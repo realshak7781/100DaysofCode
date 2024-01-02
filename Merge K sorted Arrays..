@@ -1,8 +1,12 @@
 //This questions uses the concepts of Min heap;;;
 
-question Link::  https://www.codingninjas.com/studio/problems/merge-k-sorted-arrays_975379?leftPanelTab=0&leftPanelTabValue=SUBMISSION
+//question Link::  https://www.codingninjas.com/studio/problems/merge-k-sorted-arrays_975379?leftPanelTab=0&leftPanelTabValue=SUBMISSION
 
-code:
+//code:
+
+//int n=size of arrays
+//T.C:  o(n*k log(k))
+//S.C:  o(n*k)
 
 #include <bits/stdc++.h> 
 class node{
