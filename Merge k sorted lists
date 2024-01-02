@@ -1,0 +1,90 @@
+//Merge k Sorted Linked Lists
+//Uses the concept of minHeap
+
+//question link:  https://www.codingninjas.com/studio/problems/merge-k-sorted-lists_992772?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//T.C:O(n*k log(k))
+//S.C: O(K)
+
+
+code:
+
+/*
+Following is the class structure of the Node class:
+
+class Node
+{
+public:
+    int data;
+    Node *next;
+    Node()
+    {
+        this->data = 0;
+        next = NULL;
+    }
+    Node(int data)
+    {
+        this->data = data; 
+        this->next = NULL;
+    }
+    Node(int data, Node* next)
+    {
+        this->data = data;
+        this->next = next;
+    }
+};
+*/
+
+class compare{
+    public:
+    bool operator()(Node*a,Node*b){
+        return a->data > b->data;
+    }
+};
+
+Node* mergeKLists(vector<Node*> &listArray){
+    // create a Min heap to store Nodes
+   priority_queue<Node*,vector<Node*>,compare > minHeap;
+
+   int sizeofListArray=listArray.size();
+
+//    creating the min heap for the first head nodes of the linked lists
+   for(int i=0;i<sizeofListArray;i++){
+       if(listArray[i]!=NULL){
+           Node*temp=listArray[i];
+       minHeap.push(temp);
+       }
+   }
+
+   Node*head=NULL;
+   Node*tail=NULL;
+
+
+   while(!minHeap.empty()){
+       Node*top=minHeap.top();
+       minHeap.pop();
+
+       if(head==NULL){
+        //    first element in the answer linked list
+        head=tail=top;
+
+        if(head->next!=NULL){
+            minHeap.push(tail->next);
+        }
+
+       }
+       else{
+        //    the answer LL contains some element
+
+        tail->next=top;
+        tail=top;
+
+        if(tail->next!=NULL){
+            minHeap.push(tail->next);
+        }
+       }
+   }
+
+   return head;
+
+}
