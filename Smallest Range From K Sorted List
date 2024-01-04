@@ -1,0 +1,76 @@
+//QUESTION:  Smallest Range From K Sorted List
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/smallest-range-from-k-sorted-list_1069356?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//T.C: O(N*K*LOGK)
+//S.C: O(K)
+
+//APPROACH: USE OF MIN HEAPS
+
+CODE:
+
+#include<climits>
+#include<queue>
+
+class node{
+    public:
+    int data;
+    int row;
+    int col;
+
+    node(int val,int i,int j){
+        this->data=val;
+        this->row=i;
+        this->col=j;
+    }
+};
+
+class compare{
+    public:
+    bool operator()(node*a,node*b){
+        return a->data  > b->data;
+    }
+};
+
+int kSorted(vector<vector<int>> &a, int k, int n) {
+    // create a min heap for the first elements of all the arrays given
+    int mini=INT_MAX,maxi=INT_MIN;
+    priority_queue<node*,vector<node*>,compare> minHeap;
+
+    for(int i=0;i<k;i++){
+        int element=a[i][0];
+        mini=min(element,mini);
+        maxi=max(maxi,element);
+        minHeap.push(new node(element,i,0));
+    }
+    // minHeap created
+
+
+    int startOfRange=mini;
+    int endOfRange=maxi;
+
+    while(!minHeap.empty()){
+        node*temp=minHeap.top();
+        minHeap.pop();
+
+        mini=temp->data;
+
+        // check for min range
+        if(maxi-mini < endOfRange-startOfRange){
+            startOfRange=mini;
+            endOfRange=maxi;
+        }
+
+        // move mini ahead so range becomes minimum i.e, search for next element min
+        if(temp->col+1 <n){
+            minHeap.push(new node(a[temp->row][temp->col+1],temp->row,temp->col+1));
+            maxi=max(maxi,a[temp->row][temp->col+1]);
+        }
+        else{
+            // next element does not exist so array over and answer is ready
+            break;
+        }
+    }
+
+    return (endOfRange-startOfRange+1);
+}
