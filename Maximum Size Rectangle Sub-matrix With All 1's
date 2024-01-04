@@ -1,0 +1,88 @@
+// Maximum Size Rectangle Sub-matrix With All 1's
+
+//USES THE CONCEPTS OF STACKS AND LARGEST RECTANGLE AREA IN A HISTOGRAM;
+
+//T.C: O(N^2 * M)
+/S.C: O(N)
+
+CODE:
+
+#include<stack>
+
+ vector<int> next(vector < int > & heights,vector<int>&nextIndex){
+   stack<int> st;
+   st.push(-1);
+
+   for(int i=heights.size()-1;i>=0;i--){
+     int index=i;
+     int curr=heights[i];
+
+     while(st.top()!=-1 && heights[st.top()]>=curr){
+       st.pop();
+     }
+     nextIndex[index]=st.top();
+     st.push(index);
+   }
+
+   return nextIndex;
+ }
+ 
+
+ 
+ vector<int> prev(vector < int > & heights,vector<int>&prevIndex){
+   stack<int> st;
+   st.push(-1);
+
+   for(int i=0;i<heights.size();i++){
+     int index=i;
+     int curr=heights[i];
+
+     while(st.top()!=-1 && heights[st.top()]>=curr){
+       st.pop();
+     }
+     prevIndex[index]=st.top();
+     st.push(index);
+   }
+
+   return prevIndex;
+ }
+
+ int largestRectangle(vector < int >& heights) {
+   int n=heights.size();
+
+   vector<int> nextSmallerElementIndex(n);
+   nextSmallerElementIndex=next(heights,nextSmallerElementIndex);
+
+   vector<int> prevSmallerElementIndex(n);
+   prevSmallerElementIndex=prev(heights,prevSmallerElementIndex);
+
+   int area=-1;
+
+   for(int i=0;i<n;i++){
+     int length=heights[i];
+
+     if(nextSmallerElementIndex[i]==-1) nextSmallerElementIndex[i]=n;
+     int width=nextSmallerElementIndex[i]-prevSmallerElementIndex[i]-1;
+
+     area=max(area,length*width);
+   }
+
+   return area;
+ }
+
+// code above this is used to calculate max area
+int maximalAreaOfSubMatrixOfAll1(vector<vector<int>> &mat, int n, int m){
+	int rectangle_area=largestRectangle(mat[0]);
+
+	for(int i=1;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(mat[i][j]!=0)mat[i][j]=mat[i][j]+ mat[i-1][j];
+
+			else mat[i][j]=0;
+
+			rectangle_area=max(rectangle_area,largestRectangle(mat[i]));
+		}
+	}
+
+	return rectangle_area;
+}
