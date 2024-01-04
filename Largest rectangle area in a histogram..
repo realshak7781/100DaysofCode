@@ -1,0 +1,70 @@
+//largest rectangle area in histogram
+//T.C: O(N)
+//S.C: O(N)
+
+//uses the concept of STACKS ;;;
+
+CODE:
+
+ #include<stack>
+
+ vector<int> next(vector < int > & heights,vector<int>&nextIndex){
+   stack<int> st;
+   st.push(-1);
+
+   for(int i=heights.size()-1;i>=0;i--){
+     int index=i;
+     int curr=heights[i];
+
+     while(st.top()!=-1 && heights[st.top()]>=curr){
+       st.pop();
+     }
+     nextIndex[index]=st.top();
+     st.push(index);
+   }
+
+   return nextIndex;
+ }
+ 
+
+ 
+ vector<int> prev(vector < int > & heights,vector<int>&prevIndex){
+   stack<int> st;
+   st.push(-1);
+
+   for(int i=0;i<heights.size();i++){
+     int index=i;
+     int curr=heights[i];
+
+     while(st.top()!=-1 && heights[st.top()]>=curr){
+       st.pop();
+     }
+     prevIndex[index]=st.top();
+     st.push(index);
+   }
+
+   return prevIndex;
+ }
+
+ int largestRectangle(vector < int > & heights) {
+   int n=heights.size();
+
+   vector<int> nextSmallerElementIndex(n);
+   nextSmallerElementIndex=next(heights,nextSmallerElementIndex);
+
+   vector<int> prevSmallerElementIndex(n);
+   prevSmallerElementIndex=prev(heights,prevSmallerElementIndex);
+
+   int area=-1;
+
+   for(int i=0;i<n;i++){
+     int length=heights[i];
+
+     if(nextSmallerElementIndex[i]==-1) nextSmallerElementIndex[i]=n;
+     int width=nextSmallerElementIndex[i]-prevSmallerElementIndex[i]-1;
+
+     area=max(area,length*width);
+   }
+
+   return area;
+ }
