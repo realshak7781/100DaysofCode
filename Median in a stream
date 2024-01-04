@@ -1,0 +1,96 @@
+// Median in a stream
+//MOST IMPORTANT QUESTION IN HEAPS
+
+//QUESTION LINK:  https://www.codingninjas.com/studio/problems/median-in-a-stream_975268?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF MIN HEAPS(FREQUENT MINIMUM USE) AND MAX HEAPS
+
+//T.C:O(NLOGN)
+//S.C:O(N)
+
+
+CODE:
+
+
+#include<queue>
+
+
+
+int signum(int a, int b) {
+    return (a > b) - (a < b);
+}
+
+void find_median(int element,priority_queue<int> &maxHeap,priority_queue<int,vector<int>,greater<int> >& minHeap,int&median,vector<int>&ans
+){
+
+	switch (signum(maxHeap.size(), minHeap.size())) {
+    case 0:
+        // if sizes are equal
+		if(element>median){
+			minHeap.push(element);
+			median=minHeap.top();
+		}
+		else{
+			maxHeap.push(element);
+			median=maxHeap.top();
+		}
+
+        break;
+
+
+    case 1:
+        // if maxheap size is  greater than minHeap size
+		if(element>median){
+			minHeap.push(element);
+			median=(maxHeap.top() + minHeap.top())/2;
+		}
+		else{
+			minHeap.push(maxHeap.top());
+			maxHeap.pop();
+			maxHeap.push(element);
+			median=(maxHeap.top() + minHeap.top())/2;
+		}
+
+        break;
+
+
+    case -1:
+	if(element>median){
+		maxHeap.push(minHeap.top());
+		minHeap.pop();
+		minHeap.push(element);
+		median=(maxHeap.top() + minHeap.top())/2;
+	}
+	else{
+		maxHeap.push(element);
+		median=(maxHeap.top() + minHeap.top())/2;
+	}
+
+	break;
+
+	}
+
+	ans.push_back(median);
+}
+
+vector<int> findMedian(vector<int> &arr, int n){
+	vector<int> ans;
+	int median=arr[0];
+	ans.push_back(arr[0]);
+	// first element's median will be the element itself
+
+	// create two priority_queues
+	priority_queue<int> maxHeap;
+	priority_queue<int,vector<int>,greater<int> > minHeap;
+
+	maxHeap.push(arr[0]);
+
+
+// process for the next elements in the coming stream
+	for(int i=1;i<arr.size();i++){
+		int element=arr[i];
+		find_median(element,maxHeap,minHeap,median,ans);
+	}
+
+	return ans;
+}
