@@ -1,0 +1,135 @@
+/    Implement Trie
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/implement-trie_631356?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF TRIE
+//T.C:O(L)
+//S.C:O(H)
+
+L: LENGTH OF WORD
+H: MAXIMUM LENGTH OF WORD
+
+
+CODE:
+
+  /*
+    Your Trie object will be instantiated and called as such:
+    Trie* obj = new Trie();
+    obj->insert(word);
+    bool check2 = obj->search(word);
+    bool check3 = obj->startsWith(prefix);
+ */
+
+
+class TrieNode
+{
+public:
+    char data;
+    TrieNode *childrenNode[26];
+    bool isTerminalNode;
+
+    TrieNode(char ch)
+    {
+        data = ch;
+        for (int i = 0; i < 26; i++)
+        {
+            childrenNode[i] = nullptr;
+        }
+        isTerminalNode = false;
+    }
+};
+
+
+class Trie {
+
+public:
+
+    /** Initialize your data structure here. */
+    TrieNode*root;
+    Trie() {
+        root=new TrieNode('\0');
+    }
+
+    void insertUtil(TrieNode *root, string word)
+    {
+        // base case
+        if (word.length() == 0)
+        {
+            root->isTerminalNode = true;
+            return;
+        }
+
+        // assumption only small letter allowed
+        int charIndex = word[0] - 'a';
+        TrieNode *child;
+
+        if (root->childrenNode[charIndex] != nullptr)
+        {
+            // word PRESENT
+            child = root->childrenNode[charIndex];
+        }
+        else
+        {
+            // ABSENT
+            child = new TrieNode(word[0]);
+           root->childrenNode[charIndex]=child ;
+        }
+
+        // RECURSION
+        insertUtil(child, word.substr(1));
+    }
+
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        insertUtil(root,word);
+    }
+
+
+     bool searchUtil(TrieNode*root,string word){
+        if(word.length()==0){
+            return root->isTerminalNode;
+        }
+
+
+        int charIndex=word[0]-'a';
+        TrieNode*child;
+        if(root->childrenNode[charIndex]){
+            child=root->childrenNode[charIndex];
+        }
+        else{
+            return false;
+        }
+
+        return searchUtil(child,word.substr(1));
+    }
+
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        return searchUtil(root,word);
+    }
+
+
+      bool prefixUtil(TrieNode*root,string prefix){
+        if(prefix.length()==0){
+            return true;
+        }
+
+
+        int charIndex=prefix[0]-'a';
+        TrieNode*child;
+        if(root->childrenNode[charIndex]){
+            child=root->childrenNode[charIndex];
+        }
+        else{
+            return false;
+        }
+
+        return prefixUtil(child,prefix.substr(1));
+    }
+
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        return prefixUtil(root,prefix);
+    }
+};
