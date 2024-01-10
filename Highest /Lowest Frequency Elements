@@ -1,0 +1,47 @@
+//    Highest / Lowest Frequency Elements
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/k-most-occurrent-numbers_625382
+
+//APPROACH: USE OF KNOWLEDGEH OF HASHING AND MAPS
+//T.C:O(N)
+//S.C:O(N)
+
+
+CODE:
+
+   vector<int> getFrequencies(vector<int>& v) {
+   int minFreq=INT_MAX;
+   int maxFreq=INT_MIN;
+
+   unordered_map<int,int> mp;
+   for(int i=0;i<v.size();i++){
+       mp[v[i]]++;
+       maxFreq=max(maxFreq,mp[v[i]]);
+   }
+
+//    traversing the map for min freq
+
+   for(auto it:mp){
+       minFreq=min(minFreq,it.second);
+   }
+
+
+//    traverse the array
+   int maxAns=INT_MAX;
+   int minAns=INT_MAX;
+
+
+   for(int i=0;i<v.size();i++){
+       int curr=v[i];
+       if(mp[curr]==minFreq){
+           minAns=min(minAns,curr);
+       }
+        if(mp[curr]==maxFreq){
+           maxAns=min(maxAns,curr);
+       }
+   }
+
+//    push maxans and minans into ans array;
+  return {maxAns,minAns};
+
+}
