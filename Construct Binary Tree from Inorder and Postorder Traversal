@@ -1,0 +1,45 @@
+//    106. Construct Binary Tree from Inorder and Postorder Traversal
+
+//QUESTION LINK: https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
+
+//APPROACH: USE OF KNOWLEDGE OF BINARY TREES
+//T.C:O(N)
+//S.C:O(N)
+
+
+
+CODE:
+
+ class Solution {
+private:
+TreeNode* buildFromPostorder(vector<int>& inorder,int is,int ie,vector<int>& postorder,int ps,int pe,map<int,int> &inorderMap){
+
+    // base case
+    if(is>ie || ps>pe)  return NULL;
+
+    int index=inorderMap[postorder[pe]];
+    int numsLeft=index-is;
+    TreeNode*root=new TreeNode(postorder[pe]);
+
+    root->left=buildFromPostorder(inorder,is,index-1,postorder,ps,ps+numsLeft-1,inorderMap);
+    root->right=buildFromPostorder(inorder,index+1,ie,postorder,ps+numsLeft,pe-1,inorderMap);
+
+    return root;
+} 
+
+
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        // create a map of inorder elements with their indexes
+        if(inorder.size()!=postorder.size()) return NULL;
+        map<int,int> inorderMap;
+        int is=0,ie=inorder.size()-1;
+        int ps=0,pe=postorder.size()-1;
+
+        for(int i=0;i<inorder.size();i++){
+            inorderMap[inorder[i]]=i;
+        } 
+
+        return buildFromPostorder(inorder,is,ie,postorder,ps,pe,inorderMap);
+    }
+};
