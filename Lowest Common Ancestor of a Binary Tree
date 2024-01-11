@@ -1,0 +1,53 @@
+//    236. Lowest Common Ancestor of a Binary Tree
+
+//QUESTION LINK: https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
+
+//APPROACH: USE OF KNOWLEDGE OF BINARY TREES
+//T.C:O(N)
+//S.C:O(N)
+
+
+
+CODE:
+
+ 
+class Solution {
+ private:
+TreeNode* findAncestor(TreeNode* root, TreeNode* p, TreeNode* q,TreeNode*&ans){
+     if(root==NULL) return NULL;
+
+     if(root->val==p->val || root->val==q->val){
+         if(ans==NULL){
+             ans=root;
+         }
+         return root;
+     } 
+
+     TreeNode*leftAns=findAncestor(root->left,p,q,ans);
+     TreeNode*rightAns=findAncestor(root->right,p,q,ans);
+
+     if(leftAns!=NULL && rightAns!=NULL){
+         ans=root;
+         return ans;
+     }
+
+     else if(leftAns!=NULL && rightAns==NULL){
+         return leftAns;
+     }
+     else if(leftAns==NULL && rightAns!=NULL){
+         return rightAns;
+     }
+     else{
+         return NULL;
+     }
+
+ }
+  
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode*ans=NULL;
+        findAncestor(root,p,q,ans);
+
+        return ans;
+    }
+};
