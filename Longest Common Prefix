@@ -1,0 +1,108 @@
+/     Longest Common Prefix
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/longest-common-prefix_2090383?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF TRIES
+//T.C:O(L)
+//S.C:O(L)
+
+
+
+CODE:
+
+ class TrieNode{
+    public:
+    char data;
+    TrieNode*childrenNode[26];
+    int childCount;
+    bool isTerminalNode;
+
+    TrieNode(char ch){
+        data=ch;
+        for(int i=0;i<26;i++){
+            childrenNode[i]=NULL;
+        }
+        isTerminalNode=false;
+        childCount=0;
+    }
+};
+
+class Trie{
+    public:
+    TrieNode*root;
+
+    Trie(char ch){
+        root=new TrieNode(ch);
+    }
+
+    
+    void insertUtil(TrieNode *root, string word)
+    {
+        // base case
+        if (word.length() == 0)
+        {
+            root->isTerminalNode = true;
+            return;
+        }
+
+        // assumption only small letter allowed
+        int charIndex = word[0] - 'a';
+        TrieNode *child;
+
+        if (root->childrenNode[charIndex] != nullptr)
+        {
+            // word PRESENT
+            child = root->childrenNode[charIndex];
+        }
+        else
+        {
+            // ABSENT
+            child = new TrieNode(word[0]);
+            root->childCount++;
+           root->childrenNode[charIndex]=child ;
+        }
+
+        // RECURSION
+        insertUtil(child, word.substr(1));
+    }
+
+
+
+   void insertWord(string word){
+        insertUtil(root,word);
+    }
+
+    void lcp(string first,string &ans){
+        for(int i=0;i<first.length();i++){
+            char ch=first[i];
+            int index=ch-'a';
+
+            if(root->childCount==1){
+                ans+=ch;
+                root=root->childrenNode[index];
+            }
+            else{
+                break;
+            }
+            
+            if(root->isTerminalNode) break;
+        }
+    }
+};
+
+string longestCommonPrefix(vector<string> &arr, int n)
+{
+   Trie *t=new Trie('\0');
+
+//    insert all strings into trie
+   for(int i=0;i<n;i++){
+       t->insertWord(arr[i]);
+   }
+
+//    call lcp
+    string ans="";
+    t->lcp(arr[0],ans);
+
+
+   return ans;
+}
