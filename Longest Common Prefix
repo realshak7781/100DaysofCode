@@ -3,8 +3,8 @@
 //QUESTION LINK: https://www.codingninjas.com/studio/problems/longest-common-prefix_2090383?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
 
 //APPROACH: USE OF KNOWLEDGE OF TRIES
-//T.C:O(L)
-//S.C:O(L)
+//T.C:O(M*N)
+//S.C:O(M*N)
 
 
 
