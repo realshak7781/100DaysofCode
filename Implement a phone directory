@@ -1,0 +1,138 @@
+//      Implement a phone directory
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/implement-a-phone-directory_1062666?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF TRIES
+//T.C:O(M^2*N)
+//S.C:O(M*N)
+
+M:AVERAGE WORD LENGTH
+N: NO OF STRINGS
+
+
+
+CODE:
+
+
+
+class TrieNode
+{
+public:
+    char data;
+    TrieNode *childrenNode[26];
+    bool isTerminalNode;
+
+    TrieNode(char ch)
+    {
+        data = ch;
+        for (int i = 0; i < 26; i++)
+        {
+            childrenNode[i] = nullptr;
+        }
+        isTerminalNode = false;
+    }
+};
+
+
+class Trie
+{
+public:
+    TrieNode *root;
+
+    Trie()
+    {
+        root = new TrieNode('\0');
+    }
+
+    void insertUtil(TrieNode *root, string word)
+    {
+        // base case
+        if (word.length() == 0)
+        {
+            root->isTerminalNode = true;
+            return;
+        }
+
+        // assumption only small letter allowed
+        int charIndex = word[0] - 'a';
+        TrieNode *child;
+
+        if (root->childrenNode[charIndex] != nullptr)
+        {
+            // word PRESENT
+            child = root->childrenNode[charIndex];
+        }
+        else
+        {
+            // ABSENT
+            child = new TrieNode(word[0]);
+           root->childrenNode[charIndex]=child ;
+        }
+
+        // RECURSION
+        insertUtil(child, word.substr(1));
+    }
+
+    void insertWord(string word)
+    {
+        insertUtil(root, word);
+    }
+
+
+
+    void printSuggestions(TrieNode*curr,vector<string>& temp,string prefix){
+        if(curr->isTerminalNode){
+            temp.push_back(prefix);
+        }
+
+        for(char ch='a';ch<='z';ch++){
+            TrieNode*next=curr->childrenNode[ch-'a'];
+            if(next){
+                prefix.push_back(ch);
+                printSuggestions(next,temp,prefix);
+                prefix.pop_back();
+            }
+        }
+    }
+
+
+    vector<vector<string> > getSuggestions(string &queryStr){
+        TrieNode* prev=root;
+        vector<vector<string>>output;
+        string prefix="";
+
+        for(int i=0;i<queryStr.length();i++){
+            char lastChar=queryStr[i];
+            prefix.push_back(lastChar);
+
+            TrieNode*curr=prev->childrenNode[lastChar-'a'];
+
+            if(curr){
+                vector<string> temp;
+                printSuggestions(curr,temp,prefix);
+                output.push_back(temp);
+                temp.clear();
+                prev=curr;
+            }else{
+                break;
+            }
+        }
+        return output;
+    }
+
+
+};
+
+vector<vector<string>> phoneDirectory(vector<string>&contactList, string &queryStr)
+{
+    // creation of trie
+    Trie*t=new Trie();
+
+    // insert all strings into trie
+    for(int i=0;i<contactList.size();i++){
+        string str=contactList[i];
+        t->insertWord(str);
+    }
+
+    return t->getSuggestions(queryStr);
+}
