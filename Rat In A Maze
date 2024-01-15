@@ -1,0 +1,77 @@
+/   Rat In A Maze
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/rat-in-a-maze_1215030?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF BACKTRACKING
+//T.C:O(4^(n*n))
+//S.C:O(n*m)
+
+
+
+
+CODE:
+
+
+#include <bits/stdc++.h>
+bool isSafe(int newX,int newY,vector<vector<bool> > &vis,vector < vector < int >> & arr,int n){
+   if((newX>=0 && newX<n) && (newY>=0 && newY<n) && vis[newX][newY]!=1 && arr[newX][newY]==1) return true;
+
+   else return false;
+} 
+
+
+void findPath(int x,int y,vector < vector < int >> & arr,int n,vector<string> &ans,vector<vector<bool> > &vis,string path){
+   // base case
+   if(x==n-1 && y==n-1){
+      ans.push_back(path);
+      return;
+   }
+
+   //4 movements
+   // D,L,R,U 
+
+   //  down
+   if(isSafe(x+1,y,vis,arr,n)){
+      //downward movement possible
+      vis[x][y]=1;
+      findPath(x+1,y,arr,n,ans,vis,path+'D');
+      vis[x][y]=0;
+   }
+
+   //left
+   if(isSafe(x,y-1,vis,arr,n)){
+      //downward movement possible
+      vis[x][y]=1;
+      findPath(x,y-1,arr,n,ans,vis,path+'L');
+      vis[x][y]=0;
+   }
+
+   // right
+   if(isSafe(x,y+1,vis,arr,n)){
+      //downward movement possible
+      vis[x][y]=1;
+      findPath(x,y+1,arr,n,ans,vis,path+'R');
+      vis[x][y]=0;
+   }
+
+   //  up
+   if(isSafe(x-1,y,vis,arr,n)){
+      //downward movement possible
+      vis[x][y]=1;
+      findPath(x-1,y,arr,n,ans,vis,path+'U');
+      vis[x][y]=0;
+   }
+}
+
+
+
+vector < string > searchMaze(vector < vector < int >> & arr, int n) {
+   vector<string> ans;
+   vector<vector<bool> > visited(n,vector<bool>(n,0));
+   string path="";
+   if(arr[0][0]==0) return ans;
+
+   findPath(0,0,arr,n,ans,visited,path);
+
+   return ans;
+}
