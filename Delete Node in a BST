@@ -1,0 +1,69 @@
+// 450. Delete Node in a BST
+
+//QUESTION LINK: https://leetcode.com/problems/delete-node-in-a-bst/description/
+
+//APPROACH: USE OF KNOWLEDGE OF BST
+//T.C:O(LOGN))
+//S.C:O(N)
+
+
+
+
+CODE:
+
+class Solution {
+private:
+TreeNode*getMin(TreeNode* root){
+    if(root==NULL) return NULL;
+
+    while(root->left!=NULL){
+        root=root->left;
+    }
+
+    return root;
+}
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(root==NULL) return NULL;
+
+    if(root->val==key){
+        // o child
+        if(root->left==NULL && root->right==NULL){
+            delete root;
+            return NULL;
+        }
+
+        // only left child exists
+        else if(root->left!=NULL && root->right==NULL){
+            TreeNode*temp=root->left;
+            delete root;
+            return temp;
+        }
+
+        // only right child exists
+        else if(root->right!=NULL && root->left==NULL){
+            TreeNode*temp=root->right;
+            delete root;
+            return temp;
+        }
+
+        // both child exists
+        else if(root->left!=NULL && root->right!=NULL){
+            int valToPut=getMin(root->right)->val;
+            root->val=valToPut;
+            root->right=deleteNode(root->right,valToPut);
+        }
+    }
+
+    else{
+        if(key<root->val){
+            root->left=deleteNode(root->left,key);
+        }
+        else{
+            root->right=deleteNode(root->right,key);
+        }
+    }
+
+    return root;
+    }
+};
