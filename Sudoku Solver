@@ -1,0 +1,57 @@
+// Sudoku Solver
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/sudoku-solver_699919?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF BST
+//T.C:O(9^M))
+//S.C:O(1)
+
+
+
+
+CODE:
+
+#include <bits/stdc++.h> 
+bool isSafe(int row,int col,vector<vector<int>>& sudoku,int val){
+    // check for row and col for same element
+    for(int i=0;i<sudoku.size();i++){
+        if(sudoku[row][i]==val || sudoku[i][col]==val) return false;
+
+         //check for 3*3 matrix
+        if(sudoku[3*(row/3)+i/3][3*(col/3)+i%3]==val) return false;
+    }
+    return true;
+}
+bool getSudokuSolution(vector<vector<int>>& sudoku){
+    int n=sudoku[0].size();
+
+    // traversing each cell
+    for(int row=0;row<n;row++){
+        for(int col=0;col<n;col++){
+            // check all values 
+            // /cell empty
+            if(sudoku[row][col]==0){
+                for(int val=1;val<=9;val++){
+                    if(isSafe(row,col,sudoku,val)){
+                        sudoku[row][col]=val;
+                      bool solution=  getSudokuSolution(sudoku);
+                      if(solution){
+                          return true;
+                      }
+                      else{
+                          sudoku[row][col]=0;
+                      }
+                    }
+                }
+                return false;
+
+            }
+        }
+    }
+    return true;
+}
+
+void solveSudoku(vector<vector<int>>& sudoku)
+{
+	getSudokuSolution(sudoku);
+}
