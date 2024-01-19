@@ -1,0 +1,31 @@
+//  Check BST
+
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/check-bst_5975?leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF BST
+//T.C:O(O(N)
+//S.C:O(O(N)
+
+
+
+
+CODE:
+
+#include<climits>
+bool validateBST(BinaryTreeNode<int> *root,int min,int max){
+	if(root==NULL) return true;
+
+	bool leftAns=validateBST(root->left,min,root->data);
+	bool rightAns=validateBST(root->right,root->data,max);
+
+	return (leftAns && rightAns && (root->data>min && root->data<=max));
+}
+
+bool isBST(BinaryTreeNode<int> *root) {
+	int min=INT_MIN;
+	int max=INT_MAX;
+
+	return validateBST(root,min,max);
+
+}
