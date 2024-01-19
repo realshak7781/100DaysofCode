@@ -1,0 +1,34 @@
+// Creating and Printing graphs
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/create-a-graph-and-print-it_1214551?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF Graphs
+//T.C:O(n^2))
+//S.C:O(n^2)
+
+
+
+
+CODE:
+
+vector < vector < int >> printAdjacency(int n, int m, vector < vector < int >> & edges) {
+    // edgeAns array contains info about edges
+    vector<int> edgeAns[n];
+    for(int i=0;i<m;i++){
+        int u=edges[i][0];
+        int v=edges[i][1];
+
+        edgeAns[u].push_back(v);
+        edgeAns[v].push_back(u);
+    }
+
+   vector<vector<int>> adjList(n);
+   for(int i=0;i<n;i++){
+       adjList[i].push_back(i);
+       for(int j=0;j<edgeAns[i].size();j++){
+           adjList[i].push_back(edgeAns[i][j]);
+       }
+   }
+
+   return adjList;
+}
