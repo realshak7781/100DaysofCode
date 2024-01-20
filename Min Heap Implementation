@@ -1,0 +1,79 @@
+//   Min Heap Implementation
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/min-heap-implementation_5480527?leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(logn)
+//S.C:O(n)
+
+
+
+
+CODE:
+
+class minHeap {
+public:
+
+    // Constructor for the class.
+    vector<int> heap;
+   
+    minHeap(int size) {
+      }
+
+    // heapify function
+    void heapify(vector<int>&heap,int i,int size){
+    int index=i;
+    int leftIndex=2*i+1;
+    int rightIndex=2*i+2;
+
+    if(leftIndex<size && heap[index]>heap[leftIndex]){
+        index=leftIndex;
+    }
+    if(rightIndex<size && heap[index]>heap[rightIndex]){
+        index=rightIndex;
+    }
+
+    if(index!=i){
+        swap(heap[i],heap[index]);
+        heapify(heap,index,size);
+    }
+    }
+
+
+    // Implement the function to remove minimum element.
+    int extractMinElement() {
+        if(heap.size()==0) return -1;
+
+        int ans=heap[0];
+        deleteElement(0);
+        return ans;
+    }
+
+    // Implement the function to delete an element.
+    void deleteElement(int ind) {
+        if(ind>=heap.size()) return;
+        if(heap.size()==0) return ;
+    
+    swap(heap[ind],heap[heap.size()-1]);
+
+    // removing the last element;
+    heap.pop_back();
+
+    int size=heap.size();
+
+    for(int i=size/2 -1;i>=0;i--){
+        heapify(heap,i,size);
+    }
+
+    }
+
+    // Implement the function to insert 'val' in the heap.
+    void insert(int val) {
+        heap.push_back(val);
+        int size=heap.size();
+        for(int i=size/2-1;i>=0;i--){
+             heapify(heap,i,size);
+        }
+       
+    }
+};
