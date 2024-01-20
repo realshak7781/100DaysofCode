@@ -1,0 +1,50 @@
+//   Implement a priority queue
+
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/implement-a-priority-queue-_1743878
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(logn)
+//S.C:O(1)
+
+
+
+
+CODE:
+
+void heapify(vector<int> &heap,int size,int i){
+    int index=i;
+    int leftIndex=2*i+1;
+    int rightIndex=2*i+2;
+
+    if(leftIndex<size && heap[index]<heap[leftIndex]){
+        index=leftIndex;
+    }
+    if(rightIndex<size && heap[index]<heap[rightIndex]){
+        index=rightIndex;
+    }
+
+    if(index!=i){
+        swap(heap[i],heap[index]);
+        heapify(heap,size,index);
+    }
+}
+
+int pop(vector<int> &heap)
+{
+    if(heap.size()==0) return -1;
+    
+    int max_element=heap[0];
+    swap(heap[0],heap[heap.size()-1]);
+
+    // removing the last element;
+    heap.pop_back();
+
+    int size=heap.size();
+
+    for(int i=size/2 -1;i>=0;i--){
+        heapify(heap,size,i);
+    }
+
+    return max_element;
+}
