@@ -1,0 +1,39 @@
+//    Convert Min Heap To Max Heap
+
+//QUESTION LINK:  https://www.codingninjas.com/studio/problems/convert-min-heap-to-max-heap_1381084?leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(NLOGN)
+//S.C:O(H)
+
+
+
+
+CODE:
+
+void maxHeapify(int index,vector<int>&heap,int size){
+	int nodeIndex=index;
+	int leftNodeIndex=2*index+1;
+	int rightNodeIndex=2*index+2;
+
+	if(leftNodeIndex<size && heap[nodeIndex]<heap[leftNodeIndex] ){
+		nodeIndex=leftNodeIndex;
+	}
+	if(rightNodeIndex<size && heap[nodeIndex]<heap[rightNodeIndex]){
+		nodeIndex=rightNodeIndex;
+	}
+
+	if(nodeIndex!=index){
+		swap(heap[nodeIndex],heap[index]);
+		maxHeapify(nodeIndex,heap,size);
+	}
+}
+
+vector<int>MinToMaxHeap(int n, vector<int>&arr)
+{
+	for(int i=n/2 -1;i>=0;i--){
+		maxHeapify(i,arr,n);
+	}
+
+	return arr;
+}
