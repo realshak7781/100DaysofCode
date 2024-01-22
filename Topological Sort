@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+void topoSort(int srcNode,unordered_map<int,list<int>>&adjList,stack<int>&topologicalStack,vector<bool>&visited){
+    visited[srcNode]=true;
+
+    for(auto neighbour:adjList[srcNode]){
+        if(!visited[neighbour]){
+            topoSort(neighbour,adjList,topologicalStack,visited);
+        }
+    }
+
+    topologicalStack.push(srcNode);
+}
+
+
+vector<int> topologicalSort(vector<vector<int>> &edges, int v, int e)  {
+  unordered_map<int,list<int>> adjList;
+  for(int i=0;i<edges.size();i++){
+      int u=edges[i][0];
+      int v=edges[i][1];
+      adjList[u].push_back(v);
+  }
+
+  vector<bool>visited(v);
+  stack<int> topologicalStack;
+
+
+  for(int i=0;i<v;i++){
+      if(!visited[i]){
+          topoSort(i,adjList,topologicalStack,visited);
+      }
+  }
+
+  vector<int> ans;
+
+  while(!topologicalStack.empty()){
+      ans.push_back(topologicalStack.top());
+      topologicalStack.pop();
+  }
+
+  return ans;
+}
