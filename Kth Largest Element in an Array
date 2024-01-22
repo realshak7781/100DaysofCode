@@ -1,0 +1,40 @@
+// 
+215. Kth Largest Element in an Array
+
+//QUESTION LINK:  https://leetcode.com/problems/kth-largest-element-in-an-array/description/
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(NLOGk)
+//S.C:O(k)
+
+
+
+
+CODE:
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        //    create a min heap for k elements
+   priority_queue<int,vector<int>,greater<int>> minHeap;
+
+   for(int i=0;i<k;i++){
+       minHeap.push(nums[i]);
+   }
+
+//    if any element greater than minHeap.top() comes replace it in the min Heap
+  for(int i=k;i<nums.size();i++){
+      if(nums[i]>minHeap.top()){
+          minHeap.pop();
+          minHeap.push(nums[i]);
+      }
+  }
+
+//   now you are left with K largest elements in the min heap
+   while(minHeap.size()!=k){
+       minHeap.pop();
+   }
+
+   return minHeap.top();
+    }
+};
