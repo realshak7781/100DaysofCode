@@ -1,0 +1,80 @@
+
+//  Shortest Path in DAG
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/shortest-path-in-dag_8381897?leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF GRAPHS
+//T.C:O(V+E)
+//S.C:O(V+E)
+
+
+
+
+
+CODE:
+
+#include<unordered_map>
+#include<stack>
+void dfs(int srcNode,stack<int>&topoSort,unordered_map<int,bool>&visited,unordered_map<int,list<pair<int,int>>>&adjList){
+    visited[srcNode]=true;
+
+    for(auto neighbour : adjList[srcNode]){
+        if(!visited[neighbour.first]){
+            dfs(neighbour.first,topoSort,visited,adjList);
+        }
+    }
+
+    topoSort.push(srcNode);
+}
+
+
+vector<int> shortestPathInDAG(int n, int m, vector<vector<int>> &edges)
+{
+    // creating an adjacency list
+    unordered_map<int,list<pair<int,int>>> adjList;
+    for(int i=0;i<edges.size();i++){
+        int u=edges[i][0];
+        int v=edges[i][1];
+        int weight=edges[i][2];
+
+        adjList[u].push_back({v,weight});
+    }
+
+    stack<int> topoSort;
+    unordered_map<int,bool> visited;
+
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+            dfs(i,topoSort,visited,adjList);
+        }
+    }
+
+    vector<int> distance(n,INT_MAX);
+    int src=0;
+    distance[src]=0;
+
+    while(!topoSort.empty()){
+        int top=topoSort.top();
+        topoSort.pop();
+
+        if(distance[top]!=INT_MAX){
+            for(auto neighbour: adjList[top]){
+                int neigh=neighbour.first;
+                int dist=neighbour.second;
+
+                if(dist+distance[top]<distance[neigh]){
+                    distance[neigh]=dist+distance[top];
+                }
+            }
+        }
+    }
+
+
+    for(int i=0;i<n;i++){
+        if(distance[i]==INT_MAX){
+            distance[i]=-1;
+        }
+    }
+
+    return distance;
+}
