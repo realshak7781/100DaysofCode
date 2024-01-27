@@ -1,0 +1,29 @@
+
+// 7. Reverse Integer
+
+//QUESTION LINK: https://leetcode.com/problems/reverse-integer/description/
+
+//APPROACH: USE OF KNOWLEDGE OF MATHS
+//T.C:O(LOGN)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+class Solution {
+   
+public:
+    int reverse(int x) {
+        long  reversed=0;
+
+        while(x!=0){
+            reversed=10*reversed+x%10;
+            x=x/10;
+        }
+
+        return (reversed>INT_MAX || reversed<INT_MIN) ? 0: reversed;
+    }
+};
