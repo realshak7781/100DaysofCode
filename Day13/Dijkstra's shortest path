@@ -1,0 +1,63 @@
+
+// Dijkstra's shortest path
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/dijkstra-s-shortest-path_920469?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF GRAPHS
+//T.C:O(ELOGV)
+//S.C:O(V+E)
+
+
+
+
+
+CODE:
+
+#include <bits/stdc++.h> 
+vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source) {
+   unordered_map<int,list<pair<int,int>>> adjList;
+   for(int i=0;i<vec.size();i++){
+       int u=vec[i][0];
+       int v=vec[i][1];
+       int weight=vec[i][2];
+
+       adjList[u].push_back({v,weight});
+       adjList[v].push_back({u,weight});
+   }
+
+//    create a set {dist,weight}
+     set<pair<int,int>> s;
+     s.insert({0,source});
+    
+
+    //  create distance array
+    vector<int> distance(vertices,INT_MAX);
+     distance[source]=0;
+
+     while(!s.empty()){
+         auto top=*(s.begin());
+
+         int topNode=top.second;
+         int nodeDistance=top.first;
+
+         s.erase(s.begin());
+
+         for(auto neighbour : adjList[topNode]){
+             if(nodeDistance + neighbour.second < distance[neighbour.first]){
+                //  find existing record
+                auto record=s.find({distance[neighbour.first],neighbour.first});
+
+                // if record found
+                if(record!=s.end()){
+                    s.erase(record);
+                }
+
+                // update distance
+                 distance[neighbour.first]=nodeDistance + neighbour.second;
+                 s.insert({distance[neighbour.first],neighbour.first});
+             }
+         }
+     }
+
+     return distance;
+}
