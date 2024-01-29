@@ -1,0 +1,68 @@
+
+// Hand of Straights
+
+//QUESTION LINK: https://leetcode.com/problems/hand-of-straights/description/
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(NLOGN)
+//S.C:O(N)
+
+
+
+
+
+CODE:
+
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        if(hand.size()%groupSize!=0) return false;
+        if(hand.size()==1 && groupSize==1) return true;
+        if(groupSize>hand.size()) return false;
+
+        // algo
+        unordered_map<int,int> mp;
+        priority_queue<int,vector<int>,greater<int>> pq;
+        for(int i=0;i<hand.size();i++){
+            mp[hand[i]]++;
+        }
+
+        for(auto i:mp){
+            // creation of minHeap;
+            pq.push(i.first);
+        }
+
+        while(!pq.empty()){
+            int top=pq.top();
+
+            int cnt=1;
+            int num=top;
+            if(mp[top]!=0){
+                mp[top]--;
+                while(cnt<groupSize){
+                    num++;
+                    auto key=mp.find(num);
+                    if(key!=mp.end() && mp[num]!=0){
+                        // key found
+                        // a greater consecutive number found
+                        mp[num]--;
+                    }else if(mp.find(top-1)!=mp.end() && mp[top-1]!=0){
+                        // check for a smaller consecutive number
+                        mp[top-1]--;
+                    }
+                    else{
+                        // if both not found return falsse
+                        return false;
+                    }
+                    cnt++;
+                }
+            }
+            if(mp[top]==0){
+                // pop only when the min element freq has become zero in map
+                pq.pop();
+            }
+        }
+
+        return true;
+    }
+};
