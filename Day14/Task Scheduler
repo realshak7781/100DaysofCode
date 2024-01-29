@@ -1,0 +1,63 @@
+
+// Task Scheduler
+
+//QUESTION LINK: https://leetcode.com/problems/task-scheduler/description/
+
+//APPROACH: USE OF KNOWLEDGE OF HEAPS
+//T.C:O(NLOGN)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        if(tasks.size()==0) return -1;
+    if(tasks.size()==1) return 1;
+
+    unordered_map<char,int> mp;
+    for(int i=0;i<tasks.size();i++){
+        mp[tasks[i]]++;
+    }
+
+    priority_queue<int> pq;
+
+    for(auto i:mp){
+        pq.push(i.second);
+    }
+    queue<pair<int,int>> q;
+    int total_time=0;
+
+    while(!pq.empty()){
+        if(!q.empty() && q.front().second==total_time){
+            pq.push(q.front().first);
+            q.pop();
+        }
+        int top=pq.top();
+        pq.pop();
+         total_time+=1;
+        if(top-1!=0)
+        q.push({top-1,total_time+n}); 
+    }
+
+    while(!q.empty()){
+        while(pq.empty() && q.front().second!=total_time){
+            total_time+=1;
+        }
+         pq.push(q.front().first);
+         q.pop();
+
+          int top=pq.top();
+        pq.pop();
+         total_time+=1;
+        if(top-1!=0)
+        q.push({top-1,total_time+n});
+    }
+
+    return total_time;
+    }
+};
