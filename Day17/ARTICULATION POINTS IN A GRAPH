@@ -1,0 +1,90 @@
+
+//  ARTICULATION POINTS IN A GRAPH
+
+
+
+
+//APPROACH: USE OF KNOWLEDGE OF GRAPHS
+//T.C:O(v+E)
+//S.C:O(v)
+
+
+
+
+
+CODE:
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void dfs(int srcNode,int parent,unordered_map<int,list<int>> adjList,int&timer,vector<int>&disc,vector<int>&low,unordered_map<int,bool> &visited,vector<int>&ap){
+    visited[srcNode]=true;
+    disc[srcNode]=low[srcNode]=timer++;
+
+    int child=0;
+
+    for(auto neighbour: adjList[srcNode]){
+        if(neighbour==parent){
+            continue;
+        }
+        if(!visited[neighbour]){
+            dfs(neighbour,srcNode,adjList,timer,disc,low,visited,ap);
+            low[srcNode]=min(low[srcNode],low[neighbour]);
+
+            // check AP or not
+            if(low[neighbour]>=disc[srcNode] && parent!=-1){
+                  ap.push_back(srcNode);
+             }
+
+             child++;
+        }
+        else{
+            low[srcNode]= min(low[srcNode],disc[neighbour]);
+        }
+    }
+
+    if(parent==-1 && child>1){
+        ap.push_back(srcNode);
+    }
+}
+
+int main(){
+    int v=5,e=5;
+
+    vector<pair<int,int>> edges;
+        edges.push_back({0,1});
+        edges.push_back({0,3});
+        edges.push_back({0,4});
+        edges.push_back({1,2});
+        edges.push_back({3,4});
+    
+
+    unordered_map<int,list<int>> adjList;
+
+    for(int i=0;i<edges.size();i++){
+        int u=edges[i].first;
+        int v=edges[i].second;
+
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+    }
+
+    int timer=0;
+    vector<int> disc(v,-1);
+    vector<int>low(v,-1);
+    unordered_map<int,bool>visited;
+
+    vector<int> ap;
+
+
+    for(int i=0;i<v;i++){
+        if(!visited[i]){
+            dfs(i,-1,adjList,timer,disc,low,visited,ap);
+        }
+    }
+
+    for(int i=0;i<ap.size();i++){
+        cout<<ap[i]<<"  ";
+    }
+  return 0;
+}
