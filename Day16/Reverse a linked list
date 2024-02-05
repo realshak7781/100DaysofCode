@@ -1,0 +1,50 @@
+
+//   Reverse a linked list
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LIST
+//T.C:O(N)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+struct Node
+{
+    int data;
+    struct Node *next;
+}
+
+*/
+
+class Solution
+{
+    public:
+    
+    struct Node* reverseLL(struct Node*&head){
+        struct Node*prev=nullptr;
+        struct Node*curr=head;
+        
+        while(curr){
+            struct Node*forward=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+        }
+        
+        return prev;
+    }
+    //Function to reverse a linked list.
+    struct Node* reverseList(struct Node *head)
+    {
+       if(head==nullptr || head->next==nullptr) return head;
+       
+       return reverseLL(head);
+    }
+    
+};
+   
