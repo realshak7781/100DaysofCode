@@ -1,0 +1,83 @@
+//   Reverse a Linked List in groups of given size
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/reverse-a-linked-list-in-groups-of-given-size/1
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LIST
+//T.C:O(N)
+//S.C:O(N)
+
+
+
+
+
+CODE:
+
+  Reverse a linked list
+  The input list will have at least one element  
+  Return the node which points to the head of the new LinkedList
+  Node is defined as 
+    struct node
+    {
+        int data;
+        struct node* next;
+    
+        node(int x){
+            data = x;
+            next = NULL;
+        }
+    
+    }*head;
+*/
+
+class Solution
+{
+    public:
+    struct node* reverseLL(struct node*&head){
+        struct node*prev=nullptr;
+        struct node*curr=head;
+        
+        while(curr){
+            struct node*forward=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+        }
+        
+        return prev;
+    }
+    
+    struct node *reverseIt (struct node *head, int k)
+    { 
+        if(head==nullptr || head->next==nullptr) return head;
+        
+        struct node*temp=head;
+        int cnt=0;
+        
+        while(temp){
+            cnt++;
+            temp=temp->next;
+        }
+        
+        if(k>cnt){
+            k=cnt;
+        }
+        
+        struct node*temp1=head;
+        int steps=k;
+        
+        while(steps>1){
+            temp1=temp1->next;
+            steps--;
+        }
+        
+        struct node*forward=temp1->next;
+        temp1->next=nullptr;
+        
+        struct node*newHead=reverseLL(head);
+        
+        head->next=reverseIt(forward,k);
+        
+        return newHead;
+    }
+};
