@@ -1,0 +1,86 @@
+
+//   Count Strongly Connected Components (Kosaraju’s Algorithm)
+
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/count-strongly-connected-components-kosaraju-s-algorithm_1171151?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF GRAPHS
+//T.C:O(v+E)
+//S.C:O(v)
+
+
+
+
+
+CODE:
+
+#include<unordered_map>
+#include<stack>
+#include<list>
+
+void topoSort(int srcNode,unordered_map<int,list<int>>&adjList,stack<int>&s,unordered_map<int,bool>&visited){
+	visited[srcNode]=true;
+
+	for(auto neighbour:adjList[srcNode]){
+		if(!visited[neighbour]){
+			topoSort(neighbour,adjList,s,visited);
+		}
+	}
+
+	s.push(srcNode);
+}
+
+void dfs(int src,unordered_map<int,bool>&visited,unordered_map<int,list<int>> &transpose){
+	visited[src]=true;
+
+	for(auto nbr:transpose[src]){
+		if(!visited[nbr]){
+			dfs(nbr,visited,transpose);
+		}
+	}
+}
+
+int stronglyConnectedComponents(int v, vector<vector<int>> &edges)
+{
+	unordered_map<int,list<int>> adjList;
+	for(int i=0;i<edges.size();i++){
+		int u=edges[i][0];
+		int v=edges[i][1];
+
+		adjList[u].push_back(v);
+	}
+
+	// created visited 
+	unordered_map<int,bool> visited;
+
+	// create topo sort order
+	stack<int> s;
+	for(int i=0;i<v;i++){
+		if(!visited[i]){
+			topoSort(i,adjList,s,visited);
+		}
+	}
+
+	// transpose the graph
+	unordered_map<int,list<int>> transpose;
+	for(int i=0;i<v;i++){
+		visited[i]=false;
+		for(auto nbr:adjList[i]){
+			transpose[nbr].push_back(i);
+		}
+	}
+
+	int ans=0;
+
+	while(!s.empty()){
+		int top=s.top();
+		s.pop();
+
+		if(!visited[top]){
+			dfs(top,visited,transpose);
+			ans++;
+		}
+	}
+
+	return ans;
+}
