@@ -1,0 +1,53 @@
+
+//  Detect Loop in linked list
+
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/detect-loop-in-linked-list/1
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LISTS
+//T.C:O(n)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+struct Node
+{
+    int data;
+    struct Node *next;
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+
+*/
+class Solution
+{
+    public:
+    //Function to check if the linked list has a loop.
+    bool detectLoop(Node* head)
+    {
+        if(head==nullptr || head->next==nullptr) return false;
+        
+        Node*fast=head;
+        Node*slow=head;
+        
+        while(fast!=nullptr && slow!=nullptr){
+            fast=fast->next;
+             if(fast!=nullptr){
+                 fast=fast->next;
+             }
+             
+             slow=slow->next;
+             
+             if(fast==slow) return true;
+            
+        }
+        
+        return false;
+    }
+};
