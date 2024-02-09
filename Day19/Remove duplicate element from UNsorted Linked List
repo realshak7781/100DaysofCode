@@ -1,0 +1,56 @@
+
+//  Remove duplicate element from UNsorted Linked List
+
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/remove-duplicates-from-an-unsorted-linked-list/1
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LISTS
+
+//T.C:O(n)
+//S.C:O(n)
+
+
+
+
+
+CODE:
+
+
+class Solution
+{
+    public:
+    //Function to remove duplicates from unsorted linked list.
+    Node * removeDuplicates( Node *head) 
+    {
+        if(head==nullptr || head->next==nullptr) return head;
+        
+        unordered_map<int,bool> visited;
+        Node*temp=head;
+        
+        while(temp!=nullptr){
+            visited[temp->data]=false;
+            temp=temp->next;
+        }
+        // creartion of map done
+        
+        Node*prev=nullptr;
+        Node*curr=head;
+        
+        while(curr!=nullptr){
+            if(!visited[curr->data]){
+                prev=curr;
+                visited[curr->data]=true;
+                curr=curr->next;
+            }
+            else{
+                Node*forward=curr->next;
+                prev->next=forward;
+                curr->next=nullptr;
+                curr=forward;
+            }
+        }
+        
+        return head;
+    }
+};
