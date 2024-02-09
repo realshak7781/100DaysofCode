@@ -1,0 +1,48 @@
+
+//  Remove duplicate element from sorted Linked List
+
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/remove-duplicate-element-from-sorted-linked-list/1
+
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LISTS
+//T.C:O(n)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+
+//Function to remove duplicates from sorted linked list.
+Node *removeDuplicates(Node *head)
+{
+    if(head==nullptr || head->next==nullptr) return head;
+    Node*prev=nullptr;
+    Node*curr=head;
+    
+    while(curr!=nullptr){
+      if(prev==nullptr){
+        //   handling the first case
+        prev=curr;
+        curr=curr->next;
+      }
+      else{
+          if(prev->data == curr->data){
+              Node*forward=curr->next;
+              prev->next=forward;
+              curr->next=nullptr;
+              curr=forward;
+          }
+          else{
+              prev=curr;
+              curr=curr->next;
+          }
+      }
+    }
+    
+    return head;
+}
