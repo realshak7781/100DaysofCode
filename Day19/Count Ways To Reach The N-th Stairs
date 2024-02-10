@@ -1,0 +1,39 @@
+
+//  Count Ways To Reach The N-th Stairs
+
+
+
+//QUESTION LINK: https://www.codingninjas.com/studio/problems/count-ways-to-reach-nth-stairs_798650?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+//APPROACH: USE OF KNOWLEDGE OF DYNAMIC PROGRAMMING
+
+//T.C:O(n)
+//S.C:O(n)
+
+
+
+
+
+CODE:
+
+#define MOD 1000000007
+#include <bits/stdc++.h>
+
+int solve(int pos,int n,vector<int>&dp){
+    if(pos==n) return 1;
+    if(pos>n) return 0;
+
+    if(dp[pos]!=-1) return dp[pos];
+
+    dp[pos]= (solve(pos+1,n,dp) + solve(pos+2,n,dp))%MOD;
+
+    return dp[pos];
+}
+
+
+int countDistinctWays(int nStairs) {
+    int pos=0;
+    vector<int> dp(nStairs+1,-1);
+
+    return solve(pos,nStairs,dp);
+}
