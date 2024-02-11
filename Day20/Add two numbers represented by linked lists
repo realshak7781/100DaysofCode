@@ -1,0 +1,111 @@
+
+//  Add two numbers represented by linked lists
+
+
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/add-two-numbers-represented-by-linked-lists/1
+
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LISTS
+
+//T.C:O(n+m)
+//S.C:O(max(n,m))
+
+
+
+
+
+CODE:
+
+
+class Solution
+{
+    private:
+    Node*reverseLL(Node*head){
+        Node*prev=nullptr;
+        Node*curr=head;
+        
+        while(curr!=nullptr){
+            Node*forward=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+        }
+        
+        return prev;
+    }
+    public:
+    //Function to add two numbers represented by linked list.
+    struct Node* addTwoLists(struct Node* first, struct Node* second)
+    {
+        if(first==nullptr) return second;
+        if(second==nullptr) return first;
+        
+        struct Node*revFirst=reverseLL(first);
+        struct Node*revSecond=reverseLL(second);
+        
+        int carry=0;
+        struct Node*ansHead=nullptr;
+        struct Node*tail=nullptr;
+        
+        while(revFirst!=nullptr && revSecond!=nullptr){
+            int num=revFirst->data + revSecond->data + carry;
+            int digit=num%10;
+            carry=num/10;
+            
+            if(tail==nullptr){
+                ansHead=tail=new struct Node(digit);
+            }else{
+                struct Node *temp=new struct Node(digit);
+                tail->next=temp;
+                tail=temp;
+            }
+            
+            revFirst=revFirst->next;
+            revSecond=revSecond->next;
+        }
+        
+        while(revSecond!=nullptr){
+            int num=revSecond->data + carry;
+            int digit=num%10;
+            carry=num/10;
+            
+            if(tail==nullptr){
+                ansHead=tail=new struct Node(digit);
+            }else{
+                struct Node *temp=new struct Node(digit);
+                tail->next=temp;
+                tail=temp;
+            }
+            
+            revSecond=revSecond->next;
+        }
+        
+        
+        while(revFirst!=nullptr){
+            int num=revFirst->data + carry;
+            int digit=num%10;
+            carry=num/10;
+            
+            if(tail==nullptr){
+                ansHead=tail=new struct Node(digit);
+            }else{
+                struct Node *temp=new struct Node(digit);
+                tail->next=temp;
+                tail=temp;
+            }
+            
+            revFirst=revFirst->next;
+        }
+        
+        if(carry!=0){
+            struct Node *temp=new struct Node(carry);
+                tail->next=temp;
+                tail=temp;
+        }
+        
+        
+        return reverseLL(ansHead);
+    }
+};
