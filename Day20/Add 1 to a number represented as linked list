@@ -1,0 +1,68 @@
+
+//  Add 1 to a number represented as linked list
+
+
+
+
+//QUESTION LINK: https://www.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1
+
+
+//APPROACH: USE OF KNOWLEDGE OF LINKED LISTS
+
+//T.C:O(n)
+//S.C:O(1)
+
+
+
+
+
+CODE:
+
+class Solution
+
+{
+    private:
+    Node*reverseLL(Node*head){
+        Node*prev=nullptr;
+        Node*curr=head;
+        
+        while(curr!=nullptr){
+            Node*forward=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+        }
+        
+        return prev;
+    }
+    
+    public:
+    Node* addOne(Node *head) 
+    {
+      Node*revHead=reverseLL(head);
+      
+      Node*temp=revHead;
+      int carry=1;
+      
+      Node*lastNode=nullptr;
+      while(temp!=nullptr){
+          int num=temp->data+carry;
+          int digit=num%10;
+          carry=num/10;
+          
+          temp->data=digit;
+          if(temp->next==nullptr){
+              lastNode=temp;
+          }
+          temp=temp->next;
+      }
+      
+      if(carry!=0){
+          Node*temp2=new Node(carry);
+          lastNode->next=temp2;
+      }
+      
+      
+      return reverseLL(revHead);
+    }
+};
