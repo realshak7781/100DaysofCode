@@ -1,0 +1,47 @@
+// Find the Number of Provinces
+
+
+// USE OF KNOWLEDGE OF GRAPHS
+
+
+QUESTION LINK:https://www.codingninjas.com/studio/problems/find-the-number-of-states_1377943?leftPanelTabValue=PROBLEM
+
+T.C: O(V+E)
+S.C : O(V+E)
+
+
+CODE:
+
+void dfs(int srcNode, unordered_map<int,list<int>> &adjList,unordered_map<int,bool> &visited){
+    visited[srcNode]=true;
+
+    for(auto neighbour: adjList[srcNode]){
+        if(!visited[neighbour]){
+            dfs(neighbour,adjList,visited);
+        }
+    }
+}
+
+int findNumOfProvinces(vector<vector<int>>& roads, int n) {
+    int countOfProvinces=0;
+    unordered_map<int,list<int>> adjList;
+
+    for(int i=0;i<roads.size();i++){
+        for(int j=0;j<roads[i].size();j++){
+            if(i!=j && roads[i][j]==1){
+                adjList[i].push_back(j);
+            }
+        }
+    }
+
+    unordered_map<int,bool> visited;
+
+    for(int i=0;i<n;i++){
+        if(!visited[i]){
+            countOfProvinces++;
+            dfs(i,adjList,visited);
+        }
+    }
+
+    return countOfProvinces;
+}
