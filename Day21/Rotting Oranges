@@ -1,0 +1,77 @@
+// 994. Rotting Oranges
+
+
+// USE OF KNOWLEDGE OF GRAPHS
+
+
+QUESTION LINK:https: https://leetcode.com/problems/rotting-oranges/description/
+
+T.C: O(N*M)
+S.C : O(N*M)
+
+
+CODE:
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        
+        // {{row,col}, time}
+    queue< pair< pair<int,int> , int > > q;
+   vector<vector<int>> vis(n, vector<int>(m, 0));
+
+    int minTime=0;
+
+    // get all rotten oranges
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]==2){
+                q.push({{i,j},minTime});
+                vis[i][j]=2;
+            }
+            else{
+                vis[i][j]=0;
+            }
+        }
+    }
+
+    int dRow[]={-1,0,1,0};
+    int dCol[]={0,1,0,-1};
+
+    while(!q.empty()){
+        pair<pair<int,int >, int> frontNode=q.front();
+        q.pop();
+
+        int row=frontNode.first.first;
+        int col=frontNode.first.second;
+        int time=frontNode.second;
+        // updating the time required
+        minTime=max(time,minTime);
+        // checking for neighbours
+        for(int i=0;i<4;i++){
+            int r=row+dRow[i];
+            int c=col+dCol[i];
+
+            if(r>=0 && r<n && c>=0 && c<m && vis[r][c]!=2 && grid[r][c]==1){
+                // neighbouring oranges can be rotten
+                vis[r][c]=2;
+                q.push({{r,c},time+1});
+            }
+        }
+
+    }
+
+    // check if all the oranges are rotten or not
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(vis[i][j]!=2 && grid[i][j]==1){
+                return -1;
+            }
+        }
+    }
+
+    return minTime;
+    }
+};
