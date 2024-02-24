@@ -1,0 +1,45 @@
+// 733. Flood Fill
+
+
+
+// USE OF KNOWLEDGE OF DFS
+
+
+QUESTION LINK: https://leetcode.com/problems/flood-fill/description/
+
+T.C: O(N*M)
+S.C : O(N*M)
+
+
+CODE:
+
+class Solution {
+private:
+void dfs(vector<vector<int>>&image,int n,int m,int x,int y,int p,int iniColor,vector<vector<int>>&ans){
+    ans[x][y]=p;
+
+    int dRow[]={-1,0,1,0};
+    int dCol[]={0,1,0,-1};
+
+    for(int i=0;i<4;i++){
+        int nRow=x+dRow[i];
+        int nCol=y+dCol[i];
+
+        if(nRow>=0 && nRow<n && nCol>=0 && nCol<m && image[nRow][nCol]==iniColor && ans[nRow][nCol]!=p){
+            dfs(image,n,m,nRow,nCol,p,iniColor,ans);
+        }
+    }
+}
+
+public:
+vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+     int  iniColor=image[sr][sc];
+     vector<vector<int>> ans=image;
+     int n=image.size();
+     int m=image[0].size();
+
+   dfs(image,n,m,sr,sc,color,iniColor,ans);
+
+   return ans;
+    }
+};
