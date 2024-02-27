@@ -1,0 +1,83 @@
+//   IMPLEMENT TRIE DATA STRUCTURE
+
+//QUESTION LINK: https://leetcode.com/problems/implement-trie-prefix-tree/
+
+//APPROACH: USE OF KNOWLEDGE OF TRIES
+
+
+
+
+
+CODE:
+
+class TrieNode{
+    public:
+    char data;
+    TrieNode*children[26];
+    bool isEnd;
+
+    TrieNode(char ch){
+        data=ch;
+        for(auto &a:children) a=nullptr;
+        isEnd=false;
+    }
+};
+
+class Trie {
+public:
+    TrieNode*root;
+    Trie() {
+        root= new TrieNode('\0');
+    }
+    
+    void insert(string word) {
+    TrieNode*child=root;
+    int n=word.size();
+
+    for(int i=0;i<n;i++){
+        int charIndex=word[i]-'a';
+
+        if(!child->children[charIndex]){
+            child->children[charIndex]=new TrieNode(word[i]);
+        }
+        child=child->children[charIndex];
+    }
+    child->isEnd=true;
+    }
+    
+    bool search(string word) {
+         TrieNode*child=root;
+    int n=word.size();
+
+    for(int i=0;i<n;i++){
+        int charIndex=word[i]-'a';
+
+        if(child->children[charIndex]){
+            child=child->children[charIndex];
+        }
+        else{
+            return false;
+        }
+    }
+
+    return (child!=NULL && child->isEnd);
+    }
+    
+    bool startsWith(string prefix) {
+        TrieNode*child=root;
+    int n=prefix.size();
+
+    for(int i=0;i<n;i++){
+        int charIndex=prefix[i]-'a';
+
+        if(child->children[charIndex]){
+            child=child->children[charIndex];
+        }
+        else{
+            return false;
+        }
+    }
+
+    return true;
+    }
+};
