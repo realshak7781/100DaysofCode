@@ -1,0 +1,60 @@
+//  Trie Delete Operation
+
+QUESTION LINK: https://www.codingninjas.com/studio/problems/trie-delete-operation_1062663?leftPanelTabValue=PROBLEM
+
+
+//T.C: O(LENGTH OF WORD)
+//S.C:  O(LENGTH OF WORD)
+
+
+USE OF KNOWLEDGE OF TRIE DATA STRUCTURE
+
+
+CODE:
+
+#include <bits/stdc++.h> 
+
+/*class TrieNode {                        //Definition of TrieNode class
+public:
+    TrieNode * children[26];
+    bool isEnd;
+    TrieNode()
+    {
+        isEnd=false;
+        for(int i=0;i<26;i++)
+            children[i]=NULL;
+    }
+
+};*/
+
+
+TrieNode* solution::deleteWord(TrieNode* root, string word) {
+  if(word.size()==0){
+    root->isEnd=false;
+    return root;
+  }
+
+  int charIndex=word[0]-'a';
+  TrieNode * child=root->children[charIndex];
+
+  if(child){
+    deleteWord(child,word.substr(1));
+
+    bool hasChildren=false;
+
+    for(int i=0;i<26;i++){
+      if(child && child->children[i]) hasChildren=true;
+      break;
+    }
+
+
+    if(!hasChildren && !child->isEnd){
+      delete child;
+      root->children[charIndex]=nullptr;
+    }
+  }
+  else{
+    return root;
+  }
+}
+ 
