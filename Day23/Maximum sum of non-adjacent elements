@@ -1,0 +1,37 @@
+//  Maximum sum of non-adjacent elements
+
+QUESTION LINK: https://www.codingninjas.com/studio/problems/maximum-sum-of-non-adjacent-elements_843261?leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+
+//T.C: O(N)
+//S.C:  O(N)
+
+
+USE OF KNOWLEDGE OF DYNAMIC PROGRAMMING
+
+
+CODE:
+
+#include <bits/stdc++.h> 
+
+int solveTab(vector<int>&nums,int size){
+    // solved using tabulation
+    vector<int> dp(size,0);
+
+    dp[0]=nums[0];
+
+
+    for(int i=1;i<size;i++){
+        int incl=dp[i-2]+nums[i];
+        int excl=dp[i-1]+0;
+
+        dp[i]=max(incl,excl);
+    }
+
+    return dp[size-1];
+}
+
+
+int maximumNonAdjacentSum(vector<int> &nums){
+   return solveTab(nums,nums.size());
+}
