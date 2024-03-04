@@ -1,0 +1,119 @@
+//  Longest Common Prefix in an Array
+
+QUESTION LINK: https://www.geeksforgeeks.org/problems/longest-common-prefix-in-an-array5129/1
+
+
+//T.C: O(L)
+//S.C:  O(L)
+
+
+USE OF KNOWLEDGE OF TRIES
+
+CODE:
+
+
+class TrieNode{
+    public:
+    char data;
+    int childCount;
+    TrieNode*childrenNode[26];
+    bool isTerminalNode;
+    
+    TrieNode(char ch){
+        data=ch;
+        childCount=0;
+        for(int i=0;i<26;i++){
+            childrenNode[i]=nullptr;
+        }
+        isTerminalNode=false;
+    }
+};
+
+
+class Trie{
+    public:
+     TrieNode* root;
+     
+     Trie(){
+         root= new TrieNode('\0');
+     }
+     
+     void insertUtil(TrieNode *root, string word)
+    {
+        // base case
+        if (word.length() == 0)
+        {
+            root->isTerminalNode = true;
+            return;
+        }
+
+        // assumption only small letter allowed
+        int charIndex = word[0] - 'a';
+        TrieNode *child;
+
+        if (root->childrenNode[charIndex] != nullptr)
+        {
+            // word PRESENT
+            child = root->childrenNode[charIndex];
+        }
+        else
+        {
+            // ABSENT
+            child = new TrieNode(word[0]);
+            root->childCount++;
+           root->childrenNode[charIndex]=child ;
+        }
+
+        // RECURSION
+        insertUtil(child, word.substr(1));
+    }
+
+
+
+   void insertWord(string word){
+        insertUtil(root,word);
+    }
+    
+    
+    void lcp(string first,string&ans){
+        TrieNode*curr=root;
+        
+        for(int i=0;i<first.length();i++){
+            char ch=first[i];
+            int index=ch-'a';
+            
+            if(curr->isTerminalNode) break;
+            
+            if(curr->childCount==1){
+                ans+=ch;
+                curr=curr->childrenNode[index];
+            }
+            else{
+                break;
+            }
+        }
+        
+    }
+};
+
+class Solution{
+  public:
+    
+    string longestCommonPrefix (string arr[], int N)
+    {
+        Trie *t=new Trie();
+        
+        string ans="";
+        
+        for(int i=0;i<N;i++){
+       t->insertWord(arr[i]);
+        }
+        
+        
+        t->lcp(arr[0],ans);
+        
+        if(ans.length()==0) return "-1";
+        
+        return ans;
+    }
+};
