@@ -1,0 +1,45 @@
+// divide and conquer approach to find min and max
+
+Space Complexity: O(log n) due to the depth of the recursive call stack.
+Time Complexity: O(n) due to the number of recursive calls made.
+
+
+Code:
+
+
+
+#include<bits\stdc++.h>
+using namespace std;
+
+pair<int,int> find_Min_Max(int low,vector<int>&arr,int high){
+    if(high-low<=1){
+        pair<int,int> p;
+        if(arr[low]<arr[high]){
+            p.first=arr[high];
+            p.second=arr[low];
+        }
+        else{
+            p.first=arr[low];
+            p.second=arr[high];
+        }
+
+        return p;
+    }
+
+    int mid=low +(high-low)/2;
+
+    pair<int,int> left=find_Min_Max(0,arr,mid);
+    pair<int,int> right=find_Min_Max(mid+1,arr,high);
+
+
+    return{max(left.first,right.first),min(left.second,right.second)};
+}
+
+
+int main(){
+    vector<int> arr={6,3,4,11,16,2,15,7};
+    pair<int,int> ans=find_Min_Max(0,arr,7);
+
+    cout<<"Max element: "<<ans.first<<endl;
+    cout<<"Min element: "<<ans.second<<endl;
+}
