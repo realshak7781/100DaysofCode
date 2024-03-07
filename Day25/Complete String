@@ -1,0 +1,159 @@
+//  Complete String
+
+QUESTION LINK: https://www.codingninjas.com/studio/problems/complete-string_2687860?leftPanelTabValue=PROBLEM
+
+//T.C: O(n*l)
+//S.C:  O(n*l)
+
+
+USE OF KNOWLEDGE OF TRIES
+
+CODE:
+
+#include <bits/stdc++.h> 
+class TrieNode{
+    public:
+    char data;
+    TrieNode*childrenNode[26];
+    bool isTerminalNode;
+
+    TrieNode(char ch){
+        data=ch;
+
+        for(int i=0;i<26;i++){
+            childrenNode[i]=NULL;
+        }
+
+        isTerminalNode=false;
+    }
+};
+
+
+class Trie{
+    public:
+    TrieNode*root;
+
+    Trie(){
+        root=new TrieNode('\0');
+    }
+
+
+     void insertUtil(TrieNode *root, string word)
+    {
+        // base case
+        if (word.length() == 0)
+        {
+            root->isTerminalNode = true;
+            return;
+        }
+
+        // assumption only small letter allowed
+        int charIndex = word[0] - 'a';
+        TrieNode *child;
+
+        if (root->childrenNode[charIndex] != nullptr)
+        {
+            // word PRESENT
+            child = root->childrenNode[charIndex];
+        }
+        else
+        {
+            // ABSENT
+            child = new TrieNode(word[0]);
+           root->childrenNode[charIndex]=child ;
+        }
+
+        // RECURSION
+        insertUtil(child, word.substr(1));
+    }
+
+
+
+   void insertWord(string word){
+        insertUtil(root,word);
+    }
+
+    bool searchUtil(TrieNode*root,string word){
+        TrieNode*child=root;
+       int n=word.size();
+
+       for(int i=0;i<n;i++){
+        int charIndex=word[i]-'a';
+
+        if(child->childrenNode[charIndex]){
+            child=child->childrenNode[charIndex];
+        }
+        else{
+            return false;
+        }
+    }
+
+    return (child!=NULL && child->isTerminalNode);
+}
+
+     bool search(string word){
+         return searchUtil(root,word);
+     }
+    
+
+    void checkPrefix(string word,string&ans,unordered_map<string,bool>&mp){
+        bool flag=true;
+        string curr;
+
+        for(int i=0;i<word.length();i++){
+            curr=word.substr(0,i+1);
+            if(mp.find(curr)!=mp.end()){
+                continue;
+            }
+
+           else{
+                bool searchAns=search(curr);
+                if(searchAns){
+                    // found the curr
+                    mp[curr]=true;
+                }
+                else{
+                    flag=false;
+                    break;
+                }
+            
+           }
+        }
+
+        if(flag){
+            if(curr.length()>ans.length()){
+                ans=curr;
+            }
+            else if(curr.length()==ans.length()){
+                if(curr[0]-'a'  < ans[0]-'a'){
+                    ans=curr;
+                }
+            }
+        }
+    }
+
+
+};
+
+string completeString(int n, vector<string> &a){
+    Trie *t=new Trie();
+
+    for(int i=0;i<a.size();i++){
+        // insert every string into the trie
+        t->insertWord(a[i]);
+    }
+
+
+    string ans="";
+    unordered_map<string,bool> mp;
+
+    for(int i=0;i<a.size();i++){
+        t->checkPrefix(a[i],ans,mp);
+    }
+
+    if(ans.length()==0){
+        return "None";
+    }
+
+    return ans;
+}
