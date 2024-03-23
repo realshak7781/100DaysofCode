@@ -1,0 +1,77 @@
+//   Merge 2 Sorted Array
+
+QUESTION LINK: https://www.codingninjas.com/studio/problems/sorted-array_6613259?leftPanelTabValue=PROBLEM
+
+
+Time complexity: O(m + n) + O(max(m, n))
+Space complexity: O(m + n)
+
+USE OF KNOWLEDGE OF ARRAYS
+
+CODE:
+
+vector < int > sortedArray(vector < int > a, vector < int > b) {
+    vector<int> ans;
+    int i=0,j=0; 
+    
+
+
+while(i<a.size() && j<b.size()){
+    if(a[i]!=b[j]){
+        if(a[i]<b[j]){
+            if(ans.empty()){
+                ans.push_back(a[i]);
+            }
+
+            if( ans.back()!=a[i]){
+                ans.push_back(a[i]);
+            } 
+            i++;
+        }
+        else{
+             if(ans.empty()){
+                ans.push_back(b[j]);
+            }
+
+            if( ans.back()!=b[j]){
+                ans.push_back(b[j]);
+            }
+            j++;
+        }
+    }
+    else{
+        if(ans.empty()){
+            ans.push_back(a[i]);
+        }
+        else if(!ans.empty() && ans.back()!=a[i]){
+            ans.push_back(a[i]);
+        }
+
+         i++;
+         j++;
+    }
+}
+
+while(i<a.size()){
+    if(a[i]!=ans.back()){
+        ans.push_back(a[i]);
+        i++;
+    }
+    else{
+        i++;
+    }
+}
+
+while(j<b.size()){
+    if(b[j]!=ans.back()){
+        ans.push_back(b[j]);
+        j++;
+    }
+    else{
+        j++;
+    }
+}
+
+   return ans;
+
+}
