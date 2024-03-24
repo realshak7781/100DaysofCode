@@ -1,0 +1,47 @@
+//31. Next Permutation
+
+
+QUESTION LINK: https://leetcode.com/problems/next-permutation/
+
+
+Time complexity:o(n)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF ARRAYS
+
+CODE:
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& A) {
+        
+// Now let's implement the next permutation by writing the next_permutation code
+int index=-1;
+int size=A.size();
+
+// find the break point and the longest preifx match
+for(int i=size-2;i>=0;i--){
+    if(A[i]<A[i+1]){
+        index=i;
+        break;
+    }
+}
+
+if(index==-1){
+    // no permutation found
+    // return first permutation as per the ques
+    reverse(A.begin(),A.end());
+    return;
+}
+
+// find someone greater than the break point elem but just greater to  keep it close;
+for(int j=size-1;j>index;j--){
+    if(A[j]>A[index]){
+        swap(A[j],A[index]);
+        break;
+    }
+}
+
+reverse(A.begin()+index+1,A.end());
+    }
+};
