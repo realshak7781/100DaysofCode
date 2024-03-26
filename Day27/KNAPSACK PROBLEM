@@ -1,0 +1,35 @@
+//KNAPSACK PROBLEM
+
+QUESTION LINK:https://www.codingninjas.com/studio/problems/0-1-knapsack_920542?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=SUBMISSION
+
+Time complexity:o(n)
+Space complexity: O(W+W)
+
+USE OF KNOWLEDGE OF DYNAMIC PROGRAMMING
+
+CODE:
+
+#include <bits/stdc++.h> 
+int knapsack(vector<int> wt ,vector<int> val, int n, int W) 
+{
+	vector<int> prev(W+1,0),curr(W+1,0);
+	for(int w=wt[0];w<=W;w++) prev[w]=val[0];
+
+
+	for(int ind=1;ind<n;ind++){
+		for(int w=0;w<=W;w++){
+			int notTake=0+prev[w];
+	        int take=INT_MIN;
+
+	if(wt[ind]<=w){
+		take=prev[w-wt[ind]]+ val[ind];
+	}
+
+	 curr[w]=max(take,notTake);	
+ }
+ prev=curr;
+ }
+
+ return prev[W];
+
+}
