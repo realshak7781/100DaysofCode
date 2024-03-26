@@ -1,0 +1,39 @@
+// Subset Sum Equal To K 
+
+//QUESTION LNK:https://www.codingninjas.com/studio/problems/subset-sum-equal-to-k_1550954?leftPanelTab=1%3Fsource%3Dyoutube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM&count=25&page=1&search=&sort_entity=order&sort_order=ASC
+
+
+
+Time complexity:o(n*k)
+Space complexity: O(K)
+
+USE OF KNOWLEDGE OF DYNAMIC PROGRAMMING
+
+CODE:
+
+#include <bits/stdc++.h> 
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+   vector<bool>prev(k+1,false),curr(k+1,0);
+
+   prev[0]=curr[0]=true;
+
+    prev[arr[0]]=true;
+
+    for(int ind=1;ind<n;ind++){
+        for(int t=1;t<=k;t++){
+            bool notTake=prev[t];
+
+       bool take=false;
+    if(arr[ind]<=t){
+        take=prev[t-arr[ind]];
+    }
+
+    curr[t]= take||notTake;
+
+        }
+        prev=curr;
+    }
+
+
+    return prev[k];
+}
