@@ -1,0 +1,37 @@
+//PAINTING FENCE ALGORITHM
+
+QUESTION LINK: https://www.codingninjas.com/studio/problems/ninja-and-the-fence_3210208?topList=love-babbar-dsa-sheet-problems&leftPanelTab=0&leftPanelTabValue=PROBLEM
+
+Time complexity:o(n)
+Space complexity: O(N+N)
+
+USE OF KNOWLEDGE OF DYNAMIC PROGRAMMING
+
+CODE:
+
+#include <bits/stdc++.h>
+#define MOD 1000000007
+
+int add(int a,int b){
+    return ((a%MOD) + (b%MOD))%MOD;
+} 
+
+int mul(int a,int b){
+    return((a%MOD)*1LL*(b%MOD))%MOD;
+}
+
+int solve(int n,int k){
+    vector<int> dp(n+1,0);
+    dp[1]=k;
+    dp[2]=add(k,mul(k,k-1));
+
+    for(int i=3;i<=n;i++){
+        dp[i]=add(mul(dp[i-2],(k-1)),mul(dp[i-1],(k-1)));
+    }
+
+    return dp[n];
+}
+
+int numberOfWays(int n, int k) {
+    return solve(n,k);
+}
