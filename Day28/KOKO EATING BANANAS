@@ -1,0 +1,46 @@
+// KOKO EATING BANANAS
+
+//QUESTION LNK:https:https://leetcode.com/problems/koko-eating-bananas/description/
+
+
+Time complexity:o(n*LOG(MAX)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+CODE:
+
+class Solution {
+private:
+long long reqTime(vector<int>&piles,int h,int mid){
+    long long totalHours=0;
+    for(int i=0;i<piles.size();i++){
+        totalHours+=ceil((double)piles[i] / (double)mid);
+    }
+
+    return totalHours;
+}
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int maxi=INT_MIN;
+        for(int i=0;i<piles.size();i++){
+            maxi=max(maxi,piles[i]);
+        }
+
+       int low=1,high=maxi,ans=-1;
+
+       while(low<=high){
+        int mid=low+(high-low)/2;
+        long long timeReq=reqTime(piles,h,mid);
+
+        if(timeReq<=h){
+            ans=mid;
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+       }
+
+       return ans;
+    }
+};
