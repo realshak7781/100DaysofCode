@@ -1,0 +1,52 @@
+//Capacity To Ship Packages Within D Days
+
+
+//QUESTION LNK: https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/
+
+Time complexity:o(n*LOG(sum-max)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+class Solution {
+private:
+int f(vector<int>&weights,int capacity){
+    int days=1,load=0;
+    for(int i=0;i<weights.size();i++){
+        if((load+weights[i])>capacity){
+            days++;
+            load=weights[i];
+        }
+        else{
+            load+=weights[i];
+        }
+    }
+    return days;
+} 
+public:
+    int shipWithinDays(vector<int>& weights, int days) {
+       int low=INT_MIN,high=0;
+       for(int i=0;i<weights.size();i++){
+        low=max(low,weights[i]);
+        high+=weights[i];
+       }
+
+       while(low<=high){
+        int mid=low+(high-low)/2;
+        int daysCount=f(weights,mid);
+
+        if(daysCount<=days){
+            high=mid-1;
+        }
+        else{
+            low=mid+1;
+        }
+
+       }
+
+       return low;
+    }
+};
