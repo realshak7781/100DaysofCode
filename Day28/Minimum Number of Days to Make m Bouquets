@@ -1,0 +1,59 @@
+//Minimum Number of Days to Make m Bouquets
+
+//QUESTION LNK: https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/
+
+
+Time complexity:o(n*LOG(MAX-MIN)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+class Solution {
+private:
+bool makeBouquet(vector<int>&arr,int m,int k,int day){
+    int cnt=0,noOfBoq=0;
+
+    for(int i=0;i<arr.size();i++){
+        if(arr[i]<=day){
+            cnt++;
+        }
+        else{
+            noOfBoq+=(cnt/k);
+            cnt=0;
+        }
+    }
+    noOfBoq+=(cnt/k);
+
+    return noOfBoq>=m;
+}
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        long long int cntDays=m*1LL*k*1LL;
+        if(cntDays>bloomDay.size()) return -1;
+
+        int maxi=INT_MIN,mini=INT_MAX;
+        for(int i=0;i<bloomDay.size();i++){
+            maxi=max(maxi,bloomDay[i]);
+            mini=min(mini,bloomDay[i]);
+        }
+        int low=mini,high=maxi,ans=-1;
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            bool possible=makeBouquet(bloomDay,m,k,mid);
+
+            if(possible){
+                ans=mid;
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+
+        return ans;
+    }
+};
