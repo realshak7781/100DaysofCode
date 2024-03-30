@@ -1,0 +1,47 @@
+//Find the Smallest Divisor Given a Threshold
+
+
+//QUESTION LNK: https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/
+
+Time complexity:o(n*LOG(MAX)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+class Solution {
+ private:
+ bool check(vector<int>&nums,int divisor,int threshold){
+    int total=0;
+    for(int i=0;i<nums.size();i++){
+        total+=ceil((double)nums[i]/(double)divisor);
+    }
+
+    return total<=threshold;
+ }   
+public:
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int maxi=INT_MIN;
+        for(int i=0;i<nums.size();i++){
+            maxi=max(maxi,nums[i]);
+        }
+
+        int low=1,high=maxi,ans=-1;
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            bool isPossible=check(nums,mid,threshold);
+
+            if(isPossible){
+                ans=mid;
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        return ans;
+    }
+};
