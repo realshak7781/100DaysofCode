@@ -1,0 +1,53 @@
+// Aggressive cows
+
+//QUESTION LNK: https://www.naukri.com/code360/problems/aggressive-cows_1082559?leftPanelTabValue=PROBLEM
+
+Time complexity:o(nlogn + o(n)*o(max-min))
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+#include<limits.h>
+
+bool canWePlace(vector<int>&arr,int k,int dist){
+    int cowCount=1,last=arr[0];
+    for(int i=1;i<arr.size();i++){
+        if((arr[i]-last)>=dist){
+            last=arr[i];
+            cowCount++;
+        }
+       if(cowCount==k) return true;
+    }
+
+    return cowCount>=k;
+}
+
+int aggressiveCows(vector<int> &stalls, int k)
+{
+   sort(stalls.begin(),stalls.end());
+//    to maintain the consecutive stalls
+
+  int maxi=INT_MIN,mini=INT_MAX;
+  for(int i=0;i<stalls.size();i++){
+      maxi=max(maxi,stalls[i]);
+      mini=min(mini,stalls[i]);
+  }
+
+  int low=1,high=maxi-mini;
+
+  while(low<=high){
+      int mid=low + (high-low)/2;
+      bool isPossible=canWePlace(stalls,k,mid);
+
+      if(isPossible){
+          low=mid+1;
+      }
+      else{
+          high=mid-1;
+      }
+  }
+  return high;
+}
