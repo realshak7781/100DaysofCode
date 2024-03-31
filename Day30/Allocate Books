@@ -1,0 +1,57 @@
+//Allocate Books
+
+
+//QUESTION LNK:https://www.naukri.com/code360/problems/allocate-books_1090540?leftPanelTabValue=PROBLEM
+
+Time complexity:o(n*log(s-high))
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+int count(vector<int>&arr,int pages){
+    int stu=1,totalPages=0;
+    for(int i=0;i<arr.size();i++){
+        if((totalPages+arr[i])<=pages){
+            totalPages+=arr[i];
+        }
+        else{
+            totalPages=arr[i];
+            stu++;
+        }
+    }
+
+    return stu;
+}
+
+
+int findPages(vector<int>& arr, int n, int m) {
+   if(m>n) return -1;
+//    more students less books violates the rule ;Each student gets at least one book
+
+int low=INT_MIN,high=0;
+for(int i=0;i<arr.size();i++){
+    low=max(low,arr[i]);
+    high+=arr[i];
+}
+
+// bs
+// here mid is the max pages allocated to a student during allocation and we assume it to be the answer
+while(low<=high){
+    int mid=low+(high-low)/2;
+
+    int studentCount=count(arr,mid);
+
+    if(studentCount<=m){
+       high=mid-1;
+    }
+
+    else{
+        low=mid+1;
+    }
+}
+
+return low;
+}
