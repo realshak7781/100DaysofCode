@@ -1,0 +1,52 @@
+//Split Array Largest Sum
+
+//QUESTION LNK:  https://leetcode.com/problems/split-array-largest-sum/description/
+
+
+Time complexity:o(n*log(s-high))
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+class Solution {
+private:
+int count(int sum,vector<int>&arr){
+    int subCount=1,last=0;
+    for(int i=0;i<arr.size();i++){
+        if((last+arr[i])>sum){
+            subCount++;
+            last=arr[i];
+        }else{
+            last+=arr[i];
+        }
+    }
+
+    return subCount;
+}    
+public:
+    int splitArray(vector<int>& nums, int k) {
+        int low=INT_MIN,high=0;
+        for(int i=0;i<nums.size();i++){
+            low=max(low,nums[i]);
+            high+=nums[i];
+        }
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            int subarrayCount=count(mid,nums);
+
+            if(subarrayCount<=k){
+                // possible answer
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+
+        return low;
+    }
+};
