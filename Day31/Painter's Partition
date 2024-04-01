@@ -1,0 +1,53 @@
+//Painter's Partition
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/painter-s-partition-problem_1089557?leftPanelTabValue=PROBLEM
+
+Time complexity:o(n*log(s-high))
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF BINARY SEARCH
+
+
+CODE:
+
+
+#include<limits.h>
+int count(int area,vector<int>&arr){
+    int pCount=1,last=0;
+    for(int i=0;i<arr.size();i++){
+        if((last+arr[i])>area){
+            pCount++;
+            last=arr[i];
+        }else{
+            last+=arr[i];
+        }
+    }
+
+    return pCount;
+}
+
+
+int paintersPartition(vector<int> &nums, int k)
+{
+     int low=INT_MIN;
+    int high=0;
+        for(int i=0;i<nums.size();i++){
+            low=max(low,nums[i]);
+            high+=nums[i];
+        }
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            int painterCount=count(mid,nums);
+
+            if(painterCount<=k){
+                // possible answer
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+
+        return low;
+}
