@@ -1,0 +1,39 @@
+/Minimize Max Distance to Gas Station
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/minimise-max-distance_7541449?leftPanelTabValue=PROBLEM
+
+
+Time complexity:o(k*log(n-1))
+Space complexity: O(n-1)
+
+USE OF KNOWLEDGE OF Priority queue
+
+CODE:
+
+
+#include<queue>
+
+
+double minimiseMaxDistance(vector<int> &arr, int k){
+	// better solution
+	int n=arr.size();
+	vector<int> howMany(n-1,0);
+	priority_queue<pair<long double,int>> pq;
+	for(int i=0;i<n-1;i++){
+		pq.push({(arr[i+1]-arr[i]),i});
+	}
+	for(int gasStation=1;gasStation<=k;gasStation++){
+		auto tp=pq.top();pq.pop();
+		int secIndex=tp.second;
+		howMany[secIndex]++;
+		long double iniDiff=arr[secIndex+1]-arr[secIndex];
+		long double newSecLen=iniDiff/((long double)(howMany[secIndex]+1));
+		pq.push({newSecLen,secIndex});
+	}
+
+	return pq.top().first;
+
+		
+		
+}
