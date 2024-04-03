@@ -1,0 +1,57 @@
+// Partition Equal Subset Sum
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/partition-equal-subset-sum_892980?source=youtube&campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+
+
+
+Time complexity:o(O(N)+O(N*K))
+Space complexity: O(K+1)
+
+USE OF KNOWLEDGE OF  DYNAMIC PROGRAMMING
+
+
+CODE:
+
+#include <bits/stdc++.h> 
+
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+   vector<bool>prev(k+1,false),curr(k+1,0);
+
+   prev[0]=curr[0]=true;
+
+    prev[arr[0]]=true;
+
+    for(int ind=1;ind<n;ind++){
+        for(int t=1;t<=k;t++){
+            bool notTake=prev[t];
+
+       bool take=false;
+    if(arr[ind]<=t){
+        take=prev[t-arr[ind]];
+    }
+
+    curr[t]= take||notTake;
+
+        }
+        prev=curr;
+    }
+
+
+    return prev[k];
+}
+
+
+bool canPartition(vector<int> &arr, int n)
+{
+
+	int sum=0;
+	for(int i=0;i<arr.size();i++){
+		sum+=arr[i];
+	}
+
+	if(sum&1) return false;
+
+	return subsetSumToK(n-1,sum>>1,arr);
+}
