@@ -1,0 +1,47 @@
+//  451. Sort Characters By Frequency
+
+
+//QUESTION LNK:  https://leetcode.com/problems/sort-characters-by-frequency/
+
+
+Time complexity:o(nlogk)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF  STRINGS
+
+
+CODE:
+
+class compare{
+    public:
+    bool operator()(const pair<char, int>& a, const pair<char, int>& b){
+        return a.second <b.second;
+    }
+};
+
+
+class Solution {
+public:
+    string frequencySort(string s) {
+        string ans="";
+        unordered_map<char,int> countMap;
+        for(int i=0;i<s.length();i++){
+            countMap[s[i]]++;
+        }
+
+        priority_queue<pair<char,int>,vector<pair<char,int>>,compare> maxHeap;
+
+        for(auto &it:countMap){
+            maxHeap.push({it.first,it.second});
+        }
+        while(!maxHeap.empty()){
+            pair<char,int> top=maxHeap.top();
+            maxHeap.pop();
+
+            string curr(top.second,top.first);
+            ans+=curr;
+        }
+
+        return ans;
+    }
+};
