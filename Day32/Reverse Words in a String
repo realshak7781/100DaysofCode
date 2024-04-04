@@ -1,0 +1,72 @@
+//  151. Reverse Words in a String
+
+
+//QUESTION LNK:  https://leetcode.com/problems/reverse-words-in-a-string/
+
+Time complexity:o(s.length())
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF  STRINGS
+
+
+CODE:
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        string ans="";
+        int n =s.length();
+        if(s.length()==0) return ans;
+        int lastIndex=0;
+
+        int start=0,end=n-1;
+        while(start<n && s[start]==' '){
+            start++;
+        }
+        while (end > start && s[end] == ' ') {
+        end--;
+        }
+
+        s=s.substr(start, end - start + 1);
+        // starting and trailing spaces removed
+        int i;
+        for(i=0;i<s.length();i++){
+            if(s[i]==' '){
+                if(ans.empty()){
+                    ans+=s.substr(lastIndex,i-lastIndex);
+                    lastIndex=i+1;
+                }
+                else{
+                    ans=s.substr(lastIndex,i-lastIndex)+" "+ans;
+                    lastIndex=i+1;
+                }
+            }
+           
+        }
+        ans=s.substr(lastIndex,i-lastIndex)+" "+ans;
+
+        string result;
+
+    // Flag to indicate if the previous character was a space
+    bool prevSpace = false;
+
+    for (char ch : ans) {
+        // If current character is not a space, add it to result
+        if (ch != ' ') {
+            result.push_back(ch);
+            prevSpace = false;
+        }
+        // If current character is a space and previous character was not a space, add it to result
+        else if (!prevSpace) {
+            result.push_back(ch);
+            prevSpace = true;
+        }
+    }
+
+    int size=result.length();
+
+    if(result[size-1]==' ') return result.substr(0,size-1);
+
+        return result;
+    }
+};
