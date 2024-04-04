@@ -1,0 +1,29 @@
+//  Maximum Nesting Depth Of The Parentheses
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/maximum-nesting-depth-of-the-parentheses_8144741?leftPanelTabValue=PROBLEM
+
+
+Time complexity:o(s.length())
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF  STRINGS
+
+
+CODE:
+
+int maxDepth(string s) {
+   int cnt=0,maxi=INT_MIN;
+
+   for(int i=0;i<s.length();i++){
+       if(s[i]=='(') {
+           cnt++;
+           maxi=max(cnt,maxi);
+       }
+       else if(s[i]==')'){
+           cnt--;
+       }
+   }
+
+   return maxi;
+}
