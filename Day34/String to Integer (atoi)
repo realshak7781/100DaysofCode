@@ -1,0 +1,41 @@
+// 8. String to Integer (atoi)
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/string-to-integer-atoi/
+
+Time complexity:o(string length)
+Space complexity: O(1)
+
+USE OF KNOWLEDGE OF  STRINGS
+
+
+CODE:
+
+class Solution {
+private:
+void trim(string &s){
+    s.erase(0, s.find_first_not_of(' '));
+    s.erase(s.find_last_not_of(' ') + 1);
+}
+
+public:
+    int myAtoi(string s) {
+        if(s.length()==0) return 0;
+        trim(s);
+        long ans=0;
+        const int sign = s[0] == '-' ? -1 : 1;
+
+        if(s[0]=='-' || s[0]=='+') s=s.substr(1);
+
+        for(char ch:s){
+            if(!isdigit(ch)) break;
+            ans=ans*10 +(ch-'0');
+
+            if(sign*ans<INT_MIN) return INT_MIN;
+            else if(sign*ans>INT_MAX) return INT_MAX;
+        }
+
+        return (sign*ans);  
+    }
+};
