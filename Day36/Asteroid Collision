@@ -1,0 +1,48 @@
+//  735. Asteroid Collision
+
+
+
+//QUESTION LNK:https://leetcode.com/problems/asteroid-collision/
+
+
+Time complexity:O(n)
+Space complexity: O(n)
+
+
+USE OF KNOWLEDGE OF  stack
+
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+       stack<int> st;
+       int length=asteroids.size();
+
+       for(int i=0;i<length;i++){
+        int incoming=asteroids[i];
+
+        while(!st.empty() && incoming<0 && st.top()>0){
+            int diff=incoming + st.top();
+            if(diff<0){
+                st.pop();
+            } else if(diff>0){
+                incoming=0;
+            } else {
+                st.pop();
+                incoming=0;
+            }
+        }
+        if(incoming) st.push(incoming);
+
+       }
+
+       vector<int> ans;
+       while(!st.empty()){
+        ans.push_back(st.top());
+        st.pop();
+       }
+
+       reverse(ans.begin(),ans.end());
+
+       return ans;
+    }
+};
