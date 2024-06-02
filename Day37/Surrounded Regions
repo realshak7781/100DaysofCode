@@ -1,0 +1,78 @@
+//  130. Surrounded Regions
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/surrounded-regions/
+
+Time complexity:O(n*m)
+Space complexity: O(n*m)
+
+
+USE OF KNOWLEDGE OF  BFS
+
+class Solution {
+ private:
+ void dfs(int n,int m,int row, int col,vector<vector<int>>&visited,vector<vector<char>>& board){
+    visited[row][col]=1;
+    int delRow[]={-1,0,1,0};
+    int delCol[]={0,1,0,-1};
+
+
+    for(int i=0;i<4;i++){
+        int nRow=row+delRow[i];
+        int nCol=col+delCol[i];
+
+        if(nRow>=0 && nRow<n && nCol>=0 && nCol<m && board[nRow][nCol]=='O' &&!visited[nRow][nCol]){
+            dfs(n,m,nRow,nCol,visited,board);
+        }
+    }
+ }   
+public:
+    void solve(vector<vector<char>>& board) {
+        int rows=board.size();
+        int cols=board[0].size();
+
+        vector<vector<int>> visited(rows,vector<int>(cols,0));
+
+        int delRow[]={-1,0,1,0};
+        int delCol[]={0,1,0,-1};
+
+        // traversing the first and last row
+        for(int j=0;j<cols;j++){
+            // first row and last row
+            if(!visited[0][j] && board[0][j]=='O'){
+                dfs(rows,cols,0,j,visited,board);
+            }
+
+            if(!visited[rows-1][j] && board[rows-1][j]=='O'){
+                dfs(rows,cols,rows-1,j,visited,board);
+            }
+
+            // first col and last col
+            for(int i=0;i<rows;i++){
+                if(!visited[i][0] && board[i][0]=='O'){
+                dfs(rows,cols,i,0,visited,board);
+            }
+
+            if(!visited[i][cols-1] && board[i][cols-1]=='O'){
+                dfs(rows,cols,i,cols-1,visited,board);
+            }
+            }
+            
+        }
+
+        for(int i=0;i<rows;i++){
+                for(int j=0;j<cols;j++){
+                    if(board[i][j]=='O' && !visited[i][j]){
+                        board[i][j]='X';
+                    }
+                }
+            }
+
+
+            return ;
+
+
+    }
+};
