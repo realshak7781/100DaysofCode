@@ -1,0 +1,82 @@
+//1020. Number of Enclaves
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/number-of-enclaves/submissions/1277318752/
+
+Time complexity:O(n*m)
+Space complexity: O(n*m)
+
+
+USE OF KNOWLEDGE OF  DFS
+
+
+class Solution {
+private:
+void dfs(vector<vector<int>>& grid,int row,int col,int tRow,int tCol,vector<vector<int>>& vis){
+    vis[row][col]=1;
+    int delRow[]={-1,0,1,0};
+    int delCol[]={0,1,0,-1};
+
+
+   for(int i=0;i<4;i++){
+        int nRow=row+delRow[i];
+        int nCol=col+delCol[i];
+
+        if(nRow>=0 && nRow<tRow &&nCol>=0 && nCol<tCol && !vis[nRow][nCol] && grid[nRow][nCol]==1){
+            dfs(grid,nRow,nCol,tRow,tCol,vis);
+        }
+   }
+}
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int rows=grid.size();
+        int cols=grid[0].size();
+
+        vector<vector<int>> visited(rows,vector<int>(cols,0));
+
+        // traverse the boundaries
+        // first row and lst row
+        for(int col=0;col<cols;col++){
+            // first row
+            int elem=grid[0][col];
+            if(elem==1 && !visited[0][col]){
+                dfs(grid,0,col,rows,cols,visited);
+            }
+
+             elem=grid[rows-1][col];
+            if(elem==1 && !visited[rows-1][col]){
+                dfs(grid,rows-1,col,rows,cols,visited);
+            }
+        }
+
+
+        // traversing the first and last col
+        for(int row=0;row<rows;row++){
+            int elem=grid[row][0];
+
+            if(elem==1 && !visited[row][0]){
+                dfs(grid,row,0,rows,cols,visited);
+            }
+
+            elem=grid[row][cols-1];
+            if(elem==1 && !visited[row][cols-1]){
+                dfs(grid,row,cols-1,rows,cols,visited);
+            }
+        }
+
+
+        // count in visited matrix
+        int count=0;
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+};
