@@ -1,0 +1,58 @@
+//  Number of Distinct Islands
+
+
+
+//T.C: O(R*C)
+//S.C: O(R*C*2)
+
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/number-of-distinct-islands/0
+
+
+
+USE OF KNOWLEDGE OF  BFS
+
+class Solution {
+private:
+ void dfs(int r,int c,int rows,int cols,vector<vector<int>>&grid,vector<vector<int>>&vis,string &temp,char dir){
+        vis[r][c] = 1;
+        temp.push_back(dir);
+        
+        int delRow[] = {-1, 0, 1, 0};
+        int delCol[] = {0, 1, 0, -1};
+        char dirChar[] = {'u', 'r', 'd', 'l'};
+        
+        for (int i = 0; i < 4; i++) {
+            int nRow = r + delRow[i];
+            int nCol = c + delCol[i];
+            
+            if (nRow >= 0 && nRow < rows && nCol >= 0 && nCol < cols && grid[nRow][nCol] == 1 && !vis[nRow][nCol]) {
+                dfs(nRow, nCol, rows, cols, grid, vis, temp, dirChar[i]);
+            }
+        }
+        
+           temp.push_back('b');
+ }
+    
+  public:
+    int countDistinctIslands(vector<vector<int>>& grid) {
+        // use an unordered set to store only unique value s and return the size which is equal to no of distinct islands
+        unordered_set<string> st;
+        int tRows=grid.size();
+        int tCols=grid[0].size();
+        vector<vector<int>>  vis(tRows,vector<int>(tCols,0));
+        
+        for(int i=0;i<tRows;i++){
+            for(int j=0;j<tCols;j++){
+                if(grid[i][j]==1 && !vis[i][j]){
+                    string temp="x";
+                    dfs(i,j,tRows,tCols,grid,vis,temp,'o');
+                    st.insert(temp);
+                }
+                
+            }
+        }
+        
+        return st.size();
+    }
+};
