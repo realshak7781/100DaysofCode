@@ -1,0 +1,51 @@
+//  TOPO SORT
+
+
+
+
+//T.C: O(v+E)
+//S.C: O(v)
+
+
+//QUESTION LNK: https:https://www.geeksforgeeks.org/problems/topological-sort/1
+
+
+USE OF KNOWLEDGE OF  TOPO SORT
+
+
+class Solution
+{
+    private:
+    void dfs(int node,int vis[],stack<int> &st,vector<int> adj[]){
+        vis[node]=1;
+        
+        for(auto neighbour:adj[node]){
+            if(!vis[neighbour]){
+                dfs(neighbour,vis,st,adj);
+            }
+        }
+        
+        st.push(node);
+    }
+	public:
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	   stack<int> topoStack;
+	   int vis[V]={0};
+	   
+	   for(int node=0;node<V;node++){
+	       if(!vis[node]){
+	           dfs(node,vis,topoStack,adj);
+	       }
+	   }
+	   vector<int> ans;
+	   
+	   while(!topoStack.empty()){
+	       ans.push_back(topoStack.top());
+	       topoStack.pop();
+	   }
+	   
+	   return ans;
+	}
+};
