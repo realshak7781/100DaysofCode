@@ -1,0 +1,54 @@
+//  Deteect cycle in directed graph
+
+
+
+
+//T.C: O(v+E)
+//S.C: O(v+E)
+
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
+
+USE OF KNOWLEDGE OF  TOPO SORT
+
+
+
+class Solution {
+  public:
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+        int inDegree[V]={0};
+        queue<int> q;
+        
+        for(int i=0;i<V;i++){
+            for(auto it:adj[i]){
+                inDegree[it]++;
+            }
+        }
+        
+        
+        for(int i=0;i<V;i++){
+            if(inDegree[i]==0) q.push(i);
+        }
+        
+        
+        while(!q.empty()){
+            int front=q.front();
+            q.pop();
+            
+            for(auto it:adj[front]){
+                inDegree[it]--;
+                
+                if(inDegree[it]==0) q.push(it);
+            }
+        }
+        
+        // now check for cycle
+        for(int j=0;j<V;j++){
+            if(inDegree[j]!=0) return true;
+        }
+        
+        return false;
+    }
+};
+
