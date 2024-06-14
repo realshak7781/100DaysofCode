@@ -1,0 +1,46 @@
+//   Partitions With Given Difference 
+
+
+
+
+//T.C: O(v+E)
+//S.C: O(v+E)
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/partitions-with-given-difference_3751628?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM 
+
+
+USE OF KNOWLEDGE OF  DP
+
+
+int findWays(vector<int> &arr,int tar){
+    int n=arr.size();
+   vector<int> prev(tar+1,0), cur(tar+1,0);
+    // space opt
+    if(arr[0]==0) prev[0]=2;
+    else prev[0]=1; 
+
+    if(arr[0]!=0 && arr[0]<=tar) prev[arr[0]]=1;
+
+    for(int ind=1;ind<n;ind++){
+        for(int s=0;s<=tar;s++){
+            int notTake=prev[s];
+            int take=0;
+            if(arr[ind]<=s) take=prev[s-arr[ind]];
+
+            cur[s]=(notTake+take)%mod;
+        }
+        prev=cur;
+    }   
+    return prev[tar];
+}
+
+int countPartitions(int n, int d, vector<int> &arr) {
+   int totalSum=0;
+   for(auto &it:arr) totalSum+=it;
+
+   if((totalSum-d)<0 || (totalSum-d)&1) return false;
+   
+   return findWays(arr,(totalSum-d)/2);
+}
+
