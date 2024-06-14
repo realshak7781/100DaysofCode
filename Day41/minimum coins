@@ -1,0 +1,42 @@
+//   minimum coins
+
+
+
+
+//T.C: O(n*x)
+//S.C: O(n*x)
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/minimum-elements_3843091?leftPanelTab=1%3Fsource%3Dyoutube&campaign=striver_dpseries&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dpseries&leftPanelTabValue=SUBMISSION
+
+
+USE OF KNOWLEDGE OF  DP
+
+
+int minimumElements(vector<int> &num, int x)
+{
+  int n=num.size();  
+  vector<vector<int>> dp(n,vector<int>(x+1,0));
+
+  for(int tar=0;tar<=x;tar++){
+      if(tar%num[0]==0) dp[0][tar]=tar/num[0];
+      else dp[0][tar]=1e9;
+  }
+
+  for(int ind=1;ind<n;ind++){
+      for(int t=0;t<=x;t++){
+          int notTake=0+dp[ind-1][t];
+            int take=1e9;
+            if(num[ind]<=t) take=1+dp[ind][t-num[ind]];
+
+           dp[ind][t]= min(notTake,take);
+      }
+  }
+
+
+
+  int ans= dp[n-1][x];
+
+  if(ans>=1e9) return -1;
+  else return ans;
+}
