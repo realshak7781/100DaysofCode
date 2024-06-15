@@ -1,0 +1,47 @@
+//  Target Sum 
+
+
+
+
+//T.C: O(n*x)
+//S.C: O(n*x)
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/target-sum_4127362?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+
+
+USE OF KNOWLEDGE OF  DP
+
+#include <bits/stdc++.h>
+int mod= (int)(1e9+7);
+
+int findWays(vector<int> &arr,int tar){
+    int n=arr.size();
+   vector<int> prev(tar+1,0), cur(tar+1,0);
+    // space opt
+    if(arr[0]==0) prev[0]=2;
+    else prev[0]=1; 
+
+    if(arr[0]!=0 && arr[0]<=tar) prev[arr[0]]=1;
+
+    for(int ind=1;ind<n;ind++){
+        for(int s=0;s<=tar;s++){
+            int notTake=prev[s];
+            int take=0;
+            if(arr[ind]<=s) take=prev[s-arr[ind]];
+
+            cur[s]=(notTake+take)%mod;
+        }
+        prev=cur;
+    }   
+    return prev[tar];
+}
+ 
+int targetSum(int n, int target, vector<int>& arr) {
+    int totalSum=0;
+    for(auto &it:arr) totalSum+=it;
+
+    if((totalSum-target)<0 || (totalSum-target)&1) return false;
+
+    return findWays(arr,(totalSum-target)/2);
+}
