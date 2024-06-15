@@ -1,0 +1,36 @@
+//  Ways To Make Coin Change 
+
+
+
+//T.C: O(n*(value)
+//S.C: O(value)
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/ways-to-make-coin-change_630471?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+
+
+USE OF KNOWLEDGE OF  DP
+
+#include<vector>
+
+long countWaysToMakeChange(int *denominations, int n, int value)
+{
+   vector<long>prev(value+1,0),cur(value+1,0);
+
+    for(int tar=0;tar<=value;tar++){
+        if(tar%denominations[0]==0) prev[tar]=1;
+        else prev[tar]=0;
+    }
+
+    for(int ind=1;ind<n;ind++){
+        for(int tar=0;tar<=value;tar++){
+            long notTake=prev[tar];
+            long take=0;
+            if(denominations[ind]<=tar) take=cur[tar-denominations[ind]];
+
+            cur[tar]=(notTake+take);
+        }
+        prev=cur;
+    }
+    return prev[value];
+}
