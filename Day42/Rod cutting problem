@@ -1,0 +1,38 @@
+// Rod cutting problem
+
+
+
+//T.C: O(n*n)
+//S.C: O(n+1)
+
+
+//QUESTION LNK: https://www.naukri.com/code360/problems/rod-cutting-problem_800284?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+
+
+
+USE OF KNOWLEDGE OF  DP
+
+
+int cutRod(vector<int> &price, int n)
+{
+   vector<int> prev(n+1,0);
+
+   for(int size=0;size<=n;size++){
+	   prev[size]=size*price[0];
+   }
+
+   for(int ind=1;ind<n;ind++){
+	   for(int tar=0;tar<=n;tar++){
+		int notTake=0+prev[tar];
+		int take=INT_MIN;
+		int rodLength=ind+1;
+		if(rodLength<=tar) take=price[ind] + prev[tar-rodLength];
+
+		prev[tar]= max(notTake,take);
+	   }
+	  
+   }
+
+
+   return prev[n];
+}
