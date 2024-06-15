@@ -1,0 +1,42 @@
+//  Unbounded Knapsack 
+
+
+
+//T.C: O(n*w)
+//S.C: O(w+1)
+
+
+//QUESTION LNK:  https://www.naukri.com/code360/problems/unbounded-knapsack_1215029?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=PROBLEM
+
+
+USE OF KNOWLEDGE OF  DP
+
+#include<limits.h>
+
+
+int unboundedKnapsack(int n, int w, vector<int> &profit, vector<int> &weight){
+   
+   vector<int> prev(w+1,0);
+
+   for(int wt=0;wt<=w;wt++){
+       int cal=wt/weight[0];
+        if(cal>=0) prev[wt]=cal*profit[0];
+
+        else prev[wt]=INT_MIN;
+   }
+
+   for(int ind=1;ind<n;ind++){
+       for(int wt=0;wt<=w;wt++){
+           int notTake=0+prev[wt];
+            int take=INT_MIN;
+            if(weight[ind]<=wt) take=profit[ind]+prev[wt-weight[ind]];
+
+            prev[wt]=max(notTake,take);
+       }
+   }
+   int ans= prev[w];
+   
+
+   if(ans==INT_MIN) return 0;
+   else return ans;
+}
