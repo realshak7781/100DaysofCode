@@ -1,0 +1,39 @@
+// LONGEST COMMON SUBSEQUENCE
+
+
+
+//T.C: O(n*M)
+//S.C: O(M+1)
+
+
+//QUESTION LNK: https://www.naukri.com/code360/problems/longest-common-subsequence_624879?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTabValue=SUBMISSION
+
+
+USE OF KNOWLEDGE OF  DP ON STRINGS
+
+
+#include<vector>
+
+
+int lcs(string s, string t)
+{
+	int size1=s.length(),size2=t.length();
+	vector<int>prev(size2+1,0),cur(size2+1,0);
+
+	for(int j=0;j<=size2;j++)prev[j]=0;
+	
+	
+	
+	for(int i=1;i<=size1;i++){
+		for(int j=1;j<=size2;j++){
+			
+			if(s[i-1]==t[j-1]) cur[j]= (1+prev[j-1]);
+
+			else cur[j]= max(prev[j],cur[j-1]);
+		}
+		prev=cur;
+	}
+
+
+	return prev[size2];
+}
