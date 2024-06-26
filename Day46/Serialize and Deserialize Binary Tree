@@ -1,0 +1,70 @@
+//297. Serialize and Deserialize Binary Tree
+
+
+
+
+
+//T.C: O(N)
+//S.C: O(N)
+
+//QUESTION LNK: https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/
+
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string data="";
+        queue<TreeNode*>q;
+        q.push(root);
+
+        while(!q.empty()){
+            TreeNode*front=q.front();
+            q.pop();
+
+            if(!front) data.append("#,");
+            else{
+                data.append(to_string(front->val)+",");
+
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+
+        return data;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data.empty() || data[0]=='#') return nullptr;
+        stringstream s(data);
+        string str;
+        getline(s,str,',');
+        TreeNode*root=new TreeNode(stoi(str));
+        queue<TreeNode*>q;
+        q.push(root);
+
+        while(!q.empty()){
+            TreeNode*front=q.front();
+            q.pop();
+
+            getline(s,str,',');
+            front->left=str=="#"?nullptr:(new TreeNode(stoi(str)));
+            if(front->left)q.push(front->left);
+
+            getline(s,str,',');
+            front->right=str=="#"?nullptr:(new TreeNode(stoi(str)));
+            if(front->right)q.push(front->right);
+
+        }
+
+       
+
+
+        return root;
+    }
+};
