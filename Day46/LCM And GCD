@@ -1,0 +1,35 @@
+//LCM And GCD
+
+
+
+
+
+//T.C: O(log(min(a,b)
+//S.C: O(log(min(a,b)
+
+//QUESTION LNK: https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2
+
+
+USE OF KNOWLEDGE OF  BASICS
+
+
+vector<long long> lcmAndGcd(long long A , long long B) {
+        long long gcd=findGCD(A,B);
+        
+        long long lcm=(A*B)/gcd;
+        
+        vector<long long> ans;
+        ans.push_back(lcm);
+        ans.push_back(gcd);
+        
+        return ans;
+    }
+    
+     long long findGCD(long long a,long long b){
+        if(b==0) return a;
+        
+        long long ans=findGCD(b,a%b);
+        
+        return ans;
+    }
+    
