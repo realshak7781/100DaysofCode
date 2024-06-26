@@ -1,0 +1,41 @@
+// CHILDREN SUM PROPERTY
+
+
+
+
+//T.C: O(n)
+//S.C: O(N)+o(logn)
+
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/children-sum-parent/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=hildren-sum-parent
+
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+class Solution{
+    private:
+    pair<int,bool> solve(Node*root){
+        if(!root){
+            return {0,true};
+        }
+        if(!root->left && !root->right){
+            return {root->data,true};
+        }
+        
+        pair<int,bool> leftAns=solve(root->left);
+        pair<int,bool> rightAns=solve(root->right);
+        
+        pair<int,bool> ans;
+        ans.first=root->data;
+        ans.second=(leftAns.first+rightAns.first==root->data)&&leftAns.second&&rightAns.second;
+        
+        return ans;
+    }
+    public:
+    //Function to check whether all nodes of a tree have the value 
+    //equal to the sum of their child nodes.
+    int isSumProperty(Node *root)
+    {
+      return solve(root).second;
+    }
+};
