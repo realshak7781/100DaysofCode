@@ -4,8 +4,8 @@
 
 
 
-//T.C: O(n)
-//S.C: O(N)
+//T.C: O(logn)^2
+//S.C: O(logn)
 
 //QUESTION LNK: https://leetcode.com/problems/count-complete-tree-nodes/description/
 
