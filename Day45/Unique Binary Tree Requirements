@@ -1,0 +1,28 @@
+//Unique Binary Tree Requirements
+
+
+
+
+
+
+//T.C: O(1)
+//S.C: O(1)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/unique-binary-tree-requirements/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=unique-binary-tree-requirements
+
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+
+class Solution
+{
+public:
+    bool isPossible(int a,int b)
+    {
+        if((a+b)&1) return true;
+        else false;
+        
+        // always to construct a unique binary tree INordere is always needed;
+        // without inordere it is impossible to create a unique binary tree
+    }
+}
