@@ -1,0 +1,92 @@
+//BURNING TREE
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(N)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/burning-tree/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=burning-tree
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+
+
+class Solution {
+  private:
+  Node*inorder(Node*root,int target){
+      if(root==nullptr || root->data==target) return root;
+      
+      Node*leftAns=inorder(root->left,target);
+      Node*rightAns=inorder(root->right,target);
+      
+      if(!leftAns && rightAns) return rightAns;
+     
+      if(leftAns && !rightAns) return leftAns;
+     
+     return nullptr;
+      
+  }
+  
+  void solve(Node*root,Node*target,unordered_map<Node*,Node*>&np,int &ans,unordered_map<Node*,bool>&vis){
+      queue<Node*>q;
+      q.push(target);
+      vis[target]=true;
+      
+      while(!q.empty()){
+          int size=q.size();
+          bool flag=false;
+          for(int i=0;i<size;i++){
+              Node*front=q.front();
+              q.pop();
+              
+              if(front->left &&!vis[front->left]){
+                  flag=true;
+                  q.push(front->left);
+                  vis[front->left]=true;
+              }
+              if(front->right && !vis[front->right]){
+                  flag=true;
+                  vis[front->right]=true;
+                  q.push(front->right);
+              }
+              if(np[front] && !vis[np[front]]){
+                  q.push(np[front]);
+                  vis[np[front]]=true;
+                  flag=true;
+              }
+          }
+          if(flag) ans++;
+      }
+  }
+  public:
+    int minTime(Node* root, int target) 
+    {
+       Node*target_node=inorder(root,target);
+       unordered_map<Node*,Node*> np;
+       unordered_map<Node*,bool> vis;
+       queue<Node*>q;
+       q.push(root);
+       
+       while(!q.empty()){
+           Node*front=q.front();
+           q.pop();
+           
+           if(front->left){
+               q.push(front->left);
+               np[front->left]=front;
+           }
+           if(front->right){
+               q.push(front->right);
+               np[front->right]=front;
+           }
+       }
+    //   node to parent mapping created
+    int ans=0;
+    solve(root,target_node,np,ans,vis);
+    
+    return ans;
+       
+    }
+};
