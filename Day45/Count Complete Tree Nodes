@@ -1,0 +1,50 @@
+//222. Count Complete Tree Nodes
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(N)
+
+//QUESTION LNK: https://leetcode.com/problems/count-complete-tree-nodes/description/
+
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if(!root) return 0;
+        if(!root->left && !root->right) return 1;
+
+        int leftHeight=findLeftHeight(root);
+        int rightHeight=findRightHeight(root);
+
+        if(leftHeight==rightHeight) return (1<<leftHeight)-1;
+
+        return 1+countNodes(root->left) +countNodes(root->right);
+    }
+
+
+    int findLeftHeight(TreeNode*root){
+        int hght=0;
+
+        while(root){
+            hght++;
+            root=root->left;
+        }
+        return hght;
+    }
+
+
+    int findRightHeight(TreeNode*root){
+        int hght=0;
+
+        while(root){
+            hght++;
+            root=root->right;
+        }
+        return hght;
+    }
+};
