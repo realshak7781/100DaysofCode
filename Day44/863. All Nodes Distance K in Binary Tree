@@ -1,0 +1,78 @@
+// 863. All Nodes Distance K in Binary Tree
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(N)
+
+//QUESTION LNK: https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/description/
+
+
+USE OF KNOWLEDGE OF  BINARY TREES
+
+class Solution {
+private:
+
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        if(!root) return {};
+        if(k==0) return {target->val};
+
+       queue<TreeNode*>q;
+       q.push(root);
+       unordered_map<TreeNode*,TreeNode*>np;
+    //    a map connecting node to parent and helping in moving backwards
+       while(!q.empty()){
+        TreeNode*front=q.front();
+        q.pop();
+        if(front->left){
+            q.push(front->left);
+            np[front->left]=front;
+        }
+        if(front->right){
+            q.push(front->right);
+            np[front->right]=front;
+        }
+       }
+
+       int dis=0;
+       unordered_map<TreeNode*,bool> vis;
+       q.push(target);
+       vis[target]=true;
+       vector<int> ans;
+
+       while(!q.empty()){
+        int size=q.size();
+        if(dis==k) break;
+
+        for(int i=0;i<size;i++){
+            TreeNode*front=q.front();
+            q.pop();
+
+            if(front->left &&!vis[front->left]){
+                q.push(front->left);
+                vis[front->left]=true;
+            }
+            if(front->right &&!vis[front->right]){
+                q.push(front->right);
+                vis[front->right]=true;
+            }
+            if(np[front] && !vis[np[front]]){
+                q.push(np[front]);
+                vis[np[front]]=true;
+            }
+        }
+        dis++;
+       }
+
+    //    now dis==k amd the elements are in the queue
+     while(!q.empty()){
+        ans.push_back(q.front()->val);
+        q.pop();
+     }
+
+     return ans;
+    }
+};
