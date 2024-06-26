@@ -1,0 +1,36 @@
+//9. Palindrome Number
+
+
+
+
+
+
+//T.C: O(N)
+//S.C: O(N)
+
+//QUESTION LNK: https://leetcode.com/problems/palindrome-number/description/
+
+
+USE OF KNOWLEDGE OF  BASICS
+
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        stringstream s;
+        s<<x;
+        string num=s.str();
+
+        int first=0,last=num.length()-1;
+
+        while(first<=last){
+            if(num[first]==num[last]){
+                first++;
+                last--;
+            }
+            else return false;
+        }
+
+        return true;
+    }
+};
