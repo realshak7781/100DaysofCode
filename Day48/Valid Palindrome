@@ -1,0 +1,47 @@
+//125. Valid Palindrome
+
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(n)
+
+//QUESTION LNK: https://leetcode.com/problems/valid-palindrome/
+
+
+USE OF KNOWLEDGE OF  RECURSION
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string rslt="";
+        for(char c:s){
+            if(isalpha(c)|| isdigit(c)){
+                if(c>='A' && c<='Z'){
+                    rslt+=tolower(c);
+                }
+                else{
+                    rslt+=c;
+                }
+            }
+        }
+
+        int first=0,last=rslt.length()-1;
+
+        while(first<=last){
+            if(rslt[first]==rslt[last]){
+                first++;
+                last--;
+            }
+            else{
+                return false;
+            }
+        }
+
+        return true;
+
+
+    }
+};
