@@ -1,0 +1,32 @@
+//Frequencies of Limited Range Array Elements
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(1)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/frequency-of-array-elements-1587115620/0
+
+
+USE OF KNOWLEDGE OF  BASICS
+
+
+  for (int i = 0; i < N; i++) {
+            if (arr[i] > N) {
+                arr[i] = 0;
+            }
+        }
+       
+        // Step 2: Encode frequency information into array elements
+        for (int i = 0; i < N; i++) {
+            if (arr[i] % (N + 1) > 0) {
+                arr[(arr[i] % (N + 1)) - 1] += (N + 1);
+            }
+        }
+       
+        // Step 3: Decode the frequency information
+        for (int i = 0; i < N; i++) {
+            arr[i] /= (N + 1);
+        }
