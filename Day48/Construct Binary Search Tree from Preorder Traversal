@@ -1,0 +1,34 @@
+//1008. Construct Binary Search Tree from Preorder Traversal
+
+
+
+
+
+
+
+//T.C: O(n)
+//S.C: O(n)
+
+//QUESTION LNK: https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/
+
+USE OF KNOWLEDGE OF  BST
+
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int i=0,upperBound=INT_MAX;
+        return solve(preorder,i,upperBound);
+    }
+
+    TreeNode*solve(vector<int>&preorder,int &i,int ub){
+        if(i==preorder.size() || preorder[i]>ub) return nullptr;
+
+        TreeNode*root= new TreeNode(preorder[i++]);
+        root->left=solve(preorder,i,root->val);
+        root->right=solve(preorder,i,ub);
+
+        return root;
+    }
+};
+
+
