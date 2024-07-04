@@ -1,0 +1,68 @@
+//ALien Dictionary
+
+
+
+
+
+
+
+
+
+
+//T.C: O(n*L+k+E)
+//S.C: O(K+E)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/alien-dictionary/1
+
+USE OF KNOWLEDGE OF  Graphs
+
+class Solution{
+    private:
+    void compare(string s1,string s2,unordered_map<int,list<int>>&adList){
+        int i=0,j=0;
+        while(i<s1.length() && j<s2.length()){
+            if(s1[i]!=s2[j]){
+                adList[s1[i]-'a'].push_back(s2[j]-'a');
+                break;
+            }
+            else{
+                i++,j++;
+            }
+        }
+    }
+    public:
+    string findOrder(string dict[], int N, int K) {
+    //   represent letters with numbers
+       unordered_map<int,list<int>> adList;
+       for(int i=0;i<N-1;i++){
+           string first=dict[i];
+           string second=dict[i+1];
+           compare(first,second,adList);
+       }
+    //   adjacency list created
+    vector<int> indegree(26,0);
+     for (const auto &i : adList) {
+        for (const auto &j : i.second) {
+            indegree[j]++;
+        }
+    }
+    queue<int> q;
+    for(int i=0;i<26;i++){
+        if(indegree[i]==0) q.push(i);
+    }
+    string ans="";
+    while(!q.empty()){
+        int front=q.front();
+        q.pop();
+        ans+=('a'+front);
+        
+        for(auto i:adList[front]){
+            indegree[i]--;
+            if(indegree[i]==0) q.push(i);
+        }
+    }
+    
+    return ans;
+    
+    }
+};
