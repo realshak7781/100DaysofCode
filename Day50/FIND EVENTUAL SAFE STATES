@@ -1,0 +1,60 @@
+//FIND EVENTUAL SAFE STATES
+
+
+
+
+
+
+
+
+
+
+//T.C: O(VLOGV)
+//S.C: O(V+E)
+
+//QUESTION LNK: https://leetcode.com/problems/find-eventual-safe-states/
+
+USE OF KNOWLEDGE OF  Graphs
+
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        vector<int> ans;
+        vector<int> indegree(graph.size(),0);
+        // find indegree using graph array
+        for(int i=0;i<graph.size();i++){
+            indegree[i]=graph[i].size();
+        }
+        // creating the adjacency list
+        unordered_map<int,list<int>> adList;
+         for(int i=0;i<graph.size();i++){
+           int v=i;
+           for(auto j:graph[i]){
+            int u=j;
+            adList[u].push_back(v);
+           }
+        }
+
+        queue<int> q;
+        for(int i=0;i<indegree.size();i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+
+        while(!q.empty()){
+            int front=q.front();
+            q.pop();
+            ans.push_back(front);
+
+            for(auto adjacent:adList[front]){
+                indegree[adjacent]--;
+                if(indegree[adjacent]==0)q.push(adjacent);
+            }
+        }
+
+        sort(ans.begin(),ans.end());
+        return ans;
+
+    }
+};
