@@ -1,0 +1,53 @@
+//Shortest path in Undirected Graph
+
+
+
+
+
+
+
+
+
+
+//T.C: O(v+E)
+//S.C: O(V+E)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=shortest-path-in-undirected-graph-having-unit-distance
+
+
+USE OF KNOWLEDGE OF  Graphs
+
+class Solution {
+  public:
+    vector<int> shortestPath(vector<vector<int>>& edges, int N,int M, int src){
+        vector<int> dist(N,INT_MAX);
+        dist[src]=0;
+        unordered_map<int,list<int>> adList;
+        for (auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adList[u].push_back(v);
+            adList[v].push_back(u);
+      }
+        
+        queue<int> q;
+        q.push(src);
+        
+        while(!q.empty()){
+            int front=q.front();
+            q.pop();
+            
+            for(auto adj:adList[front]){
+                if(dist[front]+1<dist[adj]){
+                    dist[adj]=dist[front]+1;
+                    q.push(adj);
+                }
+            }
+        }
+        
+        for(int i=0;i<dist.size();i++){
+            if(dist[i]==INT_MAX) dist[i]=-1;
+        }
+        
+        return dist;
+    }
