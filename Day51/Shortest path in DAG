@@ -1,0 +1,77 @@
+//Shortest path in DAG
+
+
+
+
+
+
+
+
+
+
+//T.C: O(v+E)
+//S.C: O(V+E)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=shortest-path-in-undirected-graph
+
+USE OF KNOWLEDGE OF  Graphs
+
+class Solution {
+ private:
+  void topoSort(int node, unordered_map<int, list<pair<int, int>>>& adjList, stack<int>& st, vector<bool>& vis) {
+        vis[node] = true;
+        
+        for (auto adj : adjList[node]) {
+            if (!vis[adj.first]) {
+                topoSort(adj.first, adjList, st, vis);
+            }
+        }
+        st.push(node);
+    }
+  public:
+    vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
+        // Create the adjacency list
+        unordered_map<int, list<pair<int, int>>> adjList;
+        for (auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int weight = edge[2];
+            adjList[u].push_back({v, weight});
+        }
+        
+        // Build the topoSort
+        vector<bool> vis(N, false);
+        stack<int> topoStack;
+        for (int i = 0; i < N; i++) {
+            if (!vis[i]) {
+                topoSort(i, adjList, topoStack, vis);
+            }
+        }
+        
+        vector<int> dist(N, INT_MAX);
+        dist[0] = 0;
+        
+        while (!topoStack.empty()) {
+            int top = topoStack.top();
+            topoStack.pop();
+            
+            if (dist[top] != INT_MAX) {
+                for (auto& i : adjList[top]) {
+                    // Relax edges
+                    int v = i.first;
+                    int w = i.second;
+                    if (dist[top] + w < dist[v]) {
+                        dist[v] = dist[top] + w;
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0; i < N; i++) {
+            if (dist[i] == INT_MAX) dist[i] = -1;
+        }
+        
+        return dist;
+    
+    }
+};
