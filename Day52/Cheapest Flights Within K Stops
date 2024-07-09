@@ -1,0 +1,60 @@
+
+787. Cheapest Flights Within K Stops
+
+
+
+
+
+//T.C: O(k*f)
+//S.C: O(n*k+f)
+
+//QUESTION LNK:  https://leetcode.com/problems/cheapest-flights-within-k-stops/description/
+
+USE OF KNOWLEDGE OF  Graphs
+
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        // create adjacency list
+        unordered_map<int,list<pair<int,int>>> adjList;
+        vector<int> dist(n,INT_MAX);
+        dist[src]=0;
+        
+         for (int i = 0; i < flights.size(); i++) {
+            int u = flights[i][0];
+            int v = flights[i][1];
+            int price = flights[i][2];
+            adjList[u].push_back({v, price});
+        }
+
+        queue<pair<int,pair<int,int>>> pq;
+        // stops,node,price
+        pq.push({0,{src,0}});
+
+        while(!pq.empty()){
+            int node=pq.front().second.first;
+            int price=pq.front().second.second;
+            int stops=pq.front().first;
+            pq.pop();
+
+           if(stops>k) continue;
+           for (auto iter : adjList[node])
+            {
+                int adjNode = iter.first;
+                int edW = iter.second;
+
+                // We only update the queue if the new calculated dist is
+                // less than the prev and the stops are also within limits.
+                if (price + edW < dist[adjNode] && stops <= k)
+                {
+                    dist[adjNode] = price + edW;
+                    pq.push({stops + 1, {adjNode, price + edW}});
+                }
+            }
+        }
+
+        int ans=dist[dst];
+
+        return ans==INT_MAX?-1:ans;
+    }
+};
