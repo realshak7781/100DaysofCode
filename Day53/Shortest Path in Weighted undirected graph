@@ -1,0 +1,65 @@
+Shortest Path in Weighted undirected graph
+
+
+
+
+//T.C: O((n+m)logn
+//S.C: O((n+1)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1
+
+
+  public:
+    vector<int> shortestPath(int n, int m, vector<vector<int>>& edges) {
+        vector<int> dist(n+1,1e9),parent(n+1);
+          
+        for(int i=1;i<=n;i++) parent[i] = i;
+        
+        dist[1]=0;
+        unordered_map<int,list<pair<int,int>>> adjList;
+        for(auto&it : edges){
+            adjList[it[0]].push_back({it[1],it[2]});
+            adjList[it[1]].push_back({it[0],it[2]});
+        }
+        
+        set<pair<int,int>>s;
+        s.insert({0,1});
+        
+        while(!s.empty()){
+            auto top=*(s.begin());
+            int node=top.second;
+            int weight=top.first;
+            s.erase(s.begin());
+            
+            for(auto &neigh:adjList[node]){
+                int neighbour=neigh.first;
+                int nWeight=neigh.second;
+                
+                if(weight+nWeight<dist[neighbour]){
+                    auto record= s.find({dist[neighbour],neighbour});
+                    
+                    if(record!=s.end()){
+                        s.erase(record);
+                    }
+                    
+                    dist[neighbour]=weight+nWeight;
+                    s.insert({dist[neighbour],neighbour});
+                     parent[neighbour] = node;
+                }
+            }
+        }
+        
+        if(dist[n]==1e9) return {-1};
+        
+          vector<int> path;
+        int node = n;
+        while(parent[node] != node){
+            path.push_back(node);
+            node = parent[node];
+        }
+        path.push_back(1);
+        path.push_back(dist[n]);
+        reverse(path.begin(),path.end());
+        return path;
+    }
+};
