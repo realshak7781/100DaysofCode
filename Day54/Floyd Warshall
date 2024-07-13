@@ -1,0 +1,50 @@
+Floyd Warshall
+
+
+
+
+//T.C: O(v^3)
+//S.C: O((1)
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1
+
+
+
+ USE OF GRAPHS
+
+#define REP(i,a,b) for (int i = a; i <b; i++)
+
+class Solution {
+  public:
+	void shortest_distance(vector<vector<int>>&matrix){
+	   int v=matrix.size();
+	   
+	   REP(i,0,v){
+	       REP(j,0,v){
+	           if(matrix[i][j]==-1){
+	               matrix[i][j]=INT_MAX;
+	           }
+	       }
+	   }
+	   
+	   REP(via,0,v){
+	       REP(i,0,v){
+	           REP(j,0,v){
+	              if(matrix[i][via]!=INT_MAX && matrix[via][j]!=INT_MAX && matrix[i][via]+matrix[via][j] <matrix[i][j]){
+	                  matrix[i][j]=matrix[i][via]+matrix[via][j]; 
+	              }
+	           }
+	       }
+	   }
+	   
+	   
+	   
+	   REP(i,0,v){
+	       REP(j,0,v){
+	           if(matrix[i][j]==INT_MAX){
+	               matrix[i][j]=-1;
+	           }
+	       }
+	   }
+	}
+};
