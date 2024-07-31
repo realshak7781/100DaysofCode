@@ -1,0 +1,92 @@
+146. LRU Cache
+
+
+
+
+
+
+
+//T.C:o(1)
+//S.C: O(n)
+
+//QUESTION LNK: https://leetcode.com/problems/lru-cache/
+
+ USE OF STACKS
+
+class LRUCache {
+public:
+ class node {
+    public:
+    int key;
+    int val;
+    node * next;
+    node * prev;
+    node(int _key, int _val) {
+    key = _key;
+    val = _val;
+    }
+};
+
+  node * head = new node(-1, -1);
+  node * tail = new node(-1, -1);
+
+  int cap;
+  unordered_map < int, node * > m;
+    LRUCache(int capacity) {
+        cap=capacity;
+        head->next=tail;
+        tail->prev=head;
+    }
+
+   void addnode(node * newnode) {
+    node * temp = head -> next;
+    newnode -> next = temp;
+    newnode -> prev = head;
+    head -> next = newnode;
+    temp -> prev = newnode;
+  }
+
+  void deletenode(node * delnode) {
+    node * delprev = delnode -> prev;
+    node * delnext = delnode -> next;
+    delprev -> next = delnext;
+    delnext -> prev = delprev;
+  }
+    
+    int get(int key) {
+        if(m.find(key)!=m.end()){
+            int res=m[key]->val;
+            deletenode(m[key]);
+            addnode(m[key]);
+             m.erase(key);
+             m[key]=head->next;
+            return res;
+        }
+
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        if(m.find(key)!=m.end()){
+            node*existingNode=m[key];
+             m.erase(key);
+            deletenode(existingNode);
+        }
+        if(m.size()==cap){
+            m.erase(tail->prev->key);
+            deletenode(tail->prev);
+        }
+        addnode(new node(key,value));
+        m[key]=head->next;
+    }
+};
+
+// TRY TO UNDERSTAND THE QUESTION USING THE TSHIRT ANALOGY
+// THE LEAST RECENTLY USED LIES NEAR THE TAIL AND THE MOST RECENTLY USED LIES NEAR HEAD
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
