@@ -1,0 +1,58 @@
+1901. Find a Peak Element II
+
+
+
+
+//T.C:o(mlogn;
+//S.C: O(1)
+
+//QUESTION LNK: https://leetcode.com/problems/find-a-peak-element-ii/description/
+
+
+TOPIC:   BINARY SEARCH
+
+
+class Solution {
+private: 
+int findMax(vector<vector<int>>& mat,int rows,int col){
+    int maxValue=-1e9;
+    int maxIndex=-1;
+
+    for(int i=0;i<rows;i++){
+       if(mat[i][col]>maxValue){
+        maxValue=mat[i][col];
+        maxIndex=i;
+       }
+    }
+    return maxIndex;
+} 
+public:
+    vector<int> findPeakGrid(vector<vector<int>>& mat) {
+        int rows=mat.size(),cols=mat[0].size();
+        int low=0,high=cols-1;
+
+
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            // finding mazx element in the current col to satisfy the upper and lower condn
+            // the problem then boils down to 1D array peak problem
+            int maxElemRow=findMax(mat,rows,mid);
+            // the indexes will always be in bound because of boundary condn
+            int cur = mat[maxElemRow][mid];
+
+            // Check left and right neighbors only if they exist
+            bool leftHigher = (mid > 0) && (cur < mat[maxElemRow][mid - 1]);
+            bool rightHigher = (mid < cols - 1) && (cur < mat[maxElemRow][mid + 1]);
+
+            if (!leftHigher && !rightHigher) {
+                return {maxElemRow, mid};
+            } else if (leftHigher) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return {-1,-1};
+    }
+};
