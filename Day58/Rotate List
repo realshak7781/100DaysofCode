@@ -1,0 +1,50 @@
+Rotate List
+
+
+
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK: https://www.interviewbit.com/problems/rotate-list/
+
+
+TOPIC:   LINKED LIST
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ListNode*getLastNode(ListNode*A,int &cnt){
+    ListNode*head=A;
+    while(head->next!=nullptr){
+        cnt++;
+        head=head->next;
+    }
+    return head;
+}
+ListNode* Solution::rotateRight(ListNode* A, int B) {
+    
+    if(!A || !A->next || B==0) return A;
+    
+    int nodeCnt=1;
+    ListNode*tail=getLastNode(A,nodeCnt);
+    tail->next=A;
+    int dist=nodeCnt-(B%nodeCnt);
+
+    while(dist>0){
+        dist--;
+        tail=tail->next;
+    }
+    A=tail->next;
+    tail->next=nullptr;
+    
+    return A;
+     
+}
