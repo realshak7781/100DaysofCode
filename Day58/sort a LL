@@ -1,0 +1,73 @@
+sort a LL
+
+
+
+
+
+//T.C:o(nlogn);
+//S.C: O(logn)
+
+//QUESTION LNK: https://www.interviewbit.com/problems/sort-list/
+
+
+TOPIC:   LINKED LIST
+
+ListNode* findMid(ListNode*A){
+     ListNode*slow=nullptr;
+     ListNode*fast=A;
+     
+     while(fast!=nullptr){
+         if(!slow) slow=fast;
+         else slow=slow->next;
+         
+         fast=fast->next;
+         if(fast){
+             fast=fast->next;
+         }
+     }
+     return slow;
+ }
+ 
+ ListNode*merge(ListNode*left,ListNode*right){
+     ListNode*dummyNode=new ListNode(0);
+     ListNode*tail=dummyNode;
+     
+     
+     while(left!=nullptr && right!=nullptr){
+         if(left->val<=right->val){
+             tail->next=left;
+             left=left->next;
+         }
+         else{
+             tail->next=right;
+             right=right->next;
+         }
+         tail=tail->next;
+     }
+     
+     if(left!=nullptr){
+         tail->next=left;
+     }
+     
+     if(right!=nullptr){
+         tail->next=right;
+     }
+     
+     
+     return dummyNode->next;
+ }
+ 
+ListNode* Solution::sortList(ListNode* A) {
+    if(!A || !A->next) return A;
+    
+    ListNode*midNode=findMid(A);
+    ListNode*midFront=midNode->next;
+    
+    midNode->next=nullptr;
+    ListNode*left=sortList(A);
+    ListNode*right=sortList(midFront);
+    
+    A=merge(left,right);
+    
+    return A;
+}
