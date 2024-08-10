@@ -1,0 +1,49 @@
+Remove Duplicates from Sorted List 2
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK:https://www.interviewbit.com/problems/remove-duplicates-from-sorted-list-ii/
+
+TOPIC:   LINKED LIST
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ ListNode*getLast(ListNode*cur){
+     while(cur->next&&cur->val == cur->next->val){
+        cur=cur->next;
+     }
+     return cur;
+ }
+ListNode* Solution::deleteDuplicates(ListNode* A) {
+    ListNode*dummyNode=new ListNode(0);
+    dummyNode->next=A;
+    ListNode*tail=dummyNode;
+    ListNode*cur=A;
+    
+    
+    while(cur){
+        if(cur->next && cur->val==cur->next->val){
+             ListNode*lastnode=getLast(cur);
+                ListNode*front=lastnode->next;
+                tail->next=front;
+                lastnode->next=nullptr;
+                cur=front;  
+        }
+        else{
+            tail=cur;
+            cur=cur->next;
+        }
+    }
+    
+    return dummyNode->next;
+}
+
