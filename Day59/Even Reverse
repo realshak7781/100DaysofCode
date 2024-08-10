@@ -1,0 +1,76 @@
+Even Reverse
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK: https://www.interviewbit.com/problems/even-reverse/
+
+
+TOPIC:   LINKED LIST
+
+
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+ ListNode*reverse(ListNode*head){
+     ListNode*prev=nullptr;
+     
+     while(head){
+         ListNode*front=head->next;
+         head->next=prev;
+         prev=head;
+         head=front;
+     }
+     
+     return prev;
+ }
+ 
+ 
+ListNode* Solution::solve(ListNode* A) {
+    if(!A || !A->next || !A->next->next || !A->next->next->next) return A;
+    
+   ListNode*evenNode=new ListNode(0);
+   ListNode*evenTail=evenNode;
+   int pos=1;
+   ListNode*cur=A;
+   ListNode*prev=nullptr;
+   
+   while(cur){
+       ListNode*front=cur->next;
+       if(pos%2==0){
+           evenTail->next=cur;
+           evenTail=cur;
+           cur->next=nullptr;
+           prev->next=front;
+       }
+       prev=cur;
+       cur=front;
+       pos++;
+   }
+   
+   ListNode*rHead=reverse(evenNode->next);
+   ListNode*temp=A;
+   
+   while(temp && rHead){
+       ListNode*front=temp->next;
+       temp->next=rHead;
+       ListNode*rFront=rHead->next;
+       rHead->next=front;
+       rHead=rFront;
+       temp=front;
+   }
+   
+   
+   return A;
+   
+//    merge the both lists
+}
