@@ -1,0 +1,62 @@
+sort a BINARY LL
+
+
+
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK: https://www.interviewbit.com/problems/sort-binary-linked-list/
+
+TOPIC:   LINKED LIST
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ListNode* Solution::solve(ListNode* A) {
+    ListNode*oneDummy=new ListNode(0);
+    ListNode*zeroDummy=new ListNode(0);
+    ListNode*oneTail=oneDummy;
+    ListNode*zeroTail=zeroDummy;
+    
+    ListNode*cur=A;
+    
+    while(cur){
+        ListNode*front=cur->next;
+        if(cur->val==1){
+            if(oneDummy==oneTail){
+                oneDummy->next=cur;
+                oneTail=cur;
+                cur->next=nullptr;
+            }
+            else{
+                oneTail->next=cur;
+                oneTail=cur;
+                cur->next=nullptr;
+            }
+        }
+        else{
+            if(zeroDummy==zeroTail){
+                zeroDummy->next=cur;
+                zeroTail=cur;
+                cur->next=nullptr;
+            }
+            else{
+                zeroTail->next=cur;
+                zeroTail=cur;
+                cur->next=nullptr;
+            }
+        }
+        cur=front;
+    }
+    
+    zeroTail->next=oneDummy->next;
+    
+    return zeroDummy->next;
+}
