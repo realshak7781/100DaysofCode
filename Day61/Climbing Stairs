@@ -1,0 +1,38 @@
+70. Climbing Stairs
+
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK:https://leetcode.com/problems/climbing-stairs/
+
+
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+class Solution {
+private:
+int solveMemo(int n,vector<int>&dp){
+    if(n==1) return 1;
+    if(n==0) return 1;
+
+    if(dp[n]!=-1) return dp[n];
+
+    return dp[n]=climbStairs(n-1)+climbStairs(n-2);
+}    
+public:
+    int climbStairs(int n) {
+       int prev2=1;
+       int prev1=1;
+       int cur;
+       for(int i=2;i<=n;i++){
+        cur=prev1+prev2;
+        prev2=prev1;
+        prev1=cur;
+       }
+
+       return prev1;
+    }
+};
