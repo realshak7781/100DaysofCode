@@ -1,0 +1,77 @@
+Reverse Alternate K Nodes
+
+
+//T.C:o(n);
+//S.C: O(1)
+
+//QUESTION LNK:https://www.interviewbit.com/problems/reverse-alternate-k-nodes/
+
+
+
+
+TOPIC:   LINKED LIST
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ ListNode*reverseNodes(ListNode*head){
+     ListNode*prev=nullptr;
+     ListNode*cur=head;
+     
+     while(cur){
+         ListNode*front=cur->next;
+         cur->next=prev;
+         prev=cur;
+         cur=front;
+     }
+     return prev;
+ }
+ListNode* Solution::solve(ListNode* A, int B) {
+    if(!A || !A->next || B==1) return A;
+    
+    ListNode*dummynode=new ListNode(0);
+    dummynode->next=A;
+    ListNode*cur=A;
+    ListNode*prev=dummynode;
+    int k=B;
+    bool reverse=false;
+    
+    while(cur){
+        if(k==1){
+            if(!reverse){
+                ListNode*front=cur->next;
+                ListNode*tail=prev->next;
+                cur->next=nullptr;
+                ListNode*rHead=reverseNodes(tail);
+                prev->next=rHead;
+                tail->next=front;
+                
+                prev=tail;
+                cur=front;
+             
+                k=B;
+                reverse=true;
+            }
+            else{
+                reverse=false;
+                k=B;
+                prev=cur;
+                cur=cur->next;
+            }
+        }
+        else{
+            // just move forward
+            cur=cur->next;
+            k--;
+        }
+    }
+    
+    return dummynode->next;
+}
+
