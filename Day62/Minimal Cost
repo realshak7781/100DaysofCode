@@ -1,0 +1,43 @@
+Minimal Cost
+
+
+
+//T.C:o(n*k);
+//S.C: O(n)
+
+//QUESTION LNK:  https://www.geeksforgeeks.org/problems/minimal-cost/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=minimal-cost
+
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+  private:
+    int solve(int pos,int dest,vector<int>&height,vector<int>&dp,int k){
+      if(pos==dest) return 0;
+      if(pos>dest) return INT_MAX;
+      
+      if(dp[pos]!=-1) return dp[pos];
+      
+       int oneStep=INT_MAX;
+      for(int i=1;i<=k;i++){
+          int ans;
+         if(pos+i<=dest){
+             ans=abs(height[pos]-height[pos+i])+solve(pos+i,dest,height,dp,k);
+         }
+         oneStep=min(ans,oneStep);
+      }
+      
+       return dp[pos]=oneStep;
+    }    
+  public:
+    int minimizeCost(vector<int>& arr, int& k) {
+        int n=arr.size();
+      int dest=n-1;
+     int pos=0;
+     vector<int> dp(n,-1);
+     
+     return solve(pos,dest,arr,dp,k);
+    }
+};
