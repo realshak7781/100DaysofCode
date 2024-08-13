@@ -1,0 +1,70 @@
+Geek Jump
+
+
+
+
+//T.C:o(n);
+//S.C: O(n)
+
+//QUESTION LNK:  https://www.geeksforgeeks.org/problems/geek-jump/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=geek-jump
+
+
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution {
+  private:
+  int solve(int pos,int dest,vector<int>&height,vector<int>&dp){
+      if(pos==dest) return 0;
+      if(pos>dest) return INT_MAX;
+      
+      if(dp[pos]!=-1) return dp[pos];
+      
+      int oneStep=INT_MAX;
+     if(pos+1<=dest){
+         oneStep=abs(height[pos]-height[pos+1])+solve(pos+1,dest,height,dp,dp);
+     }
+     
+     int twoStep=INT_MAX;
+     if(pos+2<=dest){
+         twoStep=abs(height[pos]-height[pos+2])+solve(pos+2,dest,height,dp);
+     }
+      
+      dp[pos]=min(oneStep,twoStep);
+      return dp[pos];
+  }
+  public:
+    int minimumEnergy(vector<int>& height, int n) {
+     int dest=n-1;
+     int pos=0;
+     vector<int> dp(n,-1);
+     
+     return solve(pos,dest,height,dp);
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int N;
+        cin >> N;
+        vector<int> arr(N);
+        for (int i = 0; i < N; i++) {
+            cin >> arr[i];
+        }
+        Solution obj;
+        cout << obj.minimumEnergy(arr, N) << "\n";
+    }
+    return 0;
+}
+// } Driver Code Ends
