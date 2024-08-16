@@ -1,0 +1,90 @@
+62. Unique Paths
+
+
+
+//T.C:o(n*m);
+//S.C: O(n)
+
+//QUESTION LNK:  https://leetcode.com/problems/unique-paths/
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+private:
+int solveMem(int r,int c,vector<vector<int>>&dp){
+    if(r==0 && c==0) return 1;
+    if(r<0 || c<0) return 0;
+
+    if(dp[r][c]!=-1) return dp[r][c];
+
+    // check whether you can go up or not
+    int upStep=0;
+    upStep= solveMem(r-1,c,dp);
+
+    // check for left movemennt
+    int leftStep=0;
+    leftStep= solveMem(r,c-1,dp);
+
+    return dp[r][c]= (upStep+leftStep);
+} 
+
+
+int solveTab(int m,int n){
+    vector<vector<int>> dp(m,vector<int>(n,0));
+
+    for(int r=0;r<m;r++){
+        for(int c=0;c<n;c++){
+           if(r==0 && c==0) dp[r][c]=1;
+           else{
+            int up=0;
+            int left=0;
+
+            if(r>0) up=dp[r-1][c];
+            if(c>0) left=dp[r][c-1];
+
+            dp[r][c]=up+left;
+           }
+        } 
+    }
+
+    return dp[m-1][n-1];
+}
+
+int spaceOpt(int m,int n){
+    vector<int> prev(n,0);
+
+    for(int i=0;i<m;i++){
+        vector<int> cur(n,0);
+        for(int j=0;j<n;j++){
+            if(i==0 && j==0){
+                cur[j]=1;
+                continue;
+            }
+            int up=0;
+            int left=0;
+
+            if(i>0) up=prev[j];
+            if(j>0) left=cur[j-1];
+
+            cur[j]=up+left;
+        }
+        prev=cur;
+    }
+
+    return prev[n-1];
+}
+
+public:
+    int uniquePaths(int m, int n) {
+        // int r=m-1;
+        // int c=n-1;
+        // vector<vector<int>> dp(m+1,vector<int>(n+1,-1));
+
+        // return solveMem(r,c,dp);
+
+
+        return spaceOpt(m,n);
+    }
+};
