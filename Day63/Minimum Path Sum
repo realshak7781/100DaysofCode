@@ -1,0 +1,86 @@
+64. Minimum Path Sum
+
+
+
+//T.C:o(n*m);
+//S.C: O(n)
+
+//QUESTION LNK:  https://leetcode.com/problems/minimum-path-sum/description/
+
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+class Solution {
+private:
+int solveMem(int r,int c,vector<vector<int>>&grid,vector<vector<int>>&dp){
+    if(r==0 && c==0) return grid[r][c];
+    if(r<0 || c<0) return 1e9;
+
+    if(dp[r][c]!=-1) return dp[r][c];
+
+    int up=solveMem(r-1,c,grid,dp);
+    int left=solveMem(r,c-1,grid,dp);
+
+    return dp[r][c]=(grid[r][c]+min(up,left));
+}  
+
+int solveTab(int m,int n,vector<vector<int>>&grid){
+    vector<vector<int>> dp(m,vector<int>(n,0));
+
+
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(i==0 && j==0){
+                dp[i][j]=grid[i][j];
+            }
+            else{
+                int up=1e9;
+                if(i-1>=0)up=dp[i-1][j];
+
+                int left=1e9;
+                if(j-1>=0) left=dp[i][j-1];
+
+                dp[i][j]=grid[i][j]+min(up,left);
+            }
+        }
+    }
+    return dp[m-1][n-1];
+}
+
+int spaceOpt(int m,int n,vector<vector<int>> &grid){
+    vector<int> temp(n,1e9);
+
+    for(int i=0;i<m;i++){
+        vector<int> cur(n,1e9);
+        for(int j=0;j<n;j++){
+            if(i==0 && j==0){
+                cur[j]=grid[i][j];
+            }
+            else{
+                int up=1e9;
+                if(i-1>=0)up=temp[j];
+
+                int left=1e9;
+                if(j-1>=0) left=cur[j-1];
+
+                cur[j]=grid[i][j]+min(up,left);
+            }
+        }
+        temp=cur;
+    }
+
+    return temp[n-1];
+
+}
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m=grid.size();
+        int n=grid[0].size();
+
+        // vector<vector<int>> dp(m,vector<int>(n,-1));
+        // return solveMem(m-1,n-1,grid,dp);
+
+        return spaceOpt(m,n,grid);
+    }
+};
