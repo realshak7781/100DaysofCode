@@ -1,0 +1,51 @@
+
+1143. Longest Common Subsequence
+
+
+
+//T.C:o(n*m);
+//S.C: O(n*m)
+
+//QUESTION LNK:  https://leetcode.com/problems/longest-common-subsequence/
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+private:
+// int solveRecur(string s,string m,int i,int j,vector<vector<int>>&dp){
+//     if(i==0 || j==0) return 0;
+//     if(dp[i][j]!=-1) return dp[i][j];
+
+//     // if its a match
+//     if(s[i-1]==m[j-1]) return dp[i][j]=(1+solveRecur(s,m,i-1,j-1,dp));
+
+//     // if its not a match
+//     return dp[i][j]=max(solveRecur(s,m,i-1,j,dp),solveRecur(s,m,i,j-1,dp));
+// }  
+
+int solveTab(string s1,string s2,int n,int m){
+    vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+
+    for(int j=0;j<=m;j++) dp[0][j]=0;
+    for(int i=0;i<=n;i++) dp[i][0]=0;
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+              // if its a match
+        if(s1[i-1]==s2[j-1]) dp[i][j]=1+dp[i-1][j-1];
+
+    // if its not a match
+      else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+
+    return dp[n][m];
+}
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int n=text1.length(),m=text2.length();
+        // vector<vector<int>> dp(n+1,vector<int>(m+1,-1));
+        return solveTab(text1,text2,n,m);
+    }
+};
