@@ -1,0 +1,81 @@
+416. Partition Equal Subset Sum
+
+
+
+//T.C:o(n*m);
+//S.C: O(n)
+
+//QUESTION LNK:  https://leetcode.com/problems/partition-equal-subset-sum/
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+private:
+// bool solveRecur(int index,vector<int>&arr,int target,vector<vector<int>>&dp){
+//     if(target==0) return true;
+//     if(index==0) return (arr[0]==target);
+//     if(dp[index][target]!=-1) return dp[index][target];
+
+//     bool notTake=solveRecur(index-1,arr,target,dp);
+//     bool take=false;
+//     if(arr[index]<=target) take=solveRecur(index-1,arr,target-arr[index],dp);
+
+//     return dp[index][target]= take||notTake;
+// } 
+
+bool solveTab(int n,vector<int>&arr,int target){
+    vector<vector<bool>> dp(n,vector<bool>(target+1,false));
+    for(int i=0;i<n;i++) dp[i][0]=true;
+    dp[0][arr[0]]=true;
+
+    for(int i=1;i<n;i++){
+        for(int t=1;t<=target;t++){
+            bool notTake=dp[i-1][t];
+            bool take=false;
+            if(arr[i]<=t) take=dp[i-1][t-arr[i]];
+
+          dp[i][t]= take||notTake;
+        }
+    }
+
+    return dp[n-1][target];
+
+}
+
+int spaceOpt(int n,vector<int>&arr,int target){
+    vector<bool>prev(target+1,false),cur(target+1,false);
+    prev[0]=cur[0]=true;
+    prev[arr[0]]=true;
+
+     for(int i=1;i<n;i++){
+        vector<bool> cur(target+1,false);
+        for(int t=1;t<=target;t++){
+            bool notTake=prev[t];
+            bool take=false;
+            if(arr[i]<=t) take=prev[t-arr[i]];
+
+          cur[t]= take||notTake;
+        }
+        prev=cur;
+    }
+
+    return prev[target];
+}
+
+
+public:
+    bool canPartition(vector<int>& nums) {
+        int totSum=0;
+        for(auto i:nums)totSum+=i;
+        if(totSum&1) return false;
+
+        int n=nums.size(),target=totSum/2;
+
+        // vector<vector<int>> dp(n,vector<int>(target+1,-1));
+        // return solveRecur(n-1,nums,target,dp);
+
+        return spaceOpt(n,nums,target);
+    }
+};
