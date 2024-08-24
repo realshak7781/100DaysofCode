@@ -1,0 +1,32 @@
+455. Assign Cookies
+
+
+
+//T.C:o(glog + slogs +s +l);
+//S.C: O(1)
+
+//QUESTION LNK:  https://leetcode.com/problems/assign-cookies/
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(begin(g),end(g));
+        sort(s.begin(),s.end());
+
+        int l=0,r=0;
+        while(l<s.size() && r<g.size()){
+            if(s[l]>=g[r]){
+                l++;
+                r++;
+            }
+            else{
+                l++;
+            }
+        }
+
+        return r;
+    }
+};
