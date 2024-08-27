@@ -1,0 +1,41 @@
+494. Target Sum
+
+
+
+
+
+//T.C:o(2^n);
+//S.C: O(m+n)
+
+//QUESTION LNK:  https://leetcode.com/problems/target-sum/description/
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+private:
+int solveRecur(int index,vector<int>&arr,int target){
+    if (index == 0) {
+            if (target == 0 && arr[0] == 0) return 2; // Two ways: +0 and -0
+            if (target == 0 || target == arr[0]) return 1;
+            return 0;
+        }
+   int notTake=solveRecur(index-1,arr,target);
+   int take=0;
+   if(arr[index]<=target) take=solveRecur(index-1,arr,target-arr[index]);
+
+   return (take+notTake);
+}    
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n=nums.size();
+        int totSum=0;
+        for(auto i:nums)totSum+=i;
+
+        if ((target + totSum) % 2 != 0 || abs(target) > totSum) return 0;
+        
+        int sum=(totSum+target)/2;
+        return solveRecur(n-1,nums,sum);
+    }
+};
