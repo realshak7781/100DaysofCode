@@ -1,0 +1,60 @@
+322. Coin Change 2
+
+
+
+
+//T.C:o(m*n);
+//S.C: O(m*n)
+
+//QUESTION LNK:  https://leetcode.com/problems/coin-change-ii/
+
+
+TOPIC:   DYNAMIC PROGRAMMING
+
+
+class Solution {
+private:
+// int solveRecur(int index,vector<int>&arr,int amt,vector<vector<int>>&dp){
+//     if(amt==0) return 1;
+//     if(index==0) {
+//         return amt%arr[0]==0 ? 1:0 ;
+//     }
+//     if(dp[index][amt]!=-1) return dp[amt][index];
+
+//     int notTake=0+solveRecur(index-1,arr,amt,dp);
+//     int take=0;
+//     if(arr[index]<=amt) take=solveRecur(index,arr,amt-arr[index],dp);
+    
+//     return dp[index][amt]=take+notTake;
+// }  
+int solveTab(int n,vector<int>&arr,int amt){
+   vector<vector<int>> dp(n, vector<int>(amt + 1, 0));  // Initialize with a large number
+        
+        for (int i = 0; i < n; i++) dp[i][0] = 1;  // Base case: 0 coins needed to make amount 0
+
+        for (int a = 1; a <= amt; a++) {
+            if (a % arr[0] == 0) {
+                dp[0][a] = 1;  // If amount a can be exactly made by using only the first coin
+            }
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int a = 1; a <= amt; a++) {
+                int notTake = dp[i - 1][a];  // Not taking the current coin
+                int take = 0;
+                if (arr[i] <= a) {
+                    take = dp[i][a - arr[i]];  // Taking the current coin
+                }
+                dp[i][a] = take+notTake;  // Minimum of taking or not taking the coin
+            }
+        }
+
+        return dp[n - 1][amt] ;
+}   
+public:
+    int change(int amount, vector<int>& coins) {
+        int n=coins.size();
+        // vector<vector<int>> dp(n,vector<int>(amount+1,-1));
+        return solveTab(n,coins,amount);
+    }
+};
