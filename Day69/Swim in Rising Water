@@ -1,0 +1,60 @@
+778. Swim in Rising Water
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/swim-in-rising-water/description/
+
+TOPIC:   GRAPHS
+
+
+struct Cell {
+    int time;
+    int row;
+    int col;
+    
+    bool operator>(const Cell& other) const {
+        return time > other.time;
+    }
+};
+
+class Solution {
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+        int n = grid.size();
+    vector<vector<int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    priority_queue<Cell, vector<Cell>, greater<Cell>> pq;
+    vector<vector<int>> times(n, vector<int>(n, INT_MAX));
+    
+    pq.push({grid[0][0], 0, 0});
+    times[0][0] = grid[0][0];
+    
+    while (!pq.empty()) {
+        auto [current_time, r, c] = pq.top();
+        pq.pop();
+
+        if (r == n - 1 && c == n - 1) {
+            return current_time;
+        }
+
+        for (const auto& dir : directions) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if (nr >= 0 && nr < n && nc >= 0 && nc < n) {
+                int new_time = max(current_time, grid[nr][nc]);
+                if (new_time < times[nr][nc]) {
+                    times[nr][nc] = new_time;
+                    pq.push({new_time, nr, nc});
+                }
+            }
+        }
+    }
+
+    return -1; 
+    }
+};
