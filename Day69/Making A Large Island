@@ -1,0 +1,136 @@
+827. Making A Large Island
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/making-a-large-island/description/
+
+TOPIC:   GRAPHS
+
+
+class DisjointSet {
+   
+public:
+ vector<int> rank, parent, size;
+    DisjointSet(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]);
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+
+    int countDisjointSets() {
+        unordered_set<int> uniqueParents;
+        for (int i = 0; i < parent.size(); ++i) {
+            uniqueParents.insert(findUPar(i));
+        }
+        return uniqueParents.size();
+    }
+};
+
+class Solution {
+private:
+bool checkValid(int r,int c,int n){
+    return (r>=0 && r<n) && (c>=0 && c<n);
+}    
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n=grid.size();
+        DisjointSet ds(n*n);
+
+        // lets create connected islands or componenets
+        int dr[]={-1,0,1,0};
+        int dc[]={0,1,0,-1};
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    int curNode=n*i+j;
+                    for(int k=0;k<4;k++){
+                        int adjR=i+dr[k];
+                        int adjC=j+dc[k];
+
+                        // check whether its an island or not
+                        if(checkValid(adjR,adjC,n) && grid[adjR][adjC]==1){
+                            int adjNode=n*adjR+adjC;
+                            if(ds.findUPar(curNode)!=ds.findUPar(adjNode)){
+                                ds.unionBySize(curNode,adjNode);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // connected components created
+        int ans=-1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==0){
+                    set<int> st;
+                    for(int k=0;k<4;k++){
+                        int adjR=i+dr[k];
+                        int adjC=j+dc[k];
+                        if(checkValid(adjR,adjC,n) && grid[adjR][adjC]==1){
+                            int adjNode=n*adjR+adjC;
+                            st.insert(ds.findUPar(adjNode));
+                        }
+                    }
+                    int temp=1;
+                    for(auto &it:st){
+                        temp+=ds.size[it];
+                    }
+                    ans=max(ans,temp);
+                }
+            }
+        }
+
+         for (int cellNo = 0; cellNo < n * n; cellNo++) {
+            ans= max(ans, ds.size[ds.findUPar(cellNo)]);
+        }
+
+        return ans;
+
+    }
+};
