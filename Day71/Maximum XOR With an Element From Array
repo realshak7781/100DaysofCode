@@ -1,0 +1,117 @@
+1707. Maximum XOR With an Element From Array
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/maximum-xor-with-an-element-from-array/description/
+
+TOPIC:   TRIES
+
+
+struct TrieNode {
+    TrieNode* children[2]; // Since we're working with binary numbers (0 and 1)
+
+    TrieNode() {
+        children[0] = nullptr;
+        children[1] = nullptr;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    void insert(int num) {
+        TrieNode* node = root;
+        for (int i = 31; i >= 0; --i) { // 31 because we consider 32-bit integers
+            int bit = (num >> i) & 1; // Extract the ith bit
+            if (!node->children[bit]) {
+                node->children[bit] = new TrieNode();
+            }
+            node = node->children[bit];
+        }
+    }
+
+    int findMax(int num) {
+        TrieNode* node = root;
+        int maxXOR = 0;
+        for (int i = 31; i >= 0; --i) {
+            int bit = (num >> i) & 1;
+            int oppositeBit = 1 - bit; // The opposite of bit
+            if (node->children[oppositeBit]) {
+                maxXOR = (maxXOR << 1) | 1; // Move maxXOR to left and add 1
+                node = node->children[oppositeBit];
+            } else {
+                maxXOR = (maxXOR << 1); // Just move maxXOR to left (no addition)
+                node = node->children[bit];
+            }
+        }
+        return maxXOR;
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> maximizeXor(vector<int>& arr, vector<vector<int>>& queries){
+         // Initialize vector to
+    // store results of queries
+    vector<int> ans(queries.size(), 0); 
+    
+     // Vector to store offline queries
+    vector<pair<int, pair<int,int>>> offlineQueries;
+    // Sort the array of numbers
+    sort(arr.begin(), arr.end()); 
+    
+    int index = 0;
+    
+    // Convert queries to offline
+    // queries and store them in a vector
+    for(auto &it: queries) {
+        offlineQueries.push_back({it[1],{it[0], index++}}); 
+    }
+    
+    // Sort offline queries
+    // based on their end points
+    sort(offlineQueries.begin(), offlineQueries.end());
+    
+    // Pointer to iterate through
+    // the array of numbers
+    int i = 0; 
+    
+    // Number of elements in the array
+    int n = arr.size(); 
+    
+    // Create an instance of
+    // the Trie data structure
+    Trie trie; 
+    
+    // Process each offline query
+    for(auto &it : offlineQueries) {
+        // Insert numbers into the trie
+        // until the current query's end point
+        while(i < n && arr[i] <= it.first) {
+            trie.insert(arr[i]); 
+            i++; 
+        }
+        
+        // If there are numbers inserted
+        // into the trie, find the maximum
+        // XOR value for the query range
+        if(i != 0) 
+            ans[it.second.second] = trie.findMax(it.second.first); 
+        else 
+            // If no numbers inserted,
+            // set result to -1
+            ans[it.second.second] = -1; 
+    }
+    // Return the results
+    // of all queries
+    return ans; 
+    }
+};
