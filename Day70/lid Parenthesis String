@@ -1,0 +1,85 @@
+678. Valid Parenthesis String
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/valid-parenthesis-string/
+
+TOPIC:   Greedy
+
+
+class Solution {
+private:
+bool isValidParentheses(const string& s) {
+    stack<char> stack;
+    for (char ch : s) {
+        if (ch == '(') {
+            stack.push(ch);
+        } else if (ch == ')') {
+            if (stack.empty() || stack.top() != '(') {
+                return false;
+            }
+            stack.pop();
+        }
+    }
+    return stack.empty();
+}    
+public:
+    bool checkValidString(string s) {
+       string filteredStr;
+    set<int> starIndices;
+    
+    // Step 1: Filter out '*' and collect their indices
+    for (int i = 0; i < s.length(); ++i) {
+        if (s[i] == '*') {
+            starIndices.insert(i);
+        } else {
+            filteredStr += s[i];
+        }
+    }
+
+    // Step 2: Check if the filtered string is valid
+    if (isValidParentheses(filteredStr)) {
+        return true;
+    }
+
+
+       // Step 3: Use '*' to balance remaining unbalanced parentheses
+    stack<int> openStack, closeStack;
+    
+    // Push indices of unbalanced '(' and ')' into respective stacks
+    for (int i = 0; i < s.length(); ++i) {
+        if (s[i] == '(') {
+            openStack.push(i);
+        } else if (s[i] == ')') {
+            if (!openStack.empty()) {
+                openStack.pop();
+            } else {
+                closeStack.push(i);
+            }
+        }
+    }
+
+    // Match remaining open parentheses with the nearest '*'
+    while (!openStack.empty() && !starIndices.empty()) {
+        int openIndex = openStack.top();
+        auto nearestStar = starIndices.upper_bound(openIndex);
+        if (nearestStar == starIndices.end()) break;
+        openStack.pop();
+        starIndices.erase(nearestStar);
+    }
+
+    // Match remaining close parentheses with the nearest '*'
+    while (!closeStack.empty() && !starIndices.empty()) {
+        int closeIndex = closeStack.top();
+        auto nearestStar = starIndices.lower_bound(closeIndex);
+        if (nearestStar == starIndices.begin()) break;
+        closeStack.pop();
+        starIndices.erase(--nearestStar);
+    }
+
+    // If both stacks are empty, it's a valid string
+    return openStack.empty() && closeStack.empty();
+
+    }
+};
