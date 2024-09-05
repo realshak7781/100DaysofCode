@@ -1,0 +1,79 @@
+421. Maximum XOR of Two Numbers in an Array
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/description/
+
+TOPIC:   TRIES
+
+
+struct TrieNode {
+    TrieNode* children[2]; // Since we're working with binary numbers (0 and 1)
+
+    TrieNode() {
+        children[0] = nullptr;
+        children[1] = nullptr;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    void insert(int num) {
+        TrieNode* node = root;
+        for (int i = 31; i >= 0; --i) { // 31 because we consider 32-bit integers
+            int bit = (num >> i) & 1; // Extract the ith bit
+            if (!node->children[bit]) {
+                node->children[bit] = new TrieNode();
+            }
+            node = node->children[bit];
+        }
+    }
+
+    int findMaxXOR(int num) {
+        TrieNode* node = root;
+        int maxXOR = 0;
+        for (int i = 31; i >= 0; --i) {
+            int bit = (num >> i) & 1;
+            int oppositeBit = 1 - bit; // The opposite of bit
+            if (node->children[oppositeBit]) {
+                maxXOR = (maxXOR << 1) | 1; // Move maxXOR to left and add 1
+                node = node->children[oppositeBit];
+            } else {
+                maxXOR = (maxXOR << 1); // Just move maxXOR to left (no addition)
+                node = node->children[bit];
+            }
+        }
+        return maxXOR;
+    }
+};
+
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        int n=nums.size();
+
+         Trie trie;
+        int maxResult = 0;
+
+        // Insert all numbers into the Trie
+        for (int num : nums) {
+            trie.insert(num);
+        }
+
+        // Find the maximum XOR for each number
+        for (int num : nums) {
+            maxResult = max(maxResult, trie.findMaxXOR(num));
+        }
+
+        return maxResult;
+    }
+};
