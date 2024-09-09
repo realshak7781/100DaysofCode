@@ -1,0 +1,39 @@
+78. Subsets
+
+
+
+
+
+
+//QUESTION LNK:https://leetcode.com/problems/subsets/
+
+
+
+TOPIC:   GREEDY ALGORITHM
+
+
+class Solution {
+private:
+void generateSubsets(vector<vector<int>>&subsets,int n,vector<int>&arr){
+    int totalSubsets=1<<n;
+
+    for(int bitmask=0;bitmask<totalSubsets;bitmask++){
+        vector<int> temp;
+        for(int i=0;i<n;i++){
+            if(bitmask &(1<<i)){
+                temp.push_back(arr[i]);
+            }   
+        }
+        subsets.push_back(temp);
+    }
+}   
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        int n=nums.size();
+        vector<vector<int>> subsets;
+
+        generateSubsets(subsets,n,nums);
+
+        return subsets;
+    }
+};
