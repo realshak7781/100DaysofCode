@@ -1,0 +1,23 @@
+136. Single Number
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/single-number/description/
+
+
+TOPIC:   BIT MANIPULATION
+
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans=nums[0];
+        for(int i=1;i<nums.size();i++) ans^=nums[i];
+
+        return ans;
+    }
+};
