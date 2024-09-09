@@ -1,0 +1,22 @@
+2220. Minimum Bit Flips to Convert Number
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/minimum-bit-flips-to-convert-number/description/
+
+
+TOPIC:   BIT MANIPULATION
+
+
+class Solution {
+public:
+    int minBitFlips(int start, int goal) {
+        int ans=__builtin_popcount(start^goal);
+
+        return ans;
+    }
+};
