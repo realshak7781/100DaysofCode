@@ -1,0 +1,53 @@
+29. Divide Two Integers
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/divide-two-integers/
+
+
+TOPIC:   BIT MANIPULATION
+
+
+typedef long long LL;
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if (divisor == 0) {
+            // Handle division by zero case
+            throw std::overflow_error("Division by zero");
+        }
+
+        if (dividend == INT_MIN && divisor == -1) {
+            // Handle overflow case
+            return INT_MAX;
+        }
+
+        bool isNeg = (dividend < 0) ^ (divisor < 0); // Use XOR to determine if result should be negative
+
+        LL D = abs(static_cast<LL>(dividend));
+        LL d = abs(static_cast<LL>(divisor));
+        LL Q = 0;
+
+        while (D >=d) {
+            int pow = 0;
+            while ((d << pow) <= D) {
+                pow++;
+            }
+            pow=pow-1;
+            
+            D -= (d << pow);
+            Q += (1LL << pow);
+        }
+
+        if (isNeg) Q = -Q;
+
+        // Ensure the result fits within the 32-bit integer range
+        if (Q < INT_MIN) return INT_MIN;
+        if (Q > INT_MAX) return INT_MAX;
+        return static_cast<int>(Q);
+
+    }
+};
