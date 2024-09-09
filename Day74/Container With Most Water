@@ -1,0 +1,29 @@
+11. Container With Most Water
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/container-with-most-water/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: TWO POINTER
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int i=0,j=height.size()-1;
+
+        int maxWaterStored=-1e9;
+
+        while(i<j){
+            int widthC=j-i;
+            int heightC=min(height[i],height[j]);
+            maxWaterStored=max(widthC*heightC,maxWaterStored);
+
+            if(height[i]<height[j]) i++;
+            else j--;
+        }
+
+        return maxWaterStored;
+    }
+};
