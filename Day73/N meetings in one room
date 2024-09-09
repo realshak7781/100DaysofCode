@@ -1,0 +1,38 @@
+N meetings in one room
+
+
+
+
+
+
+//QUESTION LNK: https://www.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1
+
+
+
+TOPIC:   GREEDY ALGORITHM
+
+
+   int maxMeetings(int n, int start[], int end[]) {
+         // Create a vector of pairs where each pair is (end_time, start_time)
+        std::vector<std::pair<int, int>> meetings;
+        for (int i = 0; i < n; i++) {
+            meetings.push_back({end[i], start[i]});
+        }
+        
+        // Sort the meetings by end time
+        std::sort(meetings.begin(), meetings.end());
+        
+        int meetingCount = 1;  // At least one meeting can be conducted
+        int lastEndTime = meetings[0].first;  // End time of the first meeting
+        
+        for (int i = 1; i < n; i++) {
+            // If the start time of the current meeting is after the end time of the last selected meeting
+            if (meetings[i].second > lastEndTime) {
+                meetingCount++;
+                lastEndTime = meetings[i].first;
+            }
+        }
+        
+        return meetingCount;
+    }
+};
