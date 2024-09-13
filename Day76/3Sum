@@ -1,0 +1,73 @@
+15. 3Sum
+
+
+
+
+
+//TC:~~O(n^2)
+//SC:o(n^2)
+
+
+//QUESTION LNK: https://leetcode.com/problems/3sum/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: TWO POINTER/Slding window
+
+CODE:
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        // int n=nums.size();
+
+        // set<vector<int>> st;
+        // for(int i=0;i<n;i++){
+        //     unordered_set<int> hashSet;
+        //   for(int j=i+1;j<n;j++){
+        //     int complement=-(nums[i]+nums[j]);
+        //     if(hashSet.find(complement)!=hashSet.end()){
+        //         vector<int> temp={nums[i],nums[j],complement};
+        //         sort(temp.begin(),temp.end());
+        //         st.insert(temp);
+        //     }
+        //     hashSet.insert(nums[j]);
+        //   }
+        // }
+
+        // vector<vector<int>> ans(st.begin(),st.end());
+
+        // return ans;
+
+
+        // the most optimal approach
+        sort(nums.begin(),nums.end());
+        int n=nums.size();
+
+        vector<vector<int>> ans;
+
+        for(int i=0;i<n-2;i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
+
+            int target=-nums[i];
+            int left=i+1,right=n-1;
+
+            while(left<right){
+                int sum=nums[left]+nums[right];
+
+                if(sum==target){
+                    ans.push_back({nums[i],nums[left],nums[right]});
+
+                    while(left<right && nums[left]==nums[left+1]) ++left;
+                    while(left<right && nums[right]==nums[right-1]) --right;
+                    ++left,right--;
+                }
+                else if(sum>target) right--;
+
+                else left++;
+            }
+        }
+
+        return ans;
+    }
+};
