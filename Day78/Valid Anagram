@@ -1,0 +1,27 @@
+242. Valid Anagram
+
+
+
+
+
+//TC:~~O(slogs)
+//SC:o(tlogt)
+
+
+//QUESTION LNK: https://leetcode.com/problems/valid-anagram/submissions/1223424401/?envType=study-plan-v2&envId=top-interview-150
+
+TOPIC: HASHMAPS
+
+CODE:
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        sort(s.begin(),s.end());
+        sort(t.begin(),t.end());
+
+        if(s==t) return true;
+
+        else return false;
+    }
+};
