@@ -1,0 +1,41 @@
+128. Longest Consecutive Sequence
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/longest-consecutive-sequence/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: HASHMAPS
+
+CODE:
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if(!nums.size()) return 0;
+
+        unordered_set<int> hashSet(nums.begin(),nums.end());
+        int longestStreak=-1e9;
+        for(int num:hashSet){
+            if(!hashSet.count(num-1)){
+                    int currentVal=num;
+            int currentStreak=1;
+            
+
+            while(hashSet.count(currentVal+1)){
+                currentVal+=1;
+                currentStreak+=1;
+            }
+            longestStreak=max(longestStreak,currentStreak);
+            }
+        }
+
+        return longestStreak;
+    }
+};
