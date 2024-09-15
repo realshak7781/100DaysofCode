@@ -1,0 +1,35 @@
+219. Contains Duplicate II
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(n)
+
+
+//QUESTION LNK: https://leetcode.com/problems/contains-duplicate-ii/description/?envType=study-plan-v2&envId=top-interview-150
+
+TOPIC: HASHMAPS
+
+CODE:
+
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int> seen;
+        // mapping between value and index
+
+        for(int i=0;i<nums.size();i++){
+            int val=nums[i];
+
+            if(seen.count(val)){
+                int j=seen[val];
+                if(abs(i-j)<=k) return true;
+            }
+           seen[val]=i;
+        }
+
+        return false;
+    }
+};
