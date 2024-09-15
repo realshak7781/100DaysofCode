@@ -1,0 +1,45 @@
+202. Happy Number
+
+
+
+
+//TC:~~O(d)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/happy-number/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: HASHMAPS
+
+CODE:
+
+class Solution {
+private:
+int getNext(int n){
+    int totSum=0;
+
+    while(n>0){
+        int digit=n%10;
+        totSum+=digit*digit;
+        n/=10;
+    }
+    return totSum;
+}
+public:
+    bool isHappy(int n) {
+        if(n==1) return true;
+
+        // using floyd cycle detection algo
+        int slow=n;
+        int fast=getNext(n);
+
+        while(fast!=1 && slow!=fast){
+            slow=getNext(slow);
+            fast=getNext(getNext(fast));
+        }
+
+        return fast==1;
+
+    }
+};
