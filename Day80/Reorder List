@@ -1,0 +1,78 @@
+143. Reorder List
+
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/reorder-list/description/
+
+TOPIC:  LINKED LIST
+
+
+CODE:
+
+
+class Solution {
+// private:
+// ListNode*solve(ListNode*head){
+//      if(!head || !head->next || !head->next->next) return head;
+
+//         ListNode*start=head;
+//         ListNode*end=head;
+//         ListNode*beforeEnd=head;
+//         while(end->next){
+//             beforeEnd=end;
+//             end=end->next;
+//         }
+//         ListNode*startFront=start->next;
+//         start->next=end;
+//         beforeEnd->next=nullptr;
+
+//         end->next=solve(startFront);
+
+//         return start;
+// }    
+
+// the above approach has worst time complexity of o(n^2)
+public:
+    void reorderList(ListNode* head) {
+        if(!head || !head->next || !head->next->next) return ;
+
+          ListNode* slow = head;
+          ListNode* fast = head;
+            
+            while (fast != nullptr && fast->next != nullptr) {
+                slow = slow->next;        
+                fast = fast->next->next;  
+            }
+            
+           // Step 2: Reverse the second half of the list
+        ListNode* prev = nullptr;
+        ListNode* curr = slow;
+        while (curr) {
+            ListNode* nextTemp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+
+        // Step 3: Merge the two halves
+        ListNode* first = head;
+        ListNode* second = prev;  // This is the head of the reversed second half
+        while (second->next) {
+            ListNode* tmp1 = first->next;
+            ListNode* tmp2 = second->next;
+            
+            first->next = second;
+            second->next = tmp1;
+
+            first = tmp1;
+            second = tmp2;
+        }
+    }
+};
