@@ -1,0 +1,57 @@
+739. Daily Temperatures
+
+
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(n)
+
+
+//QUESTION LNK: https://leetcode.com/problems/daily-temperatures/description/
+
+TOPIC: MONOTONIC STACK
+
+
+CODE:
+
+
+class Solution {
+private:
+void findNGE(int n,vector<int>&temp,vector<int>&nge){
+    stack<int> s;
+    s.push(-1);
+
+    for(int i=n-1;i>=0;i--){
+        int curElem=temp[i];
+
+        while(!s.empty() && s.top()!=-1 && temp[s.top()]<=curElem) s.pop();
+
+        nge[i]=s.top();
+
+        s.push(i);
+    }
+}   
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int n=temperatures.size();
+        vector<int> nge(n);
+        findNGE(n,temperatures,nge);
+
+
+        vector<int> ans(n);
+
+        for(int i=0;i<n;i++){
+            if(nge[i]==-1){
+                ans[i]=0;
+            }
+            else{
+                ans[i]=nge[i]-i;
+            }
+        }
+
+        return ans;
+    }
+};
