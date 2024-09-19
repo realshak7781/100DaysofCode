@@ -1,0 +1,173 @@
+695. Max Area of Island
+
+
+
+
+
+
+
+//TC:~~O(n*m)
+//SC:o(n*M)
+
+
+//QUESTION LNK: https://leetcode.com/problems/reorder-list/description/
+
+TOPIC:  BFS/DISJOINT SET
+
+
+CODE:
+
+
+// class Solution {
+// private:
+//     // Direction vectors for exploring 4 directions
+//     int dr[4] = {1, -1, 0, 0};
+//     int dc[4] = {0, 0, 1, -1};
+
+//     bool inBound(int r, int c, int m, int n) {
+//         return r >= 0 && r < m && c >= 0 && c < n;
+//     }
+
+//     int dfs(int m, int n, int r, int c, vector<vector<int>>& grid, vector<vector<bool>>& vis) {
+//         // Mark the cell as visited
+//         vis[r][c] = true;
+
+//         int area = 1; // Current cell contributes 1 to the area
+
+//         // Explore all 4 directions
+//         for (int i = 0; i < 4; ++i) {
+//             int nRow = r + dr[i];
+//             int nCol = c + dc[i];
+
+//             if (inBound(nRow, nCol, m, n) && grid[nRow][nCol] == 1 && !vis[nRow][nCol]) {
+//                 area += dfs(m, n, nRow, nCol, grid, vis);
+//             }
+//         }
+
+//         return area;
+//     }
+
+// public:
+//     int maxAreaOfIsland(vector<vector<int>>& grid) {
+//         int m = grid.size();
+//         int n = grid[0].size();
+
+//         vector<vector<bool>> vis(m, vector<bool>(n, false));
+
+//         int maxArea = 0;
+
+//         for (int i = 0; i < m; ++i) {
+//             for (int j = 0; j < n; ++j) {
+//                 if (grid[i][j] == 1 && !vis[i][j]) {
+//                     maxArea = max(maxArea, dfs(m, n, i, j, grid, vis));
+//                 }
+//             }
+//         }
+
+//         return maxArea;
+//     }
+// };
+
+class DisjointSet {
+    vector<int> rank, parent, size;
+public:
+    DisjointSet(int n) {
+        rank.resize(n + 1, 0);
+        parent.resize(n + 1);
+        size.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node])
+            return node;
+        return parent[node] = findUPar(parent[node]); // Path compression
+    }
+
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_v] < rank[ulp_u]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+
+    int getSize(int u) {
+        return size[findUPar(u)];
+    }
+};
+
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        DisjointSet ds(m * n); // Initialize DisjointSet for m * n cells
+
+        // Function to convert 2D coordinates to a 1D index
+        auto getIndex = [&](int row, int col) {
+            return row * n + col;
+        };
+
+        // Directions for right and down movements (we union only in these directions)
+        vector<pair<int, int>> directions = {{1, 0}, {0, 1}};
+
+        // Traverse the grid
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) { // If the current cell is land
+                    int currentIndex = getIndex(i, j);
+
+                    // Try to union with neighboring land cells (right and down)
+                    for (auto dir : directions) {
+                        int newRow = i + dir.first;
+                        int newCol = j + dir.second;
+
+                        // Check bounds and if the neighbor is land
+                        if (newRow < m && newCol < n && grid[newRow][newCol] == 1) {
+                            int neighborIndex = getIndex(newRow, newCol);
+                            ds.unionBySize(currentIndex, neighborIndex);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Find the maximum size of any connected component
+        int maxArea = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == 1) {
+                    maxArea = max(maxArea, ds.getSize(getIndex(i, j)));
+                }
+            }
+        }
+
+        return maxArea;
+    }
+};
