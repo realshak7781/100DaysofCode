@@ -1,0 +1,76 @@
+
+45. Jump Game II
+
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/jump-game-ii/
+
+TOPIC: GREEDY/DP
+
+
+CODE:
+
+
+class Solution {
+private:
+// int solveRecur(int indx,int dest,vector<int>&nums,vector<int> &dp){
+//     if(indx>=dest) return 0;
+
+//     if(dp[indx]!=-1) return dp[indx];
+
+//     int minWays=1e9;
+//     for(int i=1;i<=nums[indx];i++){
+//         minWays=min(minWays,1+solveRecur(indx+i,dest,nums,dp));
+//     }
+
+//     return  dp[indx]=minWays;
+// } 
+
+
+// int solveTab(vector<int>&nums,int n){
+//     vector<int> dp(n,1e9);
+//     dp[n-1]=0;
+
+//     for(int indx=n-1;indx>=0;indx--){
+//         for(int i=1;i<=nums[indx];i++){
+//            if(indx+i<n) dp[indx]=min(dp[indx],1+dp[indx+i]);
+//         }
+//     }
+
+//     return  dp[0];
+// }
+public:
+    int jump(vector<int>& nums) {
+        // int n=nums.size();
+        // // vector<int> dp(n,-1);
+        // // return solveRecur(0,n-1,nums,dp);
+
+        // return solveTab(nums,n);
+
+
+        // GREEDY APPROACH BELOW
+         int jumps = 0;
+        int farthest = 0;
+        int currentJumpEnd = 0;
+        
+        for (int i = 0; i < nums.size() - 1; ++i) {
+            // Track the farthest we can reach
+            farthest = max(farthest, i + nums[i]);
+            
+            // If we've reached the end of the current jump range, increment the jump count
+            if (i == currentJumpEnd) {
+                jumps++;
+                currentJumpEnd = farthest;
+            }
+        }
+        
+        return jumps;
+    }
+};
