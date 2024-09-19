@@ -1,0 +1,58 @@
+25. Reverse Nodes in k-Group
+
+
+
+
+//TC:~~O(n)
+//SC:o(n/k)
+
+
+//QUESTION LNK: https://leetcode.com/problems/reverse-nodes-in-k-group/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: LINKED LISTS
+
+
+CODE:
+
+class Solution {
+public:
+   
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode*temp=head;
+        int cnt=0;
+        while(temp!=NULL){
+            cnt++;
+            temp=temp->next;
+        }
+
+        // base case
+        if(head==NULL || k>cnt){
+            return head;
+        }
+
+        // solve one case
+        int cnt1=0;
+        ListNode*prev=NULL;
+        ListNode*curr=head;
+        ListNode*forward=head->next;
+        while(cnt1<k){
+            if(curr->next!=NULL){
+                forward=curr->next;
+            }
+            else{
+                forward=NULL;
+            }
+            curr->next=prev;
+            prev=curr;
+            curr=forward;
+            cnt1++;
+        }
+
+    //   baaki recursion sir dekh lenge
+      head->next=reverseKGroup(forward,k);
+
+      return prev;
+    }
+};
