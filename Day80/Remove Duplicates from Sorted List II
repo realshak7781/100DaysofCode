@@ -1,0 +1,52 @@
+82. Remove Duplicates from Sorted List II
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: LINKED LISTS
+
+
+CODE:
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if(!head || !head->next) return  head;
+        ListNode*dummy=new ListNode(0);
+        dummy->next=head;
+
+        ListNode*cur=dummy;
+        ListNode*prev=dummy;
+
+        while(cur){
+            
+
+            while(cur->next && cur->next->val==cur->val){
+                // create a window for duplicates
+                cur=cur->next;
+            }
+
+            if(prev->next!=cur){
+                ListNode*front=cur->next;
+                cur->next=nullptr;
+                cur=front;
+                prev->next=cur;
+            }
+            else{
+                prev=cur;
+                cur=cur->next;
+            }
+        }
+
+        return dummy->next;
+
+    }
+};
