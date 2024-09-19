@@ -1,0 +1,62 @@
+21. Merge Two Sorted Lists
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/merge-two-sorted-lists/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: LINKED LISTS
+
+
+CODE:
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if(!list1  && list2) return list2;
+        if(!list2  && list1) return list1;
+        if(!list1  && !list2) return nullptr;
+
+        if(list1->val>list2->val){
+            swap(list1,list2);
+        }
+        ListNode*prev=list1;
+        ListNode*cur=list1->next;
+        ListNode*temp=list2;
+
+        while(cur!=nullptr && temp!=nullptr){
+            if(temp->val>=prev->val && temp->val<=cur->val){
+                ListNode*front=temp->next;
+                prev->next=temp;
+                temp->next=cur;
+                prev=temp;
+                temp=front;
+            }
+            else{
+                prev=cur;
+                cur=cur->next;
+            }
+        }
+
+        if(temp){
+            prev->next=temp;
+        }
+
+        return list1;
+    }
+};
