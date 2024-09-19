@@ -1,0 +1,74 @@
+92. Reverse Linked List II
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/reverse-linked-list-ii/description/?envType=study-plan-v2&envId=top-interview-150
+
+
+TOPIC: LINKED LISTS
+
+
+CODE:
+
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if (!head) return nullptr;
+        
+        // Step 1: Create a dummy node and set leftP and rightP to it
+        ListNode* dummyNode = new ListNode(0);
+        dummyNode->next = head;
+        
+        ListNode* leftP = dummyNode;
+        ListNode* rightP = dummyNode;
+        
+        // Step 2: Move leftP to just before the 'left' position and rightP to the 'right' position
+        while (left > 1 || right > 0) {
+            if (left > 1) {
+                leftP = leftP->next;
+                left--;
+            }
+            if (right > 0) {
+                rightP = rightP->next;
+                right--;
+            }
+        }
+        
+        // Step 3: Save the next node after rightP and disconnect the sublist
+        ListNode* end = rightP->next;
+        rightP->next = nullptr;
+        
+        // Step 4: Disconnect the left part and reverse the sublist
+        ListNode* revHead = leftP->next;
+        leftP->next = nullptr;
+        
+        ListNode* revTail = revHead;
+        ListNode* newRHead = reverse(revHead); // Reverse the list between left and right
+        
+        // Step 5: Connect the reversed sublist back into the original list
+        leftP->next = newRHead;
+        revTail->next = end;
+        
+        // Step 6: Return the new head
+        return dummyNode->next;
+    }
+    
+    // Helper function to reverse a list
+    ListNode* reverse(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* current = head;
+        while (current != nullptr) {
+            ListNode* nextNode = current->next;
+            current->next = prev;
+            prev = current;
+            current = nextNode;
+        }
+        return prev;
+    }
+};
