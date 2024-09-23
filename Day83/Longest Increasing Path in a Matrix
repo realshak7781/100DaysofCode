@@ -1,0 +1,82 @@
+
+329. Longest Increasing Path in a Matrix
+
+
+
+
+
+
+
+//TC:~~O(n*m)
+//SC:o(N*m)
+
+.
+//QUESTION LNK: https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+
+
+TOPIC:  TOPO SORT
+
+
+CODE:
+
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int rows=matrix.size();
+        int cols=matrix[0].size();
+        vector<vector<int>> inDegree(rows,vector<int>(cols,0));
+
+        int dr[]={-1,0,1,0};
+        int dc[]={0,1,0,-1};
+        // populathe the inDegree array
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                for(int k=0;k<4;k++){
+                    int nR=i+dr[k];
+                    int nC=j+dc[k];
+                    if(nR >= 0 && nR < rows && nC >= 0 && nC < cols && matrix[nR][nC] > matrix[i][j]) inDegree[nR][nC]++;
+                }
+            }
+        }
+
+
+        // perform the topo sort
+
+        queue<pair<int,int>> q;
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(inDegree[i][j]==0) q.push({i,j});
+            }
+        }
+
+        int maxLength=0;
+        while(!q.empty()){
+            int size=q.size();
+
+            maxLength++;
+
+            for(int i=0;i<size;i++){
+                int r=q.front().first, c=q.front().second;
+                q.pop();
+
+                for(int j=0;j<4;j++){
+                    int nR=r+dr[j];
+                    int nC=c+dc[j];
+
+                    if (nR >= 0 && nR < rows && nC >= 0 && nC < cols && matrix[nR][nC] > matrix[r][c]) {
+                    inDegree[nR][nC]--; 
+                    
+                    if (inDegree[nR][nC] == 0) {
+                        q.push({nR, nC});
+                    }
+                }
+            }
+
+        }
+        }
+
+        return maxLength;
+    }
+};
