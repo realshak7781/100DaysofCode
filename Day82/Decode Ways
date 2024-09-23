@@ -1,0 +1,66 @@
+91. Decode Ways
+
+
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/decode-ways/
+
+TOPIC: DP
+
+
+CODE:
+
+class Solution {
+private:
+// int decodeWays(int indx,string s){
+//     if(s[indx]=='0') return 0;
+
+//     if(indx==s.size()) return 1;
+
+//     int singleDigitWays=decodeWays(indx+1,s);
+
+//     int doubleDigitWays=0;
+//     if(indx+1<s.size() && (s[indx]=='1' ||(s[indx]=='2' && s[indx+1]<='6'))){
+//         doubleDigitWays=decodeWays(indx+2,s);
+//     }
+
+//     return (singleDigitWays + doubleDigitWays);
+// }
+
+int decodeWays(int n,string s){
+     int prev1 = 1;  // dp[n] -> One way to decode an empty string
+        int prev2 = 0;  // dp[n + 1] -> For out-of-bound index (initially 0)
+
+        for (int indx = n - 1; indx >= 0; indx--) {
+            int current = 0; // This will hold the value of dp[indx]
+
+            if (s[indx] != '0') {
+                // Consider single digit
+                current = prev1;
+
+                // Consider double digits (if valid)
+                if (indx + 1 < n && (s[indx] == '1' || (s[indx] == '2' && s[indx + 1] <= '6'))) {
+                    current += prev2;
+                }
+            }
+
+            // Update prev2 and prev1 for the next iteration
+            prev2 = prev1;
+            prev1 = current;
+        }
+
+        return prev1;
+} 
+public:
+    int numDecodings(string s) {
+        int n=s.length();
+        return decodeWays(n,s);
+    }
+};
