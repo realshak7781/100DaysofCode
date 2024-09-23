@@ -1,0 +1,40 @@
+134. Gas Station
+
+
+
+
+
+
+
+//TC:~~O(n)
+//SC:o(1)
+
+.
+//QUESTION LNK: https://leetcode.com/problems/gas-station/
+
+TOPIC: GREEDY
+
+
+CODE:
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n=gas.size();
+        if(accumulate(gas.begin(),gas.end(),0)<accumulate(cost.begin(),cost.end(),0)) return -1;
+
+        int total_gas=0,curr_tank=0,startIndex=0;
+
+        for(int i=0;i<n;i++){
+            total_gas+=gas[i]-cost[i];
+            curr_tank+=gas[i]-cost[i];
+
+            if(curr_tank<0){
+                curr_tank=0;
+                startIndex=i+1;
+            }
+        }
+
+        return total_gas>=0 ? startIndex:-1;
+    }
+};
