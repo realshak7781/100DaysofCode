@@ -1,0 +1,85 @@
+51. N-Queens
+
+
+
+
+
+
+
+
+//TC: O(n!)
+//SC: o(n)
+
+
+//QUESTION LNK: https://leetcode.com/problems/n-queens/
+
+TOPIC:  BACKTRACKING
+
+
+CODE:
+
+
+class Solution {
+private:
+bool isSafe(int row,int col,int n,vector<string> &board){
+    int dupRow=row;
+    int dupCol=col;
+
+    // check for upper diagonal element
+    while(row>=0 && col>=0){
+        if(board[row][col]=='Q') return false;
+
+        row--;col--;
+    }
+
+    // check for left elem queen
+    col = dupCol;
+      row = dupRow;
+      while (col >= 0) {
+        if (board[row][col] == 'Q')
+          return false;
+        col--;
+      }
+
+      // check for lower diagonal elem
+      row = dupRow;
+      col = dupCol;
+      while (row < n && col >= 0) {
+        if (board[row][col] == 'Q')
+          return false;
+        row++;
+        col--;
+      }
+
+      return true;
+}
+void solve(int col,int n,vector<string>&board,vector<vector<string>>&ans){
+    if(col==n){
+        ans.push_back(board);
+        return;
+    }
+
+    // filling column wise
+    for(int row=0;row<n;row++){
+        if(isSafe(row,col,n,board)){
+            board[row][col]='Q';
+            solve(col+1,n,board,ans);
+            board[row][col]='.';
+        }
+    }
+}    
+public:
+    vector<vector<string>> solveNQueens(int n) { 
+        vector<string>board(n);
+        string s(n,'.');
+
+        for(int i=0;i<n;i++){
+            board[i]=s;
+        }
+        vector<vector<string>> ans;
+
+        solve(0,n,board,ans);
+
+        return ans;
+    }
+};
