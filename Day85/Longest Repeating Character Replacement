@@ -1,0 +1,51 @@
+424. Longest Repeating Character Replacement
+
+
+
+
+//TC: O(N)
+//SC: o(26)
+
+
+//QUESTION LNK: https://leetcode.com/problems/longest-repeating-character-replacement/description/
+
+
+
+
+TOPIC:  SLIDING WINDOW + HASHMAPS
+
+
+CODE:
+
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        int n=s.length();
+        int maxLength=INT_MIN;
+        unordered_map<char,int> freqMap;
+        int left=0;
+        int maxFreq=0;
+
+        for(int i=0;i<n;i++){
+            char ch=s[i];
+            freqMap[ch]++;
+
+            maxFreq = max(maxFreq, freqMap[ch]);
+            int reqReplacement=(i-left+1)-maxFreq;
+
+            while(reqReplacement>k){
+                freqMap[s[left]]--;
+                left++;
+
+                maxFreq=max(maxFreq,freqMap[s[left]]);
+                reqReplacement=(i-left+1)-maxFreq;
+            }
+
+
+            maxLength=max(maxLength,i-left+1);
+            
+        }
+
+        return maxLength;
+    }
+};
