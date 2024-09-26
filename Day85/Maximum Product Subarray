@@ -1,0 +1,39 @@
+152. Maximum Product Subarray
+
+
+
+
+//TC: O(N)
+//SC: o(1)
+
+
+//QUESTION LNK: https://leetcode.com/problems/maximum-product-subarray/
+
+
+
+TOPIC:  KADANE ALGO
+
+
+CODE:
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n=nums.size();
+        int ans=INT_MIN;
+        int prefxProd=1;
+        int suffixProd=1;
+
+        for(int i=0;i<nums.size();i++){
+            if(prefxProd==0) prefxProd=1;
+            if(suffixProd==0) suffixProd=1;
+
+            prefxProd=nums[i]*prefxProd;
+            suffixProd=nums[n-i-1]*suffixProd;
+
+            ans=max(ans,max(prefxProd,suffixProd));
+        }
+
+        return ans;
+    }
+};
