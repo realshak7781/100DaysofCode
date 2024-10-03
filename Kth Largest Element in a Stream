@@ -1,0 +1,56 @@
+703. Kth Largest Element in a Stream
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK:https://leetcode.com/problems/kth-largest-element-in-a-stream/description/
+
+
+TOPIC:  HEAPS
+
+CODE:
+
+class KthLargest {
+    int kth;
+vector<int> scores;
+priority_queue<int,vector<int>,greater<int>>pq;    
+public:
+    KthLargest(int k, vector<int>& nums) {
+        scores=nums;
+        kth=k;
+
+        for(int i=0;i<scores.size();i++){
+            if(pq.size()<k){
+                pq.push(scores[i]);
+            }
+            else if(pq.size()==k){
+                if(scores[i]>pq.top()){
+                    pq.pop();
+                    pq.push(scores[i]);
+                }
+            }
+        }
+    }
+    
+    int add(int val) {
+        scores.push_back(val);
+
+         if(pq.empty() || pq.size()<kth){
+            pq.push(val);
+         }
+         else if( val>pq.top()){
+            pq.pop();
+            pq.push(val);
+        }
+       
+
+        return pq.top();
+    }
+};
