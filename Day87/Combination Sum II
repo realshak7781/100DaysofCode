@@ -1,0 +1,56 @@
+40. Combination Sum II
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK:https://leetcode.com/problems/combination-sum-ii/
+
+
+TOPIC:  RECURSION AND DP
+
+CODE:
+
+class Solution {
+private:
+void solve(int index,vector<int>&candidates,vector<int>&temp,vector<vector<int>>&st,int target){
+
+    if(target==0){
+        st.push_back(temp);
+        return;
+    }
+
+    if(index>=candidates.size()) return;
+
+    for(int i=index;i<candidates.size();i++){
+        if(i>index && candidates[i]==candidates[i-1])continue;
+
+        if(target<candidates[i]) break;
+        // because the array is sorted and elems will be greater
+
+        temp.push_back(candidates[i]);
+        solve(i+1,candidates,temp,st,target-candidates[i]);
+        temp.pop_back();
+    }
+}
+
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        int n=candidates.size();
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> st;
+        vector<int> temp;
+
+        solve(0,candidates,temp,st,target);
+
+       
+
+        return st;
+    }
+};
