@@ -1,0 +1,65 @@
+300. Longest Increasing Subsequence
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/longest-increasing-subsequence/description/
+
+
+TOPIC:  RECURSION AND DP
+
+CODE:
+
+// class Solution {
+// private:
+// int solve(int index,int prevIndex,int size,vector<int>&nums,vector<vector<int>>&dp){
+//     if(index==size) return 0;
+
+
+//     if(dp[index][prevIndex+1]!=-1) return dp[index][prevIndex+1];
+
+//     int notPick=solve(index+1,prevIndex,size,nums,dp);
+
+//     int pick=0;
+//     if(prevIndex==-1 || nums[index]>nums[prevIndex]){
+//         pick=1+solve(index+1,index,size,nums,dp);
+//     }
+
+//     return dp[index][prevIndex+1]=max(pick,notPick);
+// }    
+// public:
+//     int lengthOfLIS(vector<int>& nums) {
+//         int n=nums.size();
+//          vector<vector<int>> dp(n,vector<int>(n+1,-1));
+//         return solve(0,-1,n,nums,dp);
+//     }
+// };
+
+class Solution {    
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> temp;
+
+        temp.push_back(nums[0]);
+        int len=1;
+
+        for(auto &val:nums){
+            if(val>temp.back()){
+                temp.push_back(val);
+                len++;
+            }
+            else{
+                int ind=lower_bound(temp.begin(),temp.end(),val)-temp.begin();
+                temp[ind]=val;
+            }
+        }
+
+        return len;
+    }
+};
