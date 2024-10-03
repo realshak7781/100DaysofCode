@@ -1,0 +1,47 @@
+332. Reconstruct Itinerary
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/reconstruct-itinerary/description/
+
+
+
+TOPIC: GRAPHS
+
+
+CODE:
+
+
+class Solution {    
+public:
+    vector<string>result;
+    unordered_map<string,priority_queue<string,vector<string>,greater<string>>> adj;
+
+    void dfs(string &airport){
+
+        while(!adj[airport].empty()){
+            string next=adj[airport].top();
+            adj[airport].pop();
+
+            dfs(next);
+        }
+        result.push_back(airport);
+    }
+
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        for(auto &ticket : tickets){
+            adj[ticket[0]].push(ticket[1]);
+        }
+
+        string start="JFK";
+        dfs(start);
+
+        reverse(result.begin(),result.end());
+
+        return  result;
+    }
+};
