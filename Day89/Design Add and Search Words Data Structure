@@ -1,0 +1,108 @@
+211. Design Add and Search Words Data Structure
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/design-add-and-search-words-data-structure/
+
+TOPIC: TRIES
+
+CODE:
+
+struct TrieNode{
+    char ch;
+    TrieNode*children[26];
+    bool isTerminal;
+
+    TrieNode(char c){
+        ch=c;
+        for(int i=0;i<26;i++){
+            children[i]=nullptr;
+        }
+        isTerminal=false;
+    }
+};
+
+
+class Trie{
+    public:
+    TrieNode*root;
+
+    Trie(){
+        root=new TrieNode('\0');
+    }
+
+
+    void insertUtil(string word,TrieNode*root){
+        if(word.length()==0){
+            root->isTerminal=true;
+            return;
+        }
+        char ch=word[0];
+
+        TrieNode* child=root->children[ch-'a'];
+    
+        if(!child){
+            child=new TrieNode(ch); 
+            root->children[ch - 'a'] = child;
+        }
+
+        insertUtil(word.substr(1),child);
+    }
+
+
+    bool searchUtil(TrieNode*root,string word){
+        if(word.length()==0){
+            return root->isTerminal;
+        }
+        char ch=word[0];
+
+        if(ch=='.'){
+            for(int i=0;i<26;i++){
+                if(root->children[i] && searchUtil(root->children[i],word.substr(1))){
+                  return true;
+                }
+            }
+        }else{
+            TrieNode* child = root->children[ch - 'a'];
+            if (!child) return false; 
+            return searchUtil(child, word.substr(1));
+        }
+
+        return false;
+    }
+
+    void insertWord(string word){
+        insertUtil(word,root);
+    }
+
+    bool searchWord(string word){
+       return searchUtil(root,word);
+    }
+
+    
+};
+
+class WordDictionary {
+public:
+    Trie* t;
+
+    WordDictionary() {
+        t = new Trie();
+    }
+
+    void addWord(string word) {
+        t->insertWord(word);
+    }
+
+    bool search(string word) {
+        return t->searchWord(word);
+    }
+};
