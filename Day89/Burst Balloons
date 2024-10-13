@@ -1,0 +1,62 @@
+312. Burst Balloons
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/burst-balloons/
+
+TOPIC:  DP
+
+CODE:
+
+class Solution {
+private:
+// int solve(int left,vector<int>&nums,int right,vector<vector<int>>&dp){
+//     if(left>right) return 0;
+//     if(dp[left][right]!=-1) return dp[left][right];
+//     int maxi=INT_MIN;
+//     for(int ind=left;ind<=right;ind++){
+//         int coins = nums[left - 1] * nums[ind] * nums[right + 1];
+
+//         maxi=max(maxi,coins+solve(left,nums,ind-1,dp) + solve(ind+1,nums,right,dp));
+//     }
+
+//     return dp[left][right]=maxi;
+// } 
+
+int solveTab(vector<int> &nums,int n){
+    vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+
+    for(int i=n;i>=1;i--){
+        for(int j=1;j<=n;j++){
+            if(i>j) continue;
+            int maxi=INT_MIN;
+            for(int ind=i;ind<=j;ind++){
+                int coins = nums[i - 1] * nums[ind] * nums[j + 1];
+
+                maxi=max(maxi,coins+dp[i][ind-1] + dp[ind+1][j]);
+            }
+            dp[i][j]=maxi;
+        }
+    }
+
+    return dp[1][n];
+}
+public:
+    int maxCoins(vector<int>& nums) {
+        int n=nums.size();
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+        
+        // vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        // return solve(1,nums,n-2,dp);
+
+        return solveTab(nums,n);
+    }
+};
