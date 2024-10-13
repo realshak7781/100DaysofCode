@@ -1,0 +1,70 @@
+55. Jump Game
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/jump-game/
+
+TOPIC:  DP
+
+CODE:
+
+class Solution {
+private:
+// bool solve(int pos,vector<int>&nums,int dest,vector<int>&dp){
+//     if(pos==dest) return true;
+//     if(pos>dest) return false;
+//     if(nums[pos]==0) return false;
+
+//     if(dp[pos]!=-1) return dp[pos];
+//     int maxJump=pos+nums[pos];
+
+//     bool isPossible=false;
+//     for(int jump=pos+1;jump<=maxJump;jump++){
+//         if(solve(jump,nums,dest,dp)){
+//             isPossible=true;
+//             break;
+//         }
+//     }
+
+//     return dp[pos]=isPossible;
+// } 
+
+bool solveTab(vector<int>&nums,int n){
+    vector<bool> dp(n,false);
+    dp[n-1]=true;
+
+    for(int i=n-2;i>=0;i--){
+        int maxJump=i+nums[i];
+        if(nums[i]==0){
+             dp[i]=false;
+             continue;
+        }
+
+        for(int jump=i+1;jump<=maxJump;jump++){
+            if(dp[jump]){
+                dp[i]=true;
+                break;
+            }
+        }
+    }
+
+    return dp[0];
+}
+public:
+    bool canJump(vector<int>& nums) {
+        int n=nums.size();
+        // vector<int> dp(n,-1);
+        // return solve(0,nums,n-1,dp);
+
+
+        return solveTab(nums,n);
+    }
+};
