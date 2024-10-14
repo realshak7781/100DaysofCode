@@ -1,0 +1,50 @@
+39. Combination Sum
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/combination-sum/description/
+
+TOPIC: BACKTRACKING
+
+CODE:
+
+class Solution {
+private:
+void solve(vector<int>&candidates,int ind,int target,vector<int> temp,vector<vector<int>>&ans){
+    if(target==0){
+        ans.push_back(temp);
+        return;
+    }
+    if(ind<0){
+        return;
+    }
+
+    // pick
+    if(candidates[ind]<=target){
+        temp.push_back(candidates[ind]);
+        solve(candidates,ind,target-candidates[ind],temp,ans);
+        temp.pop_back();
+    }
+
+    // notpick
+    solve(candidates,ind-1,target,temp,ans);
+}
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        int n=candidates.size();
+        vector<vector<int>> ans;
+        vector<int> temp;
+
+        solve(candidates,n-1,target,temp,ans);
+        return ans;
+    }
+};
