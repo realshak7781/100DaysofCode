@@ -1,0 +1,66 @@
+417. Pacific Atlantic Water Flow
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/pacific-atlantic-water-flow/
+
+TOPIC: DFS/BFS
+
+CODE:
+
+class Solution {
+private:
+void dfs(int rows,int cols,int r,int c,vector<vector<int>>&heights,vector<vector<int>>&canReachPacific){
+    canReachPacific[r][c]=1;
+
+    vector<pair<int,int>> directions={{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+    for(auto &d:directions){
+        int newX=r+d.first;
+        int newY=c+d.second;
+
+        if(newX>=0 && newX<rows && newY>=0 && newY<cols && 
+        !canReachPacific[newX][newY] && heights[r][c]<=heights[newX][newY]){
+            dfs(rows,cols,newX,newY,heights,canReachPacific);
+        }
+    }
+}
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        int rows=heights.size();
+        int cols=heights[0].size();
+
+        vector<vector<int>> canReachPacific(rows,vector<int>(cols,0));
+        vector<vector<int>> canReachAtlantic(rows,vector<int>(cols,0));
+
+        // reaching pacific from top and left edges
+        for(int j=0;j<cols;j++) dfs(rows,cols,0,j,heights,canReachPacific);
+        for(int i=0;i<rows;i++) dfs(rows,cols,i,0,heights,canReachPacific);
+
+         // Start DFS from Atlantic Ocean borders (bottom and right edges)
+        for (int i = 0; i < rows; i++) dfs(rows,cols,i,cols - 1,heights, canReachAtlantic); // right 
+        for (int j = 0; j < cols; j++) dfs(rows,cols,rows- 1, j,heights, canReachAtlantic); // bottom 
+
+        vector<vector<int>> ans;
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(canReachPacific[i][j] && canReachAtlantic[i][j]){
+                    ans.push_back({i,j});
+                }
+            }
+        }
+
+        return ans;
+
+    }
+};
