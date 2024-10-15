@@ -1,0 +1,58 @@
+435. Non-overlapping Intervals
+
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/non-overlapping-intervals/
+
+
+TOPIC: GREEDY ALGORIRTHM
+CODE:
+
+class compareSecond{
+ public:
+ bool operator()(const pair<int,int> &a,const pair<int,int>&b){
+       return a.second < b.second;
+  }   
+};
+
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        int n=intervals.size();
+        vector<pair<int,int>> p;
+
+        for(auto &it:intervals){
+            p.push_back({it[0],it[1]});
+        }
+
+        // sort on the basis of start values
+        sort(p.begin(),p.end(), compareSecond());
+
+        int countPairs=0;
+        int startP=p[0].first;
+        int endP=p[0].second;
+
+        for(int i=1;i<n;i++){
+            startP=p[i].first;
+
+            if(startP<endP){
+                countPairs++;
+            }
+            else{
+                endP=p[i].second;
+            }
+        }
+
+        return countPairs;
+    }
+};
