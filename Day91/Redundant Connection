@@ -1,0 +1,79 @@
+684. Redundant Connection
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/redundant-connection/description/
+
+
+TOPIC: GRAPHS AND DISJOINT SET
+
+CODE:
+
+class DisJointSet{
+    vector<int> parent,rank;
+    public:
+    DisJointSet(int n){
+        parent.resize(n+1);
+        rank.resize(n+1,0);
+
+        for(int i=1;i<=n;i++){
+            parent[i]=i;
+        }
+    }
+
+
+        int findUPar(int node){
+            if(node==parent[node]) return node;
+
+            return parent[node]=findUPar(parent[node]);
+        }
+
+        void unionByRank(int u,int v){
+            int ulp_u=parent[u];
+            int ulp_v=parent[v];
+
+            if(ulp_u==ulp_v) return;
+
+            if(rank[ulp_u]<rank[ulp_v]){
+                parent[ulp_u]=ulp_v;
+            }
+            else if(rank[ulp_u]>rank[ulp_v]){
+                parent[ulp_v]=ulp_u;
+            }
+            else{
+                parent[ulp_v]=ulp_u;
+                rank[ulp_u]++;
+            }
+        }
+};
+
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> ans;
+        DisJointSet ds(edges.size());
+
+        for(auto &edg:edges){
+            int u=edg[0],v=edg[1];
+
+            if(ds.findUPar(u)==ds.findUPar(v)){
+                ans.push_back(u);
+                ans.push_back(v);
+            }
+            else{
+                ds.unionByRank(u,v);
+            }
+        }
+
+        return ans;
+    }
+};
