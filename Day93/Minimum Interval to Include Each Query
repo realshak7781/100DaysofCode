@@ -1,0 +1,65 @@
+1851. Minimum Interval to Include Each Query
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/minimum-interval-to-include-each-query/description/
+
+
+TOPIC: MAP AND BINARY SEARCH AND HEAP AND SORTING
+
+
+CODE:
+
+
+class Solution {
+public:
+    vector<int> minInterval(vector<vector<int>>& intervals, vector<int>& queries) {
+        // map the original query to their indices
+        map<int,vector<int>> mp;
+        for(int i=0;i<queries.size();i++){
+            mp[queries[i]].push_back(i);
+        }
+        // sort the intervals arrays and queries array
+        sort(intervals.begin(),intervals.end());
+        // creates the ans array and initialize it to -1
+        vector<int> ans(queries.size(),-1);
+
+        // create the minHeap(interval,endingPoint)
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minHeap;
+
+        // for loop the sorted query
+        //    for each query add the intervals for which qj>=li
+        //    and then remove those intervals from minheap whose ending points
+        // are less than  the query point 
+
+        // if minHeap is NOT empty addd the top element
+
+        int i=0;
+        for(auto &x:mp){
+            int query=x.first;
+
+            while(i<intervals.size() && query>=intervals[i][0]){
+                minHeap.push({intervals[i][1]-intervals[i][0]+1,intervals[i][1]});
+                i++;
+            }
+
+            while(!minHeap.empty() && minHeap.top().second<query){
+                minHeap.pop();
+            }
+
+            if(!minHeap.empty()){
+               for (auto idx : x.second) { // Assign result for each index of the query
+                    ans[idx] = minHeap.top().first;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
