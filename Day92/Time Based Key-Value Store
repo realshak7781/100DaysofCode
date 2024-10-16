@@ -1,0 +1,61 @@
+981. Time Based Key-Value Store
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/time-based-key-value-store/description/
+
+TOPIC: MAP AND BINARY SEARCH
+
+
+CODE:
+
+
+class TimeMap {
+private:
+int findLessThanorEqual(vector<pair<string,int>>&arr,int target){
+    int result=-1,left=0,right=arr.size()-1;
+
+    while(left<=right){
+        int mid=left+(right-left)/2;
+
+        int val=arr[mid].second;
+
+        if(val==target) return mid;
+
+        else if(val<target){
+            result=mid;
+            left=mid+1;
+        }
+        else{
+            right=mid-1;
+        }
+    }
+
+    return result;
+}        
+  
+public:
+
+   unordered_map<string,vector<pair<string,int>>> mp; 
+    TimeMap() {   
+    }
+    
+    void set(string key, string value, int timestamp) {
+       mp[key].emplace_back(value, timestamp);
+    }
+    
+    string get(string key, int timestamp) {
+        auto &arr=mp[key];
+
+        int index=findLessThanorEqual(arr,timestamp);
+
+        if(index==-1) return "";
+
+        else return arr[index].first;
+    }
+};
