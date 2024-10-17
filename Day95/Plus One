@@ -1,0 +1,49 @@
+66. Plus One
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/plus-one/description/
+
+
+TOPIC: ARRAYS AND MATH
+
+
+CODE:
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int n=digits.size();
+        int ind=n-1;
+
+        int sum=0,carry=0,digit;
+        while(ind>=0){
+            if(ind==n-1){
+                sum=digits[ind]+carry+1;
+            }
+            else{
+                sum=digits[ind]+carry;
+            }
+            digit=sum%10;
+            carry=sum/10;
+
+            digits[ind]=digit;
+
+            ind--;
+        }
+
+        if(carry!=0){
+            digits.insert(digits.begin(),carry);
+        }
+
+        return digits;
+    }
+};
