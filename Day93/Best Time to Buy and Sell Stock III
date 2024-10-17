@@ -1,0 +1,102 @@
+123. Best Time to Buy and Sell Stock III
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+
+
+TOPIC: DYNAMIC PROGRAMMING
+
+
+CODE:
+
+
+class Solution {
+int f(int ind,int buy,int cap,vector<int>&prices,int n, vector<vector<vector<int>>>&dp){
+    if(ind==n) return 0;
+    if(cap==0) return 0;
+
+    if(dp[ind][buy][cap]!=-1) return dp[ind][buy][cap];
+
+    if(buy){
+        return dp[ind][buy][cap]= max(-prices[ind] +f(ind+1,0,cap,prices,n,dp),
+        0+f(ind+1,1,cap,prices,n,dp));
+    }
+   return dp[ind][buy][cap]= max(prices[ind]+f(ind+1,1,cap-1,prices,n,dp),
+          0+f(ind+1,0,cap,prices,n,dp));
+} 
+
+
+int solveTab(int n,vector<int>&prices){
+    vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(3, 0)));
+
+    // for(int i=0;i<2;i++){
+    //     for(int j=0;j<3;j++){
+    //         dp[n][i][j]=0;
+    //     }
+    // }
+
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<2;j++){
+    //         dp[i][j][0]=0;
+    //     }
+    // }
+
+    for(int ind=n-1;ind>=0;ind--){
+        for(int buy=0;buy<=1;buy++){
+            for(int cap=1;cap<=2;cap++){
+                 if(buy){
+                   dp[ind][buy][cap]= max(-prices[ind] +dp[ind+1][0][cap],
+                0+dp[ind+1][1][cap]);
+            }
+            else{
+                dp[ind][buy][cap]= max(prices[ind]+dp[ind+1][1][cap-1],
+                0+dp[ind+1][0][cap]);
+            }
+              
+            }
+        }
+    }
+
+    return dp[0][1][2];
+}
+
+
+int spaceOpt(int n,vector<int>&prices){
+    vector<vector<int>> cur(2,vector<int>(3,0));
+    vector<vector<int>> prev(2,vector<int>(3,0));
+
+       for(int ind=n-1;ind>=0;ind--){
+        for(int buy=0;buy<=1;buy++){
+            for(int cap=1;cap<=2;cap++){
+                 if(buy){
+                   cur[buy][cap]= max(-prices[ind] +prev[0][cap],
+                0+prev[1][cap]);
+            }
+            else{
+                cur[buy][cap]= max(prices[ind]+prev[1][cap-1],
+                0+prev[0][cap]);
+            }
+              
+            }
+        }
+        prev=cur;
+    }
+
+    return prev[1][2];
+}
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        // vector<vector<vector<int>>> dp(n+1, vector<vector<int>>(2, vector<int>(3, -1)));
+
+         return spaceOpt(n,prices);
+    }
+};
