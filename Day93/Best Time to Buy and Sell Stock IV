@@ -1,0 +1,47 @@
+188. Best Time to Buy and Sell Stock IV
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/
+
+
+TOPIC: DYNAMIC PROGRAMMING
+
+
+CODE:
+
+
+class Solution {
+    // SAME AS BUY AND SELL STOCK 3 BUT INSTEAD OF 2 TRANSACTIONS WE CAN MAKE ATMOST K TRANSACTIONS
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        int n=prices.size();
+        vector<vector<int>> cur(2,vector<int>(k+1,0));
+    vector<vector<int>> prev(2,vector<int>(k+1,0));
+
+       for(int ind=n-1;ind>=0;ind--){
+        for(int buy=0;buy<=1;buy++){
+            for(int cap=1;cap<=k;cap++){
+                 if(buy){
+                   cur[buy][cap]= max(-prices[ind] +prev[0][cap],
+                0+prev[1][cap]);
+            }
+            else{
+                cur[buy][cap]= max(prices[ind]+prev[1][cap-1],
+                0+prev[0][cap]);
+            }
+              
+            }
+        }
+        prev=cur;
+    }
+
+    return prev[1][k];
+    }
+};
