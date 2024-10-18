@@ -1,0 +1,47 @@
+97. Interleaving String
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/interleaving-string/
+
+
+TOPIC: DYNAMIC PROGRAMMING
+
+
+CODE:
+
+
+class Solution {
+private:
+bool solveRecur(int i,int j,string&s1,string&s2,string &s3,vector<vector<int>>&dp){
+    if(i==s1.size() && j==s2.size()) return true;
+
+    if(dp[i][j]!=-1) return dp[i][j];
+    int k=i+j;
+
+    bool useS1 = false, useS2 = false;
+    if(s1[i]==s3[k]){
+        useS1=solveRecur(i+1,j,s1,s2,s3,dp);
+    }
+
+    if(s2[j]==s3[k]){
+        useS2=solveRecur(i,j+1,s1,s2,s3,dp);
+    }
+
+    return dp[i][j]=useS1 || useS2;
+}    
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        if((s1.size() + s2.size())!=s3.size()) return  false;
+        vector<vector<int>> dp(s1.size()+1,vector<int>(s2.size()+1,-1));
+        return solveRecur(0,0,s1,s2,s3,dp);
+    }
+};
