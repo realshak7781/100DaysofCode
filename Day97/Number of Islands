@@ -1,0 +1,105 @@
+200. Number of Islands
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/number-of-islands/
+
+
+TOPIC: GRAPHS AND DISJOINT SET
+
+
+CODE:
+
+
+class DisjointSet{
+    vector<int> parent,rank;
+    public:
+    DisjointSet(int n){
+        parent.resize(n);
+        rank.resize(n,0);
+
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+    }
+
+    int findUPar(int node){
+        if(node==parent[node]) return node;
+
+        return parent[node]=findUPar(parent[node]);
+    }
+
+    void unionByRank(int u,int v){
+        int ulp_u=findUPar(u);
+        int ulp_v=findUPar(v);
+
+        if(rank[ulp_u]>rank[ulp_v]){
+            parent[ulp_v]=ulp_u;
+        }
+        else if(rank[ulp_u]<rank[ulp_v]){
+            parent[ulp_u] = ulp_v;
+        }
+        else{
+            parent[ulp_v]=ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+};
+
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int rows=grid.size(),cols=grid[0].size();
+
+        DisjointSet ds(rows*cols);
+
+        vector<pair<int, int>> directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+
+                if(grid[i][j]=='1'){
+                int node=(i*cols+j);
+
+                for(auto&dir:directions){
+                    int newR=i+dir.first;
+                    int newC=j+dir.second;
+
+                    if(newR>=0 &&newR<rows && newC>=0 && newC<cols && grid[newR][newC]=='1'){
+                       int neighbourNode=(newR*cols +newC);
+                       if(ds.findUPar(node)!=ds.findUPar(neighbourNode)){
+                        ds.unionByRank(node,neighbourNode);
+                       }
+                    }
+                }
+
+                }
+            }
+        }
+
+        int numIslands = 0;
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(grid[i][j]=='1'){
+                    int nodeVal=(i*cols+j);
+                    if(ds.findUPar(nodeVal)==nodeVal) numIslands++;
+                }
+            }
+        }
+
+        return numIslands;
+    }
+};
