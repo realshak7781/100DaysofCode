@@ -1,0 +1,44 @@
+139. Word Break
+
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/word-break/description/
+
+TOPIC: DYNAMIC PROGRAMMING
+
+
+CODE:
+
+
+class Solution {
+private:
+bool wordBreakHelper(int start,string s,unordered_set<string> &dict,vector<int>&dp)  {
+    if(start==s.size()) return true;
+
+    if(dp[start]!=-1) return dp[start];
+    for(int split=start+1;split<=s.size();split++){
+        if(dict.count(s.substr(start,split-start)) && wordBreakHelper(split,s,dict,dp) ){
+            return dp[start]= true;
+        }
+    }
+
+    return dp[start]=false;
+}  
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(),wordDict.end());
+
+        vector<int> dp(s.size()+1,-1);
+        return wordBreakHelper(0,s,dict,dp);
+    }
+};
