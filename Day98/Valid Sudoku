@@ -1,0 +1,53 @@
+36. Valid Sudoku
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/valid-sudoku/
+
+TOPIC: HASHING
+
+
+CODE:
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        unordered_map<int,unordered_set<char>> checkRows;
+        unordered_map<int,unordered_set<char>> checkCols;
+        unordered_map<int,unordered_set<char>> checkSquares;
+
+        auto createKey = [](int row,int col){
+            return (row/3)*3+col/3;
+        };
+
+        for(int r=0;r<9;r++){
+            for(int c=0;c<9;c++){
+                char cell=board[r][c];
+
+                if(cell=='.') continue;
+
+                if(checkRows[r].count(cell) || checkCols[c].count(cell) || checkSquares[createKey(r,c)].count(cell)  ) return false;
+
+                checkRows[r].insert(cell);
+                checkCols[c].insert(cell);
+                checkSquares[createKey(r,c)].insert(cell);
+            }
+        }
+
+        return true;
+    }
+};
