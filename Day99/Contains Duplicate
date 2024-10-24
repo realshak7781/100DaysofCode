@@ -1,0 +1,34 @@
+217. Contains Duplicate
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/contains-duplicate/
+
+
+TOPIC: HASHSET
+
+
+
+CODE:
+
+
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        int size=nums.size();
+        if(size==1)return false;
+
+        unordered_set<int> hashSet;
+
+        for(auto &val:nums){
+            if(hashSet.count(val)) return true;
+
+            hashSet.insert(val);
+        }
+
+        return false;
+    }
+};
