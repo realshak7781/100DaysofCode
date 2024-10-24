@@ -1,0 +1,65 @@
+
+56. Merge Intervals
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/merge-intervals/
+
+
+TOPIC: ARRAYS AND INTERVALS AND GREEDY
+
+CODE:
+
+class compareIntervals{
+    public:
+    bool operator()(const vector<int> &a,const vector<int>&b){
+        return a[0]<b[0];
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        int n=intervals.size();
+        sort(intervals.begin(),intervals.end(),compareIntervals());
+        vector<vector<int>> ans;
+
+        ans.push_back(intervals[0]);
+
+        for(int i=1;i<n;i++){
+            int start=ans.back()[0],end=ans.back()[1];
+            
+            int newStart=intervals[i][0];
+            int newEnd=intervals[i][1];
+
+            if(newStart<=end){
+                // overlap
+                if(newEnd>=end){
+                    ans.back()[1]=newEnd;
+                }
+            }
+            else{
+                ans.push_back({newStart,newEnd});
+            }
+
+            
+        }
+
+        return ans;
+    }
+};
+   
