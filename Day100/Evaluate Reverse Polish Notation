@@ -1,0 +1,49 @@
+150. Evaluate Reverse Polish Notation
+
+
+
+
+
+
+//QUESTION LNK:https://leetcode.com/problems/evaluate-reverse-polish-notation/
+
+
+TOPIC: STACK
+
+
+
+CODE:
+
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+       stack<int> st;
+
+       for(auto &val:tokens){
+
+          if (val == "+" || val == "-" || val == "*" || val == "/") {
+                int val2 = st.top(); st.pop(); // Second operand
+                int val1 = st.top(); st.pop(); // First operand
+
+                if (val == "+") {
+                    st.push(val1 + val2);
+                } else if (val == "-") {
+                    st.push(val1 - val2);
+                } else if (val == "*") {
+                    st.push(val1 * val2);
+                } else if (val == "/") {
+                    st.push(val1 / val2);
+                }
+            } else {
+               stringstream ss;
+               ss<<val;
+               int x=0;
+               ss>>x;
+                st.push(x);
+            }
+       }
+
+       return st.top();
+    }
+};
