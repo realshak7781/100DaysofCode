@@ -1,0 +1,43 @@
+763. Partition Labels
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/partition-labels/
+
+
+TOPIC: HASHSET and STRINGS
+
+
+
+CODE:
+
+
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        unordered_map<char,int> charToLastIndex;
+        for(int i=0;i<s.length();i++){
+            charToLastIndex[s[i]]=i;
+        }
+
+        int size=0,end=INT_MIN;
+        vector<int> ans;
+
+        for(int i=0;i<s.length();i++){
+            char cur=s[i];
+            int curCharIndex=charToLastIndex[cur];
+
+            size+=1;
+            end=max(curCharIndex,end);
+            if(i==end){
+                ans.push_back(size);
+                size=0;
+            }
+            
+        }
+        return ans;
+    }
+};
