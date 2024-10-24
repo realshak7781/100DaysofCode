@@ -1,0 +1,53 @@
+79. Word Search
+
+
+
+
+
+
+
+//QUESTION LNK: https://leetcode.com/problems/word-search/
+
+
+
+TOPIC: DFS AND BACKTRACKING
+
+CODE:
+
+class Solution {
+private:
+bool dfs(int rows,int cols,int r,int c,vector<vector<char>>&board,vector<pair<int, int>> directions,vector<vector<bool>>&vis,string word){
+    if(word.length()==0) return true;
+    vis[r][c]=true;
+
+    for(auto &dir:directions){
+        int newR=r + dir.first;
+        int newC=c + dir.second;
+
+        if(newR>=0 && newR<rows && newC>=0 && newC<cols && !vis[newR][newC] && board[newR][newC]==word[0] && dfs(rows,cols,newR,newC,board,directions,vis,word.substr(1)) ){
+            return true;
+        }
+    }
+
+    vis[r][c]=false;
+
+    return false;
+}    
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int rows=board.size();
+        int cols=board[0].size();
+
+        vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        vector<vector<bool>> vis(rows,vector<bool>(cols,false));
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(board[i][j]==word[0] && dfs(rows,cols,i,j,board,directions,vis,word.substr(1))){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+};
