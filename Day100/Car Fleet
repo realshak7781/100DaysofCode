@@ -1,0 +1,51 @@
+853. Car Fleet
+
+
+
+
+
+
+
+
+//QUESTION LNK:  https://leetcode.com/problems/car-fleet/
+
+
+TOPIC: MONOTONIC STACK AND VISUALISATION(2 D)
+
+
+CODE:
+
+
+class decreaseSort{
+    public:
+
+    bool operator()(const pair<double,int>&a,const pair<double,int>&b){
+        return a.second>b.second;
+    }
+};
+
+class Solution {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        int n=position.size();
+        vector<pair<double,int>>  cars(n);
+
+        for(int i=0;i<n;i++){
+          cars[i] = {(double)(target - position[i]) / speed[i], position[i]};
+        }
+
+        sort(cars.begin(),cars.end(),decreaseSort());
+
+        stack<double>st;
+
+        for(int i=0;i<n;i++){
+            double time=cars[i].first;
+            if(st.empty() || time>st.top()){
+                st.push(time);
+            }
+        }
+
+        return st.size();
+
+    }
+};
